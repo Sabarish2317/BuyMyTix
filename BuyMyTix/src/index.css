@@ -1,1 +1,47 @@
+@font-face {
+  font-family: "Satoshi";
+  src: url("/fonts/Satoshi-Variable.woff2") format("woff2");
+  font-weight: 100 900; /* Supports variable weights */
+  font-display: swap;
+}
+
 @import "tailwindcss";
+
+:root {
+  --font-satoshi: "Satoshi", sans-serif;
+}
+
+body {
+  @apply antialiased [text-rendering:optimizeLegibility] [font-smoothing:antialiased];
+  font-family: var(--font-satoshi);
+  background-color: #000000;
+  border: none;
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+
+.heading {
+  font-size: 48px;
+}
+.sub-heading {
+  font-size: 36px;
+}
+.body-text {
+  font-size: 24px;
+}
+
+@layer utilities {
+  .text-shadow {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  .hover-scale {
+    transition: transform 0.2s ease-in-out;
+  }
+  .hover-scale:hover {
+    transform: scale(1.05);
+  }
+  .primary {
+    color: #dc3912;
+  }
+}
