@@ -1,6 +1,8 @@
 import { motion } from "motion/react";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { ANIMATION_DURATION, MOVEMENT_DISTANCE } from "../../utils/constants";
+import { LOGIN_PAGE, SIGNUP_PAGE } from "../../utils/routing";
 
 // Enum for navigation button names
 enum NavigationButton {
@@ -17,6 +19,7 @@ interface TopNavigationBarProps {
 
 // Top Navigation Bar Component
 const TopNavigationBar: React.FC<TopNavigationBarProps> = () => {
+  const navigate = useNavigate();
   return (
     // Main navigation container
     <motion.div
@@ -66,6 +69,7 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = () => {
         <button
           className="login-button w-max text-[clamp(20px,2vw,24px)] text-white underline hidden lg:flex
          hover:scale-95 transition-all duration-200 active:scale-105"
+          onClick={() => navigate(LOGIN_PAGE)}
         >
           Log in
         </button>
@@ -75,7 +79,10 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = () => {
           className="get-started-button w-max bg-white px-4 py-3 rounded-md backdrop-blur-sm justify-center items-center gap-2.5 hidden md:flex
         hover:bg-white/80 hover:scale-95 transition-all duration-200 active:scale-105 active:bg-white"
         >
-          <h2 className="text-[clamp(20px,2vw,24px)] text-black font-medium">
+          <h2
+            className="text-[clamp(20px,2vw,24px)] text-black font-medium"
+            onClick={() => navigate(SIGNUP_PAGE)}
+          >
             Get started
           </h2>
         </button>

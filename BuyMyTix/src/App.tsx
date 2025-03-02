@@ -6,14 +6,19 @@ import {
 } from "react-router-dom";
 
 import HomePage from "./pages/HomePage";
+import AuthenticationPage from "./pages/AuthenticationPage";
+import ErrorPage from "./utils/Error";
+import { HOME_PAGE, AUTHENTICATE_PAGE } from "./utils/routing";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="*" element={<h1>Not found</h1>} />
-        <Route path="/" element={<Navigate to="/home" />} />
-        <Route path="/home" element={<HomePage />} />
+        {/* Urls are stored in utils/routing */}
+        <Route path="/*" element={<ErrorPage />} />
+        <Route path="/" element={<Navigate to={HOME_PAGE} />} />
+        <Route path={HOME_PAGE} element={<HomePage />} />
+        <Route path={AUTHENTICATE_PAGE} element={<AuthenticationPage />} />
       </Routes>
     </Router>
   );
