@@ -1,8 +1,26 @@
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+
+import HomePage from "./pages/HomePage";
+import AuthenticationPage from "./pages/AuthenticationPage";
+import ErrorPage from "./utils/Error";
+import { HOME_PAGE, AUTHENTICATE_PAGE } from "./utils/routing";
+
 function App() {
   return (
-    <>
-      <h1 className="text-3xl font-bold underline">helloo</h1>
-    </>
+    <Router>
+      <Routes>
+        {/* Urls are stored in utils/routing */}
+        <Route path="/*" element={<ErrorPage />} />
+        <Route path="/" element={<Navigate to={HOME_PAGE} />} />
+        <Route path={HOME_PAGE} element={<HomePage />} />
+        <Route path={AUTHENTICATE_PAGE} element={<AuthenticationPage />} />
+      </Routes>
+    </Router>
   );
 }
 
