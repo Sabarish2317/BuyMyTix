@@ -1,4 +1,6 @@
+import { motion } from "motion/react";
 import React from "react";
+import { ANIMATION_DURATION, MOVEMENT_DISTANCE } from "../../utils/constants";
 
 // Enum for navigation button names
 enum NavigationButton {
@@ -17,7 +19,16 @@ interface TopNavigationBarProps {
 const TopNavigationBar: React.FC<TopNavigationBarProps> = () => {
   return (
     // Main navigation container
-    <div className="top-navigation-bar flex flex-row justify-between items-center py-5">
+    <motion.div
+      initial={{ opacity: 0, y: -MOVEMENT_DISTANCE }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{
+        duration: ANIMATION_DURATION,
+        delay: ANIMATION_DURATION * 6,
+        ease: "easeOut",
+      }}
+      className="top-navigation-bar flex flex-row justify-between items-center py-5"
+    >
       {/* Logo Section */}
       <div className="logo-padding w-full flex justify-start flex-row">
         <img
@@ -74,7 +85,7 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = () => {
       <button className="hamburger-menu w-max bg-white/8 rounded-[6px] px-3 flex md:hidden">
         <img className="h-10" src="/icons/hamburger-menu-icon.svg" alt="menu" />
       </button>
-    </div>
+    </motion.div>
   );
 };
 
