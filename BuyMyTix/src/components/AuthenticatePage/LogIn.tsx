@@ -108,7 +108,7 @@ const LoginForm: React.FC = () => {
         // Display the error from the backend
         setLoginError(response.message || "An error occurred during login");
       }
-    } catch (error) {
+    } catch (e) {
       // Handle any unexpected errors
       setLoginError("Unable to connect to the server. Please try again later.");
     } finally {

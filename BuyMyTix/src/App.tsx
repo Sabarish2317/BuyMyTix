@@ -9,8 +9,17 @@ import HomePage from "./pages/HomePage";
 import AuthenticationPage from "./pages/AuthenticationPage";
 import ErrorPage from "./utils/Error";
 import { HOME_PAGE, AUTHENTICATE_PAGE } from "./utils/routing";
+import { useEffect, useState } from "react";
+import { getAnimationConstants } from "./utils/constants";
 
 function App() {
+  const [, setAnimation] = useState(getAnimationConstants());
+
+  useEffect(() => {
+    console.log("Fetching animation values on refresh...");
+    setAnimation(getAnimationConstants());
+  }, []);
+
   return (
     <Router>
       <Routes>

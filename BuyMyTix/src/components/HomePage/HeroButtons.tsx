@@ -19,7 +19,7 @@ const HeroButtons: React.FC = () => {
       <div className="buttons-container buttons-container justify-center items-center gap-3 md:gap-4 flex flex-row">
         {/* Sell Tickets Button */}
         <button
-          className="px-4 py-2 md:px-6 md:py-3 text-white bg-white/5 rounded-md border-2 border-white/20 backdrop-blur-[145.40px] justify-center items-center gap-2.5 flex
+          className="px-4 py-2 md:px-6 md:py-3 text-white bg-white/5 rounded-md  outline-2 outline-white/20 outline-offset-[-2px] backdrop-blur-[145.40px] justify-center items-center gap-2.5 flex
            text-[clamp(16px,2vw,24px)] font-medium hover:scale-95 hover:opacity-80 transition-all duration-200 active:scale-105 active:opacity-100"
         >
           Sell your tickets
@@ -34,7 +34,7 @@ const HeroButtons: React.FC = () => {
         </button>
       </div>
       {/* search button*/}
-      <div className="relative w-full  ">
+      <div className="relative w-full h-max">
         <motion.div
           initial={{ opacity: 0, y: MOVEMENT_DISTANCE }}
           animate={{ opacity: 1, y: 0 }}
@@ -58,18 +58,20 @@ const HeroButtons: React.FC = () => {
           onFocus={() => setInputValue(" ")}
           onChange={(e) => setInputValue(e.target.value)}
           placeholder=""
-          className="w-full px-4 py-2 md:px-6 md:py-3 text-white bg-white/5 rounded-md border-2 border-white/20 
+          className="w-full px-4 py-2 md:px-6 md:py-3 text-white bg-white/5 rounded-md outline-2 outline-white/20 outline-offset-[-2px]
       backdrop-blur-[145.40px] text-[clamp(16px,2vw,24px)] font-medium 
       hover:scale-95  transition-all duration-200 
-      focus:outline-none focus:scale-105 active:opacity-100 pr-12" // Added padding-right for icon
+      focus:outline-none focus:scale-105 active:opacity-100  pr-12" // Added padding-right for icon
         />
-        {/* Show Flipping Text when Input is Empty */}
-        {inputValue.length === 0 && <FlippingText />}
-        <img
-          src="/icons/search.svg"
-          alt="search"
-          className="absolute right-4 top-1/2 transform -translate-y-1/2 w-6 h-6  hover:scale-105  transition-all duration-200 active:scale-110 active:scale-3d cursor-pointer"
-        />
+        <div className="row flex flex-row justify-between">
+          {/* Show Flipping Text when Input is Empty */}
+          <img
+            src="/icons/search.svg"
+            alt="search"
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 w-6 h-6 origin-right scale-80 md:scale-100 hover:scale-105  transition-all duration-200 active:scale-110 active:scale-3d cursor-pointer"
+          />
+          {inputValue.length === 0 && <FlippingText />}
+        </div>
       </div>
     </motion.div>
   );

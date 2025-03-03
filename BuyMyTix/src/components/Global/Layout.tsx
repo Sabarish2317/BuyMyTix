@@ -13,7 +13,7 @@ const Layout: React.FC<LayoutProps> = ({ children, className = "" }) => {
   return (
     <div
       ref={parentRef}
-      className={`main-entry-point w-full h-screen flex flex-col items-center relative overflow-clip 
+      className={`main-entry-point w-full h-screen flex flex-col items-center relative overflow-scroll overflow-x-clip  
                  bg-gradient-to-b from-black via-[#402283] via-50% to-[#9f64da] ${className}`}
     >
       {/* Noise Overlay */}
