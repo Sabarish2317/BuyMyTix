@@ -150,8 +150,7 @@ const LoginForm: React.FC = () => {
                 backdropFilter: "blur(50px)",
               }}
               transition={{
-                duration: 1,
-                delay: 0.2,
+                duration: 0.3,
                 ease: [0.43, 0.13, 0.23, 0.96],
               }}
             />

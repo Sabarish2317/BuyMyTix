@@ -41,6 +41,16 @@ input:-webkit-autofill:active {
   background-color: transparent !important; /* Ensures no white background */
 }
 
+/* Hide scrollbar for all browsers */
+::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, and Edge */
+}
+
+html {
+  -ms-overflow-style: none; /* For Internet Explorer and Edge */
+  scrollbar-width: none; /* For Firefox */
+}
+
 .gradient-border {
   border-radius: 12px;
   position: relative;

@@ -12,7 +12,7 @@ const AuthenticationPage: React.FC = () => {
   return (
     <Layout className="justify-center relative ">
       {/* max width section */}
-      <div className="auth-page  items-center self-center flex flex-col justify-center w-full max-w-[760px] ">
+      <div className="auth-page  items-center self-center flex flex-col justify-center w-full max-w-[760px] rounded-xl overflow-clip">
         <img
           className="sm:flex md:hidden w-[150px] self-center p-4 mb-6"
           src="/icons/logo.svg"
@@ -20,7 +20,7 @@ const AuthenticationPage: React.FC = () => {
         />
 
         {/* main frame */}
-        <div className="main-frame w-full  h-min flex flex-row justify-center self-center rounded-md ">
+        <div className="main-frame w-full  h-min flex flex-row justify-center self-center ">
           {/*dynamic tabs section */}
           <div
             className="flex-6 mx-4 md:mx-0 rounded-md md:rounded-[0px] forms-tab-left w-full p-[26px] flex flex-col justify-start items-start gap-2

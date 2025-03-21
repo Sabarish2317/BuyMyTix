@@ -12,7 +12,7 @@ import AnimatedBento from "../components/HomePage/AnimatedBento";
 const HomePage: React.FC = () => {
   return (
     <Layout>
-      <TopNavigationBar />
+      <TopNavigationBar isLoggedIn={false} />
       <div className="home-page-layout flex flex-col gap-4">
         <HeroSection />
         <HeroButtons />

@@ -50,7 +50,7 @@ const AnimatedBento: React.FC = () => {
               our website.
             </h3>
           }
-          iconPath="/icons/glove-icon.svg"
+          iconPath="/icons/secure-icon.svg"
           alt="globe"
         />
       </div>
@@ -73,7 +73,7 @@ const AnimatedBento: React.FC = () => {
               and make the deal happen.
             </h3>
           }
-          iconPath="/icons/glove-icon.svg"
+          iconPath="/icons/offer-icon.svg"
           alt="globe"
         />
       </div>
@@ -95,7 +95,7 @@ const AnimatedBento: React.FC = () => {
               clicks, it's that easy!
             </h3>
           }
-          iconPath="/icons/glove-icon.svg"
+          iconPath="/icons/speed-icon.svg"
           alt="globe"
         />
         <AnimatedBentoBox
@@ -113,7 +113,7 @@ const AnimatedBento: React.FC = () => {
               clicks, it's that easy!
             </h3>
           }
-          iconPath="/icons/glove-icon.svg"
+          iconPath="/icons/secure-icon.svg"
           alt="globe"
         />
       </div>
