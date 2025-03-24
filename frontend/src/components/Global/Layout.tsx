@@ -25,10 +25,10 @@ const Layout: React.FC<LayoutProps> = ({ children, className = "" }) => {
           delay: ANIMATION_DURATION * 1,
           ease: "easeOut",
         }}
-        className="absolute z-10 inset-0 pointer-events-none opacity-50 mix-blend-multiply"
+        className="absolute z-10 inset-0 pointer-events-none opacity-50 mix-blend-multiply "
         style={{
           backgroundImage: "url('/images/noise-overlay.png')",
-          backgroundSize: "cover",
+          backgroundSize: "fit",
           backgroundRepeat: "repeat",
         }}
       ></motion.div>
