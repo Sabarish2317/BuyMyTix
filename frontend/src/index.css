@@ -1,0 +1,92 @@
+@font-face {
+  font-family: "Satoshi";
+  src: url("/fonts/Satoshi-Variable.woff2") format("woff2");
+  font-weight: 100 900; /* Supports variable weights */
+  font-display: swap;
+}
+
+@import "tailwindcss";
+
+:root {
+  --font-satoshi: "Satoshi", sans-serif;
+}
+
+body {
+  @apply antialiased [text-rendering:optimizeLegibility] [font-smoothing:antialiased];
+  font-family: var(--font-satoshi);
+  background-color: #000000;
+  border: none;
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+
+.heading {
+  font-size: 48px;
+}
+.sub-heading {
+  font-size: 36px;
+}
+.body-text {
+  font-size: 24px;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-text-fill-color: white !important; /* Keeps text white */
+  color: white !important;
+  -webkit-box-shadow: 0 0 0 1000px rgba(220, 57, 18, 1) inset !important; /* Matches your dark theme */
+  background-color: transparent !important; /* Ensures no white background */
+}
+
+/* Hide scrollbar for all browsers */
+::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, and Edge */
+}
+
+html {
+  -ms-overflow-style: none; /* For Internet Explorer and Edge */
+  scrollbar-width: none; /* For Firefox */
+}
+
+.gradient-border {
+  border-radius: 12px;
+  position: relative;
+  background: black; /* or any background color you want */
+}
+
+.gradient-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 12px; /* same as parent */
+  padding: 2px; /* border width */
+  background: linear-gradient(to bottom, #8970a7, #000000);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+@media (max-width: 640px) {
+  .gradient-border::before {
+    padding: 01px; /* smaller border width for mobile */
+  }
+}
+@layer utilities {
+  .text-shadow {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  .hover-scale {
+    transition: transform 0.2s ease-in-out;
+  }
+  .hover-scale:hover {
+    transform: scale(1.05);
+  }
+  .primary {
+    color: #dc3912;
+  }
+
+  /* } //generate a gray to black border gradient */
+}
