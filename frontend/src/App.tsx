@@ -23,15 +23,12 @@ function App() {
       <Routes>
         {/* Urls are stored in utils/routing */}
         <Route path="/*" element={<ErrorPage />} />
-        {/* <Route path="/hom" element={<Navigate to={LANDING_PAGE} />} /> */}
-        <Route path="/home" element={<LandingPage />} />
-        <Route path="/home:id=1" element={<HomePage />} />
-        <Route path="/search:id=1" element={<ResultsPage />} />
+        <Route path="/" element={<Navigate to={LANDING_PAGE} />} />
+        <Route path={LANDING_PAGE} element={<LandingPage />} />
+        <Route path={HOME_PAGE} element={<HomePage />} />
+        <Route path={RESULTS_PAGE} element={<ResultsPage />} />
         {/* if there is any userArguments then pass it to home page else landing page */}
-        <Route
-          path="/authenticate?type=login"
-          element={<AuthenticationPage />}
-        />
+        <Route path={AUTHENTICATE_PAGE} element={<AuthenticationPage />} />
       </Routes>
     </Router>
   );
