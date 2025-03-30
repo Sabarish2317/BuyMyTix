@@ -1,6 +1,7 @@
 import { motion } from "motion/react";
 import React, { useState } from "react";
 import { ANIMATION_DURATION } from "../../utils/constants";
+import SearchBar from "./SearchBar";
 
 const popUpVariants = {
   hidden: { opacity: 0, y: -10 },
@@ -47,15 +48,8 @@ const LocationDialogBox: React.FC<LocationDialogBoxProps> = ({
             Select new location
           </h3>
 
-          <div className="w-full h-16 px-6 py-4 bg-white/10 rounded-lg backdrop-blur-[81.60px] flex justify-between items-center overflow-hidden">
-            <img src="/icons/search.svg" />
-            <input
-              type="text"
-              onFocus={() => setInputValue(" ")}
-              onChange={(e) => setInputValue(e.target.value)}
-              placeholder="Coimbatore,Tamil Nadu"
-              className="items-center gap-4 text-white text-xl font-normal leading-7 w-full self-start pl-4"
-            ></input>
+          <div className="margin relative my-4 h-[56px]">
+            <SearchBar type="city" />
           </div>
         </div>
 
