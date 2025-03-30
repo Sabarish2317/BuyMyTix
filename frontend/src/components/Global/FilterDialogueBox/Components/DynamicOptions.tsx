@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import SearchBar from "../../SearchBar";
 
 interface DynamicOptionsProps {
   option: number;
@@ -29,20 +30,8 @@ const DynamicOptions: React.FC<DynamicOptionsProps> = ({ option }) => {
     // search bar
     case 1:
       return (
-        <div
-          className="optionn-1 relative w-full h-max px-3 py-2 md:px-6 md:py-3 bg-white/5 rounded-md outline-2 outline-white/20 outline-offset-[-2px] 
-        backdrop-blur-[145.40px] text-[clamp(16px,2vw,24px)] font-medium transition-all duration-200 ease-in-out focus-within:outline-none flex flex-row gap-3.5 items-center justify-start"
-        >
-          <img
-            src="/icons/search.svg"
-            alt="search"
-            className="w-6 h-6 hover:scale-105 transition-all duration-200 cursor-pointer z-70"
-          />
-          <input
-            type="text"
-            placeholder="Search..."
-            className="w-full text-white bg-transparent outline-none "
-          />
+        <div className="margin relative my-4 h-[56px]">
+          <SearchBar type="city" />
         </div>
       );
     case 2:

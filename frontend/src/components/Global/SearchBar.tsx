@@ -1,62 +1,15 @@
 import { useState } from "react";
 import FlippingText from "../../utils/FlippingText";
+import {
+  citySuggestionsList,
+  MovieSuggestionsList,
+} from "../../utils/constants";
 
-const suggestionsList = [
-  "Vidaamuyrachi",
-  "Captain Miller",
-  "Ayalaan",
-  "Thangalaan",
-  "Viduthalai Part 2",
-  "Indian 2",
-  "Jigarthanda DoubleX",
-  "Leo",
-  "Mark Antony",
-  "Lal Salaam",
-  "Japan",
-  "Maaveeran",
-  "Vaathi",
-  "Bommai Nayagi",
-  "Farhana",
-  "Pathu Thala",
-  "Good Night",
-  "Pon Ondru Kanden",
-  "Kazhuvethi Moorkkan",
-  "Rathnam",
-  "Rebel",
-  "Irugapatru",
-  "Paramporul",
-  "Love Today",
-  "Gatta Kusthi",
-  "Kaari",
-  "Nitham Oru Vaanam",
-  "Sembi",
-  "Raayan",
-  "Garudan",
-  "Red Sandal Wood",
-  "Deiva Machan",
-  "Aalambana",
-  "Chandramukhi 2",
-  "Vettaiyan",
-  "Kannagi",
-  "Borrder",
-  "Agilan",
-  "Mission Chapter 1",
-  "Vikram",
-  "Ponniyin Selvan: Part 2",
-  "Vaadivaasal",
-  "Maharaja",
-  "Irumbu Kai Maayavi",
-  "Maveeran Kittu 2",
-  "Vichithiran",
-  "Kuttrame Thandanai 2",
-  "RDX",
-  "Narakasura",
-  "Kanguva",
-  "Tamilarasan",
-  "Kaalaivanam",
-];
+interface SearchBarProps {
+  type: string;
+}
 
-const SearchBar: React.FC = () => {
+const SearchBar: React.FC<SearchBarProps> = ({ type }) => {
   const [inputValue, setInputValue] = useState("");
   const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -66,7 +19,13 @@ const SearchBar: React.FC = () => {
     setInputValue(value);
 
     if (value.length > 0) {
-      const filtered = suggestionsList
+      const filtered = (
+        type === "movie"
+          ? MovieSuggestionsList
+          : type === "city"
+          ? citySuggestionsList
+          : ["invalid type"]
+      )
         .filter((item) => item.toLowerCase().includes(value.toLowerCase()))
         .slice(0, 5);
 
@@ -102,7 +61,12 @@ const SearchBar: React.FC = () => {
             onChange={handleInputChange}
             className="w-full bg-transparent border-none outline-none text-[clamp(16px,2vw,24px)] font-medium"
           />
-          {inputValue.length === 0 && <FlippingText />}
+          {inputValue.length === 0 && type === "moive" && <FlippingText />}
+          {inputValue.length === 0 && type === "city" && (
+            <h3 className=" absolute text-[clamp(16px,2vw,21px)] top-1/2 -translate-y-1/2 font-medium font-white pointer-events-none">
+              Location
+            </h3>
+          )}
         </div>
       </div>
       {showSuggestions && (

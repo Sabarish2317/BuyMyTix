@@ -1,7 +1,6 @@
 import { motion } from "motion/react";
 import React, { useState } from "react";
 import { ANIMATION_DURATION, MOVEMENT_DISTANCE } from "../../utils/constants";
-import FlippingText from "../../utils/FlippingText";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "../Global/SearchBar";
 
@@ -63,7 +62,7 @@ const HeroButtons: React.FC = () => {
              pointer-events-none"
         />
 
-        <SearchBar></SearchBar>
+        <SearchBar type="movie" />
       </div>
     </motion.div>
   );

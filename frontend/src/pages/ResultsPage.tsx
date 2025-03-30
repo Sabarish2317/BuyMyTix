@@ -30,8 +30,8 @@ const ResultsPage: React.FC = () => {
           alt="google-ads "
         />
         {/* Search bar with filters */}
-        <div className="margin my-4 h-[56px]">
-          <SearchBar />
+        <div className="margin relative my-4 h-[56px]">
+          <SearchBar type="movie" />
         </div>
 
         {/* filters panel */}

@@ -24,10 +24,10 @@ const FilterDialogBox: React.FC<FilterDialogBoxProps> = ({
       animate="visible"
       exit="exit"
       transition={{
-        duration: ANIMATION_DURATION * 2,
+        duration: ANIMATION_DURATION,
         ease: "easeOut",
       }}
-      className="main-container fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-60 w-screen h-screen bg-white/2 backdrop-blur-sm flex justify-center items-center overflow-clip mt-4 "
+      className="main-container fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-60 w-screen h-screen bg-white/2 backdrop-blur-sm flex justify-center items-center overflow-clip mt-4  "
       //didnnt use childrens direcly as exit animations didnt work i dont know why
     >
       <div className="w-max p-4 bg-black  rounded-xl  flex flex-col items-center gap-3 overflow-hidden mb-32 ">
@@ -43,7 +43,7 @@ const FilterDialogBox: React.FC<FilterDialogBoxProps> = ({
             alt="close"
           />
         </div>
-        <div className="main-content flex flex-row w-max gap-5 transition-all">
+        <div className="main-content flex flex-row w-max gap-5 transition-all overflow-clip">
           {/* static left side */}
           <div className="left-side flex flex-col gap-6 min-w-[120px] md:min-w-[200px] lg:min-w-[300px] ">
             <div className="title-&-reset-button w-full flex flex-row justify-between ">
@@ -104,7 +104,7 @@ const FilterDialogBox: React.FC<FilterDialogBoxProps> = ({
           </div>
           {/* dynamic right side  */}
           <div className="sort-filter-with-dynamic-optins flex flex-col gap-6 min-w-[130px] md:min-w-[300px] lg:min-w-[400px] ">
-            <div className="title-&-reset-button w-full flex flex-row gap-2 items-center ">
+            <div className="title-&-reset-button w-full flex flex-row gap-2 items-center overflow-clip">
               <h2 className="text-white text-[clamp(20px,2vw,24px)] font-regular w-max">
                 Sort by
               </h2>
