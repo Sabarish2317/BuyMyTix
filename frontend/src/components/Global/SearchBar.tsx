@@ -24,7 +24,9 @@ const SearchBar: React.FC<SearchBarProps> = ({ type }) => {
           ? MovieSuggestionsList
           : type === "city"
           ? citySuggestionsList
-          : ["invalid type"]
+          : type === "search"
+          ? <FlippingText/>
+          
       )
         .filter((item) => item.toLowerCase().includes(value.toLowerCase()))
         .slice(0, 5);
