@@ -10,11 +10,12 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children, className = "" }) => {
   const parentRef = useRef<HTMLDivElement>(null); // Reference to parent container
+
   return (
     <div
       ref={parentRef}
-      className={`main-entry-point w-full h-screen flex flex-col items-center relative overflow-scroll overflow-x-clip  
-                 bg-gradient-to-b from-black via-[#402283] via-50% to-[#9f64da] ${className}`}
+      className={`main-entry-point w-full min-h-screen flex flex-col items-center relative overflow-hidden bg-gradient-to-b 
+                 from-black via-[#402283] via-50% to-[#9f64da] ${className}`}
     >
       {/* Noise Overlay */}
       <motion.div
@@ -25,16 +26,16 @@ const Layout: React.FC<LayoutProps> = ({ children, className = "" }) => {
           delay: ANIMATION_DURATION * 1,
           ease: "easeOut",
         }}
-        className="absolute z-10 inset-0 pointer-events-none opacity-50 mix-blend-multiply "
+        className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-50 mix-blend-multiply"
         style={{
           backgroundImage: "url('/images/noise-overlay.png')",
-          backgroundSize: "fit",
+          backgroundSize: "100px 100px", // Explicit tile size
           backgroundRepeat: "repeat",
         }}
       ></motion.div>
 
       {/* Wrapper for Page Content */}
-      <div className="wrapper w-full flex flex-col max-w-[1490px]  px-4 md:px-6 lg:px-[42px] z-50 ">
+      <div className="wrapper w-full flex flex-col max-w-[1490px] px-4 md:px-6 lg:px-[42px] z-50">
         {children}
       </div>
     </div>

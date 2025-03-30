@@ -16,8 +16,8 @@ const FlippingText = () => {
 
   return (
     <motion.div
-      className="motion-div  text-white/80  absolute left-4 top-1/2 -translate-y-1/2 
-           text-[clamp(16px,2vw,24px)] font-medium pointer-events-none "
+      className="motion-div  text-white/80  absolute top-1/2 -translate-y-1/2 
+           text-[clamp(16px,2vw,21px)] font-medium pointer-events-none "
     >
       Search for{" "}
       <AnimatePresence mode="wait">

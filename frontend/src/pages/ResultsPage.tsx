@@ -1,17 +1,18 @@
-import React from "react";
+import { easeInOut } from "motion";
+import { AnimatePresence, motion } from "motion/react";
+import React, { useState } from "react";
+import DetailCard from "../components/Global/DetailCard";
 import Layout from "../components/Global/Layout";
 import TopNavigationBar from "../components/Global/TopNavigationBar";
 import SearchBar from "../components/Global/SearchBar";
-import DetailCard from "../components/Global/DetailCard";
-import { motion } from "motion/react";
 import { MOVEMENT_DISTANCE } from "../utils/constants";
-import { easeInOut } from "motion";
+import FilterDialogBox from "../components/Global/FilterDialogueBox/FilterDialogBox";
 
-// interface HomePageProps {}
-
-const HomePage: React.FC = () => {
+const ResultsPage: React.FC = () => {
+  const [isFilterDialogBoxVisible, ToggleDialogueBoxVisiblity] =
+    useState(false);
   return (
-    <Layout className="bg-[linear-gradient(to_right,#0D0B11_10%,#261349_80%)]">
+    <Layout className="bg-[linear-gradient(to_bottom,#0D0B11_10%,#261349_80%)]">
       <TopNavigationBar isLoggedIn={true} />
       <motion.div
         initial={{ opacity: 0, y: MOVEMENT_DISTANCE }}
@@ -24,16 +25,35 @@ const HomePage: React.FC = () => {
         className="main-container"
       >
         <img
-          className="w-full h-[250px] object-cover rounded-2xl origin-top"
+          className="w-full h-[200px] object-cover rounded-2xl origin-top"
           src="/images/ad-space.png"
-          alt="google-ads"
+          alt="google-ads "
         />
         {/* Search bar with filters */}
         <div className="margin my-4 h-[56px]">
           <SearchBar />
         </div>
+
+        {/* filters panel */}
+        <div className="filters-panel">
+          <h3
+            onClick={() => ToggleDialogueBoxVisiblity(true)}
+            className="text-[clamp(18px,2.5vw,24px)] text-[#DC3912] font-semibold scale-3d hover:scale-102 hover:opacity-80 active:scale-100 active:opacity-100 transition-all duration-200 origin-left cursor-pointer"
+          >
+            Add filter
+          </h3>
+        </div>
+
+        <AnimatePresence mode="wait">
+          {isFilterDialogBoxVisible && (
+            <FilterDialogBox
+              setToggleDialogueBox={ToggleDialogueBoxVisiblity}
+            />
+          )}
+        </AnimatePresence>
+
         {/* popular movies */}
-        <div className="popular-movies-row flex flex-col gap-4 mt-4 h-max ">
+        <div className="popular-movies-row flex flex-col gap-4 mt-4 h-max">
           <div className="justify-center text-[clamp(18px,3vw,28px)] text-white font-regular">
             Popular Movies in your region
           </div>
@@ -203,4 +223,4 @@ const HomePage: React.FC = () => {
   );
 };
 
-export default HomePage;
+export default ResultsPage;
