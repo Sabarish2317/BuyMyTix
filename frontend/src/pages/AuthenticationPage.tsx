@@ -12,7 +12,7 @@ const AuthenticationPage: React.FC = () => {
   return (
     <Layout className="justify-center relative ">
       {/* max width section */}
-      <div className="auth-page  items-center self-center flex flex-col justify-center w-full max-w-[760px] rounded-xl overflow-clip">
+      <div className="auth-page  items-center self-center flex flex-col justify-center w-full max-w-[760px] rounded-xl ">
         <img
           className="sm:flex md:hidden w-[150px] self-center p-4 mb-6"
           src="/icons/logo.svg"
