@@ -24,7 +24,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ type }) => {
           ? MovieSuggestionsList
           : type === "city"
           ? citySuggestionsList
-          : ["invalid type"]
+          : []
       )
         .filter((item) => item.toLowerCase().includes(value.toLowerCase()))
         .slice(0, 5);
@@ -61,7 +61,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ type }) => {
             onChange={handleInputChange}
             className="w-full bg-transparent border-none outline-none text-[clamp(16px,2vw,24px)] font-medium"
           />
-          {inputValue.length === 0 && type === "moive" && <FlippingText />}
+          {inputValue.length === 0 && type === "movie" && <FlippingText />}
           {inputValue.length === 0 && type === "city" && (
             <h3 className=" absolute text-[clamp(16px,2vw,21px)] top-1/2 -translate-y-1/2 font-medium font-white pointer-events-none">
               Location
