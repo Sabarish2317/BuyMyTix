@@ -13,10 +13,12 @@ const SearchBar: React.FC<SearchBarProps> = ({ type }) => {
   const [inputValue, setInputValue] = useState("");
   const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(-1); // For arrow key selection
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setInputValue(value);
+    setSelectedIndex(-1); // Reset selection
 
     if (value.length > 0) {
       const filtered = (
@@ -36,6 +38,24 @@ const SearchBar: React.FC<SearchBarProps> = ({ type }) => {
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (filteredSuggestions.length === 0) return;
+
+    if (e.key === "ArrowDown") {
+      setSelectedIndex((prev) =>
+        prev < filteredSuggestions.length - 1 ? prev + 1 : 0
+      );
+    } else if (e.key === "ArrowUp") {
+      setSelectedIndex((prev) =>
+        prev > 0 ? prev - 1 : filteredSuggestions.length - 1
+      );
+    } else if (e.key === "Enter") {
+      if (selectedIndex >= 0 && selectedIndex < filteredSuggestions.length) {
+        handleSelectSuggestion(filteredSuggestions[selectedIndex]);
+      }
+    }
+  };
+
   const handleSelectSuggestion = (suggestion: string) => {
     setInputValue(suggestion);
     setShowSuggestions(false);
@@ -43,11 +63,11 @@ const SearchBar: React.FC<SearchBarProps> = ({ type }) => {
 
   return (
     <div
-      className="w-full h-max absolute z-50  text-white bg-purple-200/6 rounded-md outline-2 outline-white/20 
+      className="w-full h-max absolute z-50 text-white bg-purple-200/6 rounded-md outline-2 outline-white/20 
         outline-offset-[-2px] backdrop-blur-3xl text-[clamp(16px,2vw,24px)] font-medium transition-all 
-        duration-200  focus:outline-none active:opacity-100 flex flex-col overflow-clip"
+        duration-200 focus:outline-none active:opacity-100 flex flex-col overflow-clip"
     >
-      <div className="seach-input-container flex flex-row justify-start items-center gap-3 p-0 md:px-6 md:py-3 ">
+      <div className="seach-input-container flex flex-row justify-start items-center gap-3 px-4 py-2 md:px-6 md:py-3">
         <img
           src="/icons/search.svg"
           alt="search"
@@ -59,24 +79,28 @@ const SearchBar: React.FC<SearchBarProps> = ({ type }) => {
             type="text"
             value={inputValue}
             onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
             className="w-full bg-transparent border-none outline-none text-[clamp(16px,2vw,24px)] font-medium"
           />
           {inputValue.length === 0 && type === "movie" && <FlippingText />}
           {inputValue.length === 0 && type === "city" && (
-            <h3 className=" absolute text-[clamp(16px,2vw,21px)] top-1/2 -translate-y-1/2 font-medium font-white pointer-events-none">
+            <h3 className="absolute text-[clamp(16px,2vw,21px)] top-1/2 -translate-y-1/2 font-medium font-white pointer-events-none">
               Location
             </h3>
           )}
         </div>
       </div>
+
       {showSuggestions && (
         <ul className="w-full z-50">
           {filteredSuggestions.map((suggestion, index) => (
             <li
               key={index}
-              typeof="button"
+              role="button"
               onClick={() => handleSelectSuggestion(suggestion)}
-              className="p-3 text-white cursor-pointer hover:bg-[#7349AD] transition-all"
+              className={`p-3 text-white cursor-pointer transition-all ${
+                selectedIndex === index ? "bg-[#7349AD]" : "hover:bg-[#7349AD]"
+              }`}
             >
               {suggestion}
             </li>

@@ -65,7 +65,6 @@ html {
 
 /* changes date input calender color to white */
 input[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(1);
   cursor: pointer;
 }
 

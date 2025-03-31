@@ -61,6 +61,12 @@ const ProfileDialogueBox: React.FC<ProfileDialogueBoxProps> = () => {
         <button className="logout-button w-full flex flex-row items-center justify-start gap-6 pl-5 pr-5 pb-3 pt-3 scale-3d hover:bg-zinc-800 hover:scale-105 active:bg-zinc-700 active:scale-110 transition-all duration-200">
           <img src="/icons/logout-icon.svg" alt="settings" />
           <div className="justify-start text-white text-[clamp(20px,2vw,24px)] font-regular">
+            History
+          </div>
+        </button>
+        <button className="logout-button w-full flex flex-row items-center justify-start gap-6 pl-5 pr-5 pb-3 pt-3 scale-3d hover:bg-zinc-800 hover:scale-105 active:bg-zinc-700 active:scale-110 transition-all duration-200">
+          <img src="/icons/logout-icon.svg" alt="settings" />
+          <div className="justify-start text-white text-[clamp(20px,2vw,24px)] font-regular">
             Logout
           </div>
         </button>
