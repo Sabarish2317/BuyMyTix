@@ -5,35 +5,41 @@ import { ANIMATION_DURATION, MOVEMENT_DISTANCE } from "../../utils/constants";
 import { LOGIN_PAGE, SIGNUP_PAGE } from "../../utils/routing";
 import ProfileDialogueBox from "./ProfileDialogueBox";
 import LocationDialogBox from "./locationDialogBox";
+import SellTicketDialogBox from "./SellTicketsDialogBox";
+import CreateNewTicketDialogBox from "./CreateNewTicketDialogBox";
 
-// Enum for navigation button names
-enum NavigationButton {
-  Home = "home",
-  AboutUs = "about-us",
-  HelpAndSupport = "help-and-support",
-}
-
-// Props interface for the navigation bar
 interface TopNavigationBarProps {
-  isLoggedIn?: boolean; // Optional prop to indicate if a user is logged in
-  currentlyEnableButton?: NavigationButton; // Optional prop to specify the active button
+  isLoggedIn?: boolean;
 }
 
 // Top Navigation Bar Component
 const TopNavigationBar: React.FC<TopNavigationBarProps> = ({ isLoggedIn }) => {
   const navigate = useNavigate();
 
-  // Toggle visibility of the profile dialogue box
+  //toggle visibility of the profile dialogues
   const [isProfileVisible, setProfileVisible] = useState(false); //animate aagraku ku ithu venum so rendu state managed
   const toggleProfileDialogueBox = () => {
     setProfileVisible((prev) => !prev);
   };
-  // Toggle visibility of the location dialogue box
+  //toggle visibility of the location dialogue box
   const [isCityDialogueVisible, setCityDialogueVisible] = useState(false);
   const toggleCityDialogueBox = () => {
     setCityDialogueVisible((prev) => !prev);
   };
 
+  //toggle visiblity of the sell tickets instruction dialog box
+  const [isSellTicketDialogBoxVisible, setSellTicketDialogBoxVisible] =
+    useState(false);
+  const toggleSellTicketDialogBox = () => {
+    setSellTicketDialogBoxVisible((prev) => !prev);
+  };
+
+  //toggles visiblity of the create new ticket dialog box
+  const [isCreateTicketDialogBoxVisible, setCreateTicketDialogBoxVisible] =
+    useState(false);
+  const toggleCreateTicketDialogBox = () => {
+    setCreateTicketDialogBoxVisible((prev) => !prev);
+  };
   return (
     // Main navigation container
     <motion.div
@@ -68,16 +74,28 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({ isLoggedIn }) => {
           Home
         </button>
         <button
+          onClick={() => {
+            const currentPath = window.location.pathname;
+            if (currentPath === "/home") {
+              window.scrollTo({ top: 400, behavior: "smooth" });
+            } else {
+              navigate("/home");
+              setTimeout(() => {
+                window.scrollTo({ top: 400, behavior: "smooth" });
+              }, 100);
+            }
+          }}
           className="about-us w-max text-[clamp(20px,2vw,24px)] text-white
           hover:scale-95 transition-all duration-200 active:scale-105"
         >
           About us
         </button>
         <button
+          onClick={toggleSellTicketDialogBox}
           className="help-and-support w-max text-[clamp(20px,2vw,24px)] text-white
           hover:scale-95 transition-all duration-200 active:scale-105"
         >
-          Help & support
+          Sell tickets
         </button>
       </div>
 
@@ -113,7 +131,6 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({ isLoggedIn }) => {
             className="location-container w-max flex-row gap-2 flex max-[1290px]:hidden"
             onClick={toggleCityDialogueBox}
           >
-            <img src="/icons/marker.svg" alt="location" />
             <div
               className="login-button w-max  text- text-[clamp(20px,2vw,24px)] text-white
          hover:text-zinc-300 transition-all duration-200 active:text-zinc-400 cursor-pointer"
@@ -123,10 +140,13 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({ isLoggedIn }) => {
           </div>
 
           {/* Profile button with dropDown */}
-          <div className="profile-container relative flex flex-row items-center justify-end">
-            <div className="w-10 h-10 rounded-[290.91px] shadow-[0px_0px_23.799999237060547px_0px_rgba(220,57,18,100)] flex overflow-clip origin-right scale-3d scale-75 md:scale-90 lg:scale-100">
+          <div className="profile-container relative flex flex-row items-center justify-end ">
+            <div
+              onClick={toggleProfileDialogueBox}
+              className="w-10 h-10 rounded-[290.91px] shadow-[0px_0px_23.799999237060547px_0px_rgba(220,57,18,100)] flex overflow-clip origin-right scale-3d scale-75 md:scale-90 lg:scale-100  hover:scale-105 transition-all duration-200 ease-in-out active:scale-110 cursor-pointer"
+            >
               <img
-                className="w-full h-full "
+                className="w-full h-full  "
                 src="/images/profile.png"
                 alt="profile"
               />
@@ -145,7 +165,24 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({ isLoggedIn }) => {
                 alt="expand"
               />
             </button>
-            {/* overlay objects of top navigation bar */}
+            {/* overlay objects of top navigation bar which wll be hiddden until user prompts to upen it */}
+            {/* sell tickets dialog box */}
+            <AnimatePresence mode="wait">
+              {isSellTicketDialogBoxVisible && (
+                <SellTicketDialogBox
+                  setToggleDialogueBox={toggleSellTicketDialogBox}
+                  callBackToggle={toggleCreateTicketDialogBox}
+                />
+              )}
+            </AnimatePresence>
+            {/* create new ticket dialog box */}
+            <AnimatePresence mode="wait">
+              {isCreateTicketDialogBoxVisible && (
+                <CreateNewTicketDialogBox
+                  closeDialogBox={toggleCreateTicketDialogBox}
+                />
+              )}
+            </AnimatePresence>
             {/* city select dialogie box */}
             <AnimatePresence mode="wait">
               {isCityDialogueVisible && (
