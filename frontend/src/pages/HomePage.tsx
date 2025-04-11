@@ -6,6 +6,7 @@ import DetailCard from "../components/Global/DetailCard";
 import { motion } from "motion/react";
 import { MOVEMENT_DISTANCE } from "../utils/constants";
 import { easeInOut } from "motion";
+import AdSpace from "../components/Global/AdSpace";
 
 // interface HomePageProps {}
 
@@ -23,11 +24,7 @@ const HomePage: React.FC = () => {
         }}
         className="main-container"
       >
-        <img
-          className="w-full h-[250px] object-cover rounded-2xl origin-top"
-          src="/images/ad-space.png"
-          alt="google-ads"
-        />
+        <AdSpace />
         {/* Search bar with filters */}
         <div className="margin relative my-4 h-[56px]">
           <SearchBar type="movie" />
@@ -42,76 +39,91 @@ const HomePage: React.FC = () => {
               forwardUrl="c"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
               forwardUrl="c"
               imgSrc="/images/vidamuyarchi.png"
               title="vidanc"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
               forwardUrl="c"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
               forwardUrl="c"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
               forwardUrl="c"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
               forwardUrl="c"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
               forwardUrl="c"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
               forwardUrl="c"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
               forwardUrl="c"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
               forwardUrl="c"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
               forwardUrl="c"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
               forwardUrl="c"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
               forwardUrl="c"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
               forwardUrl="c"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
               forwardUrl="c"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
           </div>
         </div>
@@ -125,76 +137,91 @@ const HomePage: React.FC = () => {
               forwardUrl="c"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
               forwardUrl="c"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
               forwardUrl="c"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
               forwardUrl="c"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
               forwardUrl="c"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
               forwardUrl="c"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
               forwardUrl="c"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
               forwardUrl="c"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
               forwardUrl="c"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
               forwardUrl="c"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
               forwardUrl="c"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
               forwardUrl="c"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
               forwardUrl="c"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
               forwardUrl="c"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
               forwardUrl="c"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
           </div>
         </div>

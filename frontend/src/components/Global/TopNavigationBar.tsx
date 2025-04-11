@@ -2,20 +2,24 @@ import { AnimatePresence, motion } from "motion/react";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ANIMATION_DURATION, MOVEMENT_DISTANCE } from "../../utils/constants";
-import { LOGIN_PAGE, SIGNUP_PAGE } from "../../utils/routing";
+import { LOGIN_PAGE, SIGNUP_PAGE } from "../../routes/appRoutes";
 import ProfileDialogueBox from "./ProfileDialogueBox";
 import LocationDialogBox from "./locationDialogBox";
 import SellTicketDialogBox from "./SellTicketsDialogBox";
 import CreateNewTicketDialogBox from "./CreateNewTicketDialogBox";
+import { QueryClient } from "@tanstack/react-query";
+import { ProfileResponse } from "../../types/Profile";
+import ProfileImage from "./profileImage";
 
 interface TopNavigationBarProps {
-  isLoggedIn?: boolean;
+  userData: ProfileResponse;
 }
 
 // Top Navigation Bar Component
-const TopNavigationBar: React.FC<TopNavigationBarProps> = ({ isLoggedIn }) => {
+const TopNavigationBar: React.FC<TopNavigationBarProps> = ({ userData }) => {
   const navigate = useNavigate();
-
+  const queryClient = new QueryClient();
+  queryClient.getMutationCache();
   //toggle visibility of the profile dialogues
   const [isProfileVisible, setProfileVisible] = useState(false); //animate aagraku ku ithu venum so rendu state managed
   const toggleProfileDialogueBox = () => {
@@ -23,6 +27,7 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({ isLoggedIn }) => {
   };
   //toggle visibility of the location dialogue box
   const [isCityDialogueVisible, setCityDialogueVisible] = useState(false);
+
   const toggleCityDialogueBox = () => {
     setCityDialogueVisible((prev) => !prev);
   };
@@ -50,7 +55,7 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({ isLoggedIn }) => {
         delay: ANIMATION_DURATION * 6,
         ease: "easeOut",
       }}
-      className="top-navigation-bar flex flex-row justify-between items-center py-5 cursor-pointer overflow-visible"
+      className="top-navigation-bar w-full flex flex-row justify-between items-center py-5 cursor-default overflow-visible "
     >
       {/* Logo Section */}
       <div
@@ -58,7 +63,7 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({ isLoggedIn }) => {
         className="logo-padding w-full flex justify-start flex-row scale-3d hover:scale-95 hover:opacity-80 active:scale-105 active:opacity-100 transition-all duration-200"
       >
         <img
-          className="scale-75 md:scale-90 lg:scale-100 origin-left"
+          className="scale-75 md:scale-90 lg:scale-100 origin-left cursor-pointer"
           src="/icons/logo.svg"
           alt="logo"
         />
@@ -69,7 +74,7 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({ isLoggedIn }) => {
         <button
           onClick={() => navigate("/home")}
           className="home w-max text-[clamp(20px,2vw,24px)] text-white font-medium primary
-         hover:scale-95 transition-all duration-200 active:scale-105"
+         hover:scale-95 transition-all duration-200 active:scale-105 cursor-pointer"
         >
           Home
         </button>
@@ -86,26 +91,26 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({ isLoggedIn }) => {
             }
           }}
           className="about-us w-max text-[clamp(20px,2vw,24px)] text-white
-          hover:scale-95 transition-all duration-200 active:scale-105"
+          hover:scale-95 transition-all duration-200 active:scale-105 cursor-pointer"
         >
           About us
         </button>
         <button
           onClick={toggleSellTicketDialogBox}
           className="help-and-support w-max text-[clamp(20px,2vw,24px)] text-white
-          hover:scale-95 transition-all duration-200 active:scale-105"
+          hover:scale-95 transition-all duration-200 active:scale-105 cursor-pointer"
         >
           Sell tickets
         </button>
       </div>
 
-      {!isLoggedIn ? (
+      {!userData.email ? (
         /* Action Buttons - Hidden on mobile and the user havent logeed inn*/
         <div className="action-buttons-container flex flex-row gap-6 items-center justify-end w-full">
           {/* Login Button (Only visible on large screens) */}
           <button
             className="login-button w-max text-[clamp(20px,2vw,24px)] text-white underline hidden lg:flex
-         hover:scale-95 transition-all duration-200 active:scale-105"
+         hover:scale-95 transition-all duration-200 active:scale-105 cursor-pointer"
             onClick={() => navigate(LOGIN_PAGE)}
           >
             Log in
@@ -113,7 +118,7 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({ isLoggedIn }) => {
           {/* Get Started Button (Hidden on small screens, visible on medium+) */}
           <button
             className="get-started-button w-max bg-white px-3 py-2 md:px-4 md:py-3 rounded-md backdrop-blur-sm justify-center items-center gap-2.5 flex 
-        hover:bg-white/80 hover:scale-95 transition-all duration-200 active:scale-105 active:bg-white"
+        hover:bg-white/80 hover:scale-95 transition-all duration-200 active:scale-105 active:bg-white cursor-pointer"
           >
             <h2
               className="text-[clamp(20px,2vw,24px)] text-black font-medium"
@@ -125,32 +130,34 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({ isLoggedIn }) => {
         </div>
       ) : (
         // Profile Button and locatin button (Only visible after loggin in both mobile and pc view)
-        <div className="profile-location-container w-full  justify-end items-center gap-6 flex flex-row">
+        <div className="profile-location-container w-full  justify-end items-center gap-6 flex flex-row ">
           {/* location state */}
           <div
-            className="location-container w-max flex-row gap-2 flex max-[1290px]:hidden"
+            className="location-container w-max flex-row gap-2 flex max-[1290px]:hidden cursor-pointer"
             onClick={toggleCityDialogueBox}
           >
+            <img src="/icons/location-icon.svg" alt="" />
             <div
               className="login-button w-max  text- text-[clamp(20px,2vw,24px)] text-white
          hover:text-zinc-300 transition-all duration-200 active:text-zinc-400 cursor-pointer"
             >
-              Coimbatore, Tamil Nadu
+              {userData.city
+                ? userData.city + ", " + userData.state
+                : "Select your city"}
             </div>
           </div>
 
           {/* Profile button with dropDown */}
           <div className="profile-container relative flex flex-row items-center justify-end ">
-            <div
+            <ProfileImage
+              data={
+                !userData.profileImage?.data ||
+                userData.profileImage.data.trim().toLowerCase() !== "empty"
+                  ? userData.profileImage.data
+                  : "/icons/no-profile.png"
+              }
               onClick={toggleProfileDialogueBox}
-              className="w-10 h-10 rounded-[290.91px] shadow-[0px_0px_23.799999237060547px_0px_rgba(220,57,18,100)] flex overflow-clip origin-right scale-3d scale-75 md:scale-90 lg:scale-100  hover:scale-105 transition-all duration-200 ease-in-out active:scale-110 cursor-pointer"
-            >
-              <img
-                className="w-full h-full  "
-                src="/images/profile.png"
-                alt="profile"
-              />
-            </div>
+            />
             <button
               onClick={toggleProfileDialogueBox}
               style={{ rotate: isProfileVisible ? "180deg" : "0deg" }}
@@ -187,13 +194,14 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({ isLoggedIn }) => {
             <AnimatePresence mode="wait">
               {isCityDialogueVisible && (
                 <LocationDialogBox
+                  userData={userData}
                   setToggleDialogueBox={toggleCityDialogueBox}
                 />
               )}
             </AnimatePresence>
             {/* profile dialogue box */}
             <AnimatePresence mode="wait">
-              {isProfileVisible && <ProfileDialogueBox userData="s" />}
+              {isProfileVisible && <ProfileDialogueBox userData={userData} />}
             </AnimatePresence>
           </div>
         </div>

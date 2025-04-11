@@ -1,30 +1,86 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import MyDivider from "../../utils/Divider";
+import MyDivider from "../Global/Divider";
 import { AnimatePresence, motion } from "framer-motion";
-import { LOGIN_PAGE } from "../../utils/routing";
+import { LOGIN_PAGE } from "../../routes/appRoutes";
+import { useMutation } from "@tanstack/react-query";
+import { signUpUser } from "../../queries/SignUp";
+import { SignUpRequest } from "../../types/SignUp";
+import AddProfileDialogBox from "./AddProfileDetailsDialogBox";
+import GoogleAuthButton from "./googleOauthButton";
 
 const SignUpForm: React.FC = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const navigate = useNavigate();
+  const [isProfileDialogBoxVisible, setShowProfileDetailsDialog] =
+    useState(false);
+  const toggleProfileDialogueBox = () => {
+    setShowProfileDetailsDialog((prev) => !prev);
+  };
+  const [isProfileFilled, setProfileFilled] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-
   const [isAnimating, setIsAnimating] = useState(false);
 
-  const navigate = useNavigate();
+  const [form, setForm] = useState<SignUpRequest>({
+    name: "",
+    email: "",
+    phone: "",
+    profileImage: {
+      data: "",
+      contentType: "",
+    },
+    password: "",
+    confirmPassword: "",
+  });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const mutation = useMutation({
+    mutationKey: ["SignUp"],
+    mutationFn: signUpUser,
+  });
+
+  const { isError, isPending, error } = mutation;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsAnimating(true);
-    setTimeout(() => {
-      navigate("/home");
-    }, 1500); // waiting for animation to finish
-    console.log({ email, password, confirmPassword });
+    if (!isProfileFilled) {
+      toggleProfileDialogueBox();
+      return;
+    }
+    mutation.reset();
+
+    //ON_SUCCESS
+    mutation.mutate(form, {
+      onSuccess: (responseData) => {
+        setIsAnimating(true);
+        if (!responseData.token) {
+          return;
+        }
+        localStorage.setItem("token", responseData?.token);
+
+        setTimeout(() => navigate("/home"), 1000);
+      },
+      onError: () => {
+        setProfileFilled(false);
+      },
+    });
   };
 
   return (
     <div className="w-full self-center">
+      <AnimatePresence mode="wait">
+        {isProfileDialogBoxVisible && (
+          <AddProfileDialogBox
+            form={form}
+            setProfileFilled={setProfileFilled}
+            setForm={setForm}
+            setToggleDialogueBox={toggleProfileDialogueBox}
+          />
+        )}
+      </AnimatePresence>
+
       {/* Welcome Text */}
       <div className="flex-col justify-center items-center self-center">
         <AnimatePresence>
@@ -48,7 +104,6 @@ const SignUpForm: React.FC = () => {
                 top: "50%",
                 left: "50%",
                 x: "-50%",
-                y: "-50%",
                 width: "300vw",
                 height: "300vh",
                 scale: 1,
@@ -57,7 +112,7 @@ const SignUpForm: React.FC = () => {
                 backdropFilter: "blur(50px)",
               }}
               transition={{
-                duration: 0.3,
+                duration: 2,
 
                 ease: [0.43, 0.13, 0.23, 0.96],
               }}
@@ -74,9 +129,24 @@ const SignUpForm: React.FC = () => {
             Account
           </span>
         </div>
-        <div className="self-stretch text-center text-white/80 text-[clamp(14px,1.5vw,18px)] font-medium tracking-wide leading-3 sm:leading-3 md:leading-4 lg:leading-5 pb-3">
+
+        {/* Error container */}
+        <div
+          className={`self-stretch text-center text-white text-[clamp(14px,1.5vw,18px)] font-medium tracking-wide leading-3 sm:leading-3 md:leading-4 lg:leading-5 pb-3 transition-all duration-200 ease-in-out
+            "text-white/80"}`}
+        >
           Sign up for your BuyMyTix account
         </div>
+        {isError && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="text-[#dc3912] font-medium px-4 py-2 rounded-md mb-3 text-center"
+          >
+            {error.message}
+          </motion.div>
+        )}
       </div>
 
       {/* Form */}
@@ -86,15 +156,27 @@ const SignUpForm: React.FC = () => {
           <label className="text-white/80 text-[clamp(14px,1.5vw,18px)] font-medium">
             Email
           </label>
-          <div className="w-full px-3 py-[14px] rounded-md border-2 border-white/50 flex items-center">
+          <motion.div
+            initial={false}
+            animate={{
+              x: isError ? [-20, 0] : 0,
+              borderColor: isError ? "#dc3912" : "rgba(255,255,255,0.5)",
+            }}
+            transition={{
+              duration: 0.1,
+              ease: "backInOut",
+            }}
+            className="w-full px-3 py-[14px] rounded-md border-2 flex items-center justify-between"
+          >
             <input
+              name="email"
               type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={form.email}
+              onChange={handleChange}
               placeholder="m@example.com"
               className="w-full bg-transparent text-white/80 text-[clamp(14px,1.3vw,16px)] font-normal outline-none"
             />
-          </div>
+          </motion.div>
         </div>
 
         {/* Password Field */}
@@ -102,11 +184,23 @@ const SignUpForm: React.FC = () => {
           <label className="text-white/80 text-[clamp(14px,1.5vw,18px)] font-medium">
             Password
           </label>
-          <div className="w-full px-3 py-[14px] rounded-md border-2 border-white/50 flex items-center justify-between">
+          <motion.div
+            initial={false}
+            animate={{
+              x: isError ? [-20, 0] : 0,
+              borderColor: isError ? "#dc3912" : "rgba(255,255,255,0.5)",
+            }}
+            transition={{
+              duration: 0.1,
+              ease: "backInOut",
+            }}
+            className="w-full px-3 py-[14px] rounded-md border-2 flex items-center justify-between"
+          >
             <input
               type={showPassword ? "text" : "password"}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              name="password"
+              value={form.password}
+              onChange={handleChange}
               placeholder="••••••••"
               className="w-full bg-transparent text-white/80 text-[clamp(14px,1.3vw,16px)] font-normal outline-none"
             />
@@ -122,7 +216,7 @@ const SignUpForm: React.FC = () => {
                 alt="eye"
               />
             </button>
-          </div>
+          </motion.div>
         </div>
 
         {/* Confirm Password Field */}
@@ -130,26 +224,47 @@ const SignUpForm: React.FC = () => {
           <label className="text-white/80 text-[clamp(14px,1.5vw,18px)] font-medium">
             Confirm Password
           </label>
-          <div className="w-full px-3 py-[14px] rounded-md border-2 border-white/50 flex items-center justify-between">
+          <motion.div
+            initial={false}
+            animate={{
+              x: isError ? [-20, 0] : 0,
+              borderColor: isError ? "#dc3912" : "rgba(255,255,255,0.5)",
+            }}
+            transition={{
+              duration: 0.1,
+              ease: "backInOut",
+            }}
+            className="w-full px-3 py-[14px] rounded-md border-2 flex items-center justify-between"
+          >
             <input
-              type={"password"}
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              type="password"
+              name="confirmPassword"
+              value={form.confirmPassword}
+              onChange={handleChange}
               placeholder="••••••••"
               className="w-full bg-transparent text-white/80 text-[clamp(14px,1.3vw,16px)] font-normal outline-none"
             />
-          </div>
+          </motion.div>
         </div>
 
         {/* Submit Button */}
         <motion.button
-          type="submit"
-          className="px-6 py-3 w-full bg-white/90 text-black text-[clamp(14px,1.5vw,18px)] cursor-pointer font-medium rounded-md relative overflow-hidden
-          hover:bg-white transition-all duration-400 ease-in-out hover:scale-3d hover:scale-105"
+          type="button"
+          onClick={
+            form.email && form.password === form.confirmPassword
+              ? handleSubmit
+              : () => {}
+          }
+          className={`px-6 py-3 w-full bg-white/90 text-black text-[clamp(14px,1.5vw,18px)] cursor-pointer font-medium rounded-md relative overflow-hidden
+          hover:bg-white transition-all duration-400 ease-in-out hover:scale-3d hover:scale-105 ${
+            form.email && form.password === form.confirmPassword
+              ? ""
+              : "opacity-50 cursor-not-allowed"
+          }`}
           whileTap={{ scale: 0.98 }}
           disabled={isAnimating}
         >
-          Sign Up
+          {isProfileFilled ? (isPending ? "Signing Up..." : "Sign Up") : "Next"}
         </motion.button>
 
         {/* Or Divider */}
@@ -162,13 +277,7 @@ const SignUpForm: React.FC = () => {
         </div>
 
         {/* Sign Up with Google */}
-        <button
-          type="button"
-          className="px-6 py-3 w-full bg-black text-white text-[clamp(14px,1.5vw,18px)] font-medium rounded-md cursor-pointer"
-        >
-          Sign Up with Google
-        </button>
-
+        <GoogleAuthButton name="Sign up" />
         {/* Log In Link */}
         <div className="text-center text-white/80 text-[clamp(12px,1.2vw,16px)]">
           Already have an account?{" "}

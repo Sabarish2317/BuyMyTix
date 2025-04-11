@@ -13,7 +13,7 @@ const AnimatedBento: React.FC = () => {
         delay: ANIMATION_DURATION * 7,
         ease: "easeOut",
       }}
-      className="bento-container w-full flex flex-col md:flex-row gap-4 md:gap-6 lg:gap-8 p-3 md:p-4 lg:p-6 items-center justify-center mt-14"
+      className="bento-container w-full flex flex-col md:flex-row gap-4 md:gap-6 lg:gap-8 p-3 md:p-4 lg:p-6 items-center justify-center mt-14 cursor-default select-none"
     >
       {/* 1st column */}
       <div className="w-full md:w-auto flex flex-row md:flex-col gap-2 md:gap-4 lg:gap-6 ">
@@ -58,7 +58,7 @@ const AnimatedBento: React.FC = () => {
       <div className="w-full min-h-full self-stretch md:w-auto flex flex-col gap-4 md:gap-6 lg:gap-8">
         <AnimatedBentoBox2
           offsetBoxClassName="min-h-full"
-          className="min-h-full justify-between"
+          className="min-h-full justify-between gradient-border-left py-8"
           title={
             <h2>
               Direct Buyer-to-Seller
@@ -153,8 +153,9 @@ const AnimatedBentoBox: React.FC<AnimatedBentoBoxProps> = ({
     >
       {/* main container box with responsive padding */}
       <div
-        className={`main-container w-full pl-4 md:pl-6 lg:pl-8 pr-3 md:pr-4 lg:pr-6 py-4 md:py-5 lg:py-6 rounded-xl border-[1px] md:border-[2px] gradient-border  flex-col items-start gap-3 md:gap-4 lg:gap-[18px]
-          hover:scale-3d hover:scale-110 transition-all ease-in-out duration-200  inline-flex ${className}`}
+        className={`main-container relative w-full pl-4 md:pl-6 lg:pl-8 pr-3 md:pr-4 lg:pr-6 py-4 md:py-5 lg:py-6 
+  rounded-xl border-[1px] md:border-[2px] gradient-border-left flex flex-col items-start gap-3 md:gap-4 lg:gap-[18px]
+  hover:scale-110 transition-all ease-in-out duration-200  ${className}`}
       >
         {/* icon with responsive padding */}
         <div className="icon-container flex p-2 md:p-3 rounded-xl border-[3px] border-[#1D1D1D]">

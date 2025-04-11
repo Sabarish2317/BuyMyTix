@@ -4,8 +4,8 @@ import { ANIMATION_DURATION, MOVEMENT_DISTANCE } from "../../utils/constants";
 
 const HeroSection: React.FC = () => {
   return (
-    <div className="h-max justify-start items-center flex flex-col mt-6 gap-2 md:gap-0">
-      <div className="text-center leading-[30px] md:leading-[40px] lg:leading-[50px] uppercase">
+    <div className="h-max justify-start items-center flex flex-col mt-6 gap-2 md:gap-0 pointer-events-none select-none">
+      <div className="text-center leading-[30px] md:leading-[40px] lg:leading-[50px] uppercase pointer-events-none select-none">
         <motion.span
           initial={{ opacity: 0, x: -MOVEMENT_DISTANCE }}
           animate={{ opacity: 1, x: 0 }}

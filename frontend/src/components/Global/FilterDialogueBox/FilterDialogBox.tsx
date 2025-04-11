@@ -1,39 +1,57 @@
 import { motion } from "motion/react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom";
 import { ANIMATION_DURATION } from "../../../utils/constants";
 import DynamicOptions from "./Components/DynamicOptions";
 
 const popUpVariants = {
   hidden: { opacity: 0, y: -10 },
-  visible: { opacity: 1, y: 56 },
+  visible: { opacity: 1, y: 0 },
   exit: { opacity: 0, y: -10 },
 };
 
 interface FilterDialogBoxProps {
   setToggleDialogueBox: React.Dispatch<React.SetStateAction<boolean>>;
 }
+
 const FilterDialogBox: React.FC<FilterDialogBoxProps> = ({
   setToggleDialogueBox,
 }) => {
   const [selected, setSelected] = useState("");
   const [option, setOption] = useState(1);
-  return (
-    <motion.div
-      variants={popUpVariants}
-      initial="hidden"
-      animate="visible"
-      exit="exit"
-      transition={{
-        duration: ANIMATION_DURATION,
-        ease: "easeOut",
-      }}
-      className="main-container fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-60 w-screen h-screen bg-white/2 backdrop-blur-sm flex justify-center items-center overflow-clip mt-4  "
-      //didnnt use childrens direcly as exit animations didnt work i dont know why
-    >
-      <div className="w-max p-4 bg-black  rounded-xl  flex flex-col items-center gap-3 overflow-hidden mb-32 ">
+  const [domReady, setDomReady] = useState(false);
+
+  useEffect(() => {
+    setDomReady(true);
+    // Lock body scroll when dialog is open
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      // Restore scroll when component unmounts
+      document.body.style.overflow = "auto";
+    };
+  }, []);
+
+  // Early return before DOM is ready (for SSR compatibility)
+  if (!domReady) return null;
+
+  // The actual dialog content
+  const dialogContent = (
+    <div className="main-container fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-60 w-screen h-screen bg-white/2 backdrop-blur-sm flex justify-center items-center overflow-clip ">
+      <motion.div
+        variants={popUpVariants}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
+        transition={{
+          duration: ANIMATION_DURATION,
+          ease: "easeOut",
+        }}
+        className="mt-16 w-max p-4 bg-black rounded-xl flex flex-col items-center gap-3 overflow-hidden mb-32"
+      >
         {/* header */}
         <div className="title-and-close-button w-full flex justify-between h-min items-center">
-          <h2 className=" text-center text-white text-[clamp(20px,2vw,24px)] font-black uppercase leading-loose [text-shadow:_0px_0px_56px_rgb(147_93_202_/_0.35)]">
+          <h2 className="text-center text-white text-[clamp(20px,2vw,24px)] font-black uppercase leading-loose [text-shadow:_0px_0px_56px_rgb(147_93_202_/_0.35)]">
             Filter
           </h2>
           <img
@@ -132,9 +150,12 @@ const FilterDialogBox: React.FC<FilterDialogBoxProps> = ({
             Apply filters
           </span>
         </button>
-      </div>
-    </motion.div>
+      </motion.div>
+    </div>
   );
+
+  // Create portal to render the dialog at the document body level
+  return ReactDOM.createPortal(dialogContent, document.body);
 };
 
 export default FilterDialogBox;

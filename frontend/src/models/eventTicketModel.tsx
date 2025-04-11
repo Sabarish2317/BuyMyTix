@@ -11,8 +11,9 @@ interface EventTicket {
   row?: string;
   seatNos: string;
   postedUsrId: string;
-  price: number;
-  ticketQuant: number;
+  phoneNo: string;
+  price: string;
+  ticketQuant: string;
   imgUrl?: string;
   description?: string;
   usrDescription?: string;

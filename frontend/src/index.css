@@ -41,10 +41,8 @@ input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-  -webkit-text-fill-color: white !important; /* Keeps text white */
-  color: white !important;
-  -webkit-box-shadow: 0 0 0 1000px rgba(220, 57, 18, 1) inset !important; /* Matches your dark theme */
-  background-color: transparent !important; /* Ensures no white background */
+  transition: background-color 5000s;
+  -webkit-text-fill-color: #ffffff !important;
 }
 
 /* Hide scrollbar for all browsers */
@@ -68,21 +66,43 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
 }
 
-.gradient-border::before {
+.gradient-border-left {
+  position: relative;
+}
+
+.gradient-border-left::before {
   content: "";
   position: absolute;
-  inset: 0;
-  border-radius: 12px; /* same as parent */
-  padding: 2px; /* border width */
-  background: linear-gradient(to bottom, #8970a7, #000000);
+  top: -2px;
+  bottom: -2px;
+  left: -2px;
+  right: 0;
+  border-radius: 12px;
+  padding: 2px;
+  background: linear-gradient(to right, #8970a7, #000000);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   pointer-events: none;
+  transition: all 0.3s ease-in-out;
 }
+
+/* Change the gradient border after `md` */
+@media (min-width: 768px) {
+  .gradient-border-left::before {
+    background: linear-gradient(to bottom, #8970a7, #000000);
+  }
+}
+
+/* Change the gradient border after `lg` */
+@media (min-width: 1024px) {
+  .gradient-border-left::before {
+    background: linear-gradient(to bottom, #8970a7, #000000);
+  }
+}
+
 @media (max-width: 640px) {
   .gradient-border::before {
-    padding: 01px; /* smaller border width for mobile */
   }
 }
 @layer utilities {

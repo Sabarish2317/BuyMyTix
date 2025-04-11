@@ -19,7 +19,7 @@ const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
               }`}
             >
               {currentStep === step && (
-                <div className="absolute w-7 h-7 bg-purple-600/40 rounded-full animate-ping" />
+                <div className="absolute w-7 h-7 bg-purple-600/80 rounded-full animate-ping" />
               )}
             </div>
           </div>
