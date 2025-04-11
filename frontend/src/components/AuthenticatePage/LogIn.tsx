@@ -1,124 +1,57 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import MyDivider from "../../utils/Divider";
+import MyDivider from "../Global/Divider";
 import { AnimatePresence, motion } from "motion/react";
-import { SIGNUP_PAGE } from "../../utils/routing";
+import { SIGNUP_PAGE } from "../../routes/appRoutes";
+import { SignInRequest } from "../../types/SignIn";
+import { useMutation } from "@tanstack/react-query";
+import { signInUser } from "../../queries/SignIn";
+import GoogleAuthButton from "./googleOauthButton";
+import ForgotPasswordDialogBox from "../DialogBoxes/ForgotPasswordDialogBox";
 
 const LoginForm: React.FC = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [form, setForm] = useState<SignInRequest>({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
-
-  // states for managing the mail validation
-  const [emailError, setEmailError] = useState("");
-  const [loginError, setLoginError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
+  const [isForgotPasswordDialogBoxVisible, SetForgotPasswordDialogBoxVisible] =
+    useState(false);
+  const hanldeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
   const navigate = useNavigate();
 
-  // Email validation function
-  const validateEmail = (email: string): boolean => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const isValid = emailRegex.test(email);
+  const mutate = useMutation({
+    mutationFn: signInUser,
+  });
+  const { isError, error, isPending } = mutate;
 
-    if (!isValid) {
-      setEmailError("Please enter a valid email address");
-    } else {
-      setEmailError("");
-    }
-
-    return isValid;
-  };
-
-  // Handle email input change
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newEmail = e.target.value;
-    setEmail(newEmail);
-
-    // Clear error when typing
-    if (emailError) {
-      setEmailError("");
-    }
-
-    // Clear login error when typing
-    if (loginError) {
-      setLoginError("");
-    }
-  };
-
-  // Handle password input change
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-
-    // Clear login error when typing
-    if (loginError) {
-      setLoginError("");
-    }
-  };
-
-  // Simulated API call for login
-  const loginUser = async (email: string, password: string) => {
-    // This would be your actual API call
-    return new Promise<{ success: boolean; message?: string }>((resolve) => {
-      setTimeout(() => {
-        // Simulate different responses based on credentials
-        if (email === "user@example.com" && password === "password") {
-          resolve({ success: true });
-        } else if (!email || !password) {
-          resolve({
-            success: false,
-            message: "Email and password are required",
-          });
-        } else {
-          resolve({ success: false, message: "Invalid email or password" });
+  //for login via email
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    mutate.mutate(form, {
+      onSuccess: (responseData) => {
+        setIsAnimating(true);
+        if (!responseData.token) {
+          return;
         }
-      }, 1000); // Simulate network delay
+        localStorage.setItem("token", responseData?.token);
+
+        setTimeout(() => navigate("/home"), 1000);
+      },
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    // Reset errors
-    setEmailError("");
-    setLoginError("");
-
-    // Validate email format first
-    const isEmailValid = validateEmail(email);
-
-    if (!isEmailValid) {
-      return;
-    }
-
-    // Start loading state
-    setIsLoading(true);
-
-    try {
-      // Attempt to login
-      const response = await loginUser(email, password);
-
-      if (response.success) {
-        // Success - start animation and redirect
-        setIsAnimating(true);
-        setTimeout(() => {
-          navigate("/home");
-        }, 1500); // waiting for animation to finish
-      } else {
-        // Display the error from the backend
-        setLoginError(response.message || "An error occurred during login");
-      }
-    } catch (e) {
-      // Handle any unexpected errors
-      setLoginError("Unable to connect to the server. Please try again later.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   return (
-    <div className="w-full self-center">
+    <div className="w-full h-min self-center">
       {/* Animation for successful login */}
+      <AnimatePresence>
+        {isForgotPasswordDialogBoxVisible && (
+          <ForgotPasswordDialogBox
+            email={form.email || ""}
+            setToggleDialogueBox={SetForgotPasswordDialogBoxVisible}
+          />
+        )}
+      </AnimatePresence>
       <AnimatePresence>
         {isAnimating && (
           <>
@@ -159,7 +92,7 @@ const LoginForm: React.FC = () => {
       </AnimatePresence>
 
       {/* Welcome Text */}
-      <div className="flex-col justify-center items-center self-center">
+      <div className="flex-col justify-center items-center ">
         <div className="text-center">
           <span className="text-[#dc3912] text-[clamp(18px,1.5vw,28px)] font-black leading-0">
             Welcome
@@ -174,14 +107,15 @@ const LoginForm: React.FC = () => {
         </div>
 
         {/* Display login error message */}
-        {loginError && (
+
+        {isError && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1, ease: "easeInOut" }}
-            className="text-red-500 font-medium px-4 py-2 rounded-md mb-3 text-center"
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="text-[#dc3912] font-medium px-4 py-2 rounded-md mb-3 text-center"
           >
-            {loginError}
+            {error.message}
           </motion.div>
         )}
       </div>
@@ -193,39 +127,59 @@ const LoginForm: React.FC = () => {
           <label className="text-white/80 text-[clamp(14px,1.5vw,18px)] font-medium">
             Email
           </label>
-          <div
-            className={`w-full px-3 py-[14px] rounded-md border-2 ${
-              emailError ? "border-red-500" : "border-white/50"
-            } flex items-center`}
+          <motion.div
+            initial={false}
+            animate={{
+              x: isError ? [-20, 0] : 0,
+              borderColor: isError ? "#dc3912" : "rgba(255,255,255,0.5)",
+            }}
+            transition={{
+              duration: 0.1,
+              ease: "backInOut",
+            }}
+            className="w-full px-3 py-[14px] rounded-md border-2 flex items-center justify-between"
           >
             <input
+              name="email"
               type="email"
-              value={email}
-              onChange={handleEmailChange}
+              value={form.email}
+              onChange={hanldeChange}
               placeholder="m@example.com"
               className="w-full bg-transparent text-white/80 text-[clamp(14px,1.3vw,16px)] font-normal outline-none"
             />
-          </div>
-          {emailError && (
-            <p className="text-red-400 text-sm mt-1">{emailError}</p>
-          )}
+          </motion.div>
         </div>
 
         {/* Password Field */}
         <div className="flex flex-col gap-1 w-full">
-          <div className="flex justify-between items-center">
-            <label className="text-white/80 text-[clamp(14px,1.5vw,18px)] font-medium">
+          <div className="label-and-forgot-passsword-container flex flex-row w-full justify-between">
+            <label className="text-white/80 text-[clamp(12px,1.2vw,16px)] font-medium">
               Password
             </label>
-            <h3 className="text-white/60 text-[clamp(12px,1.2vw,16px)] font-medium cursor-pointer">
-              Forgot password?
+            <h3
+              onClick={() => SetForgotPasswordDialogBoxVisible(true)}
+              className="text-white/80 text-[clamp(14px,1.5vw,18px)] font-regular cursor-pointer"
+            >
+              Forgot password ?
             </h3>
           </div>
-          <div className="w-full px-3 py-[14px] rounded-md border-2 border-white/50 flex items-center justify-between">
+          <motion.div
+            initial={false}
+            animate={{
+              x: isError ? [-20, 0] : 0,
+              borderColor: isError ? "#dc3912" : "rgba(255,255,255,0.5)",
+            }}
+            transition={{
+              duration: 0.1,
+              ease: "backInOut",
+            }}
+            className="w-full px-3 py-[14px] rounded-md border-2 flex items-center justify-between"
+          >
             <input
               type={showPassword ? "text" : "password"}
-              value={password}
-              onChange={handlePasswordChange}
+              name="password"
+              value={form.password}
+              onChange={hanldeChange}
               placeholder="••••••••"
               className="w-full bg-transparent text-white/80 text-[clamp(14px,1.3vw,16px)] font-normal outline-none"
             />
@@ -241,7 +195,7 @@ const LoginForm: React.FC = () => {
                 alt="eye"
               />
             </button>
-          </div>
+          </motion.div>
         </div>
 
         {/* Submit Button */}
@@ -249,14 +203,14 @@ const LoginForm: React.FC = () => {
           type="submit"
           className={`px-6 py-3 w-full text-[clamp(14px,1.5vw,18px)] font-medium rounded-md relative overflow-hidden
           transition-all duration-400 ease-in-out hover:scale-105 ${
-            isLoading
+            isPending
               ? "bg-white/50 text-black/70 cursor-not-allowed"
               : "bg-white/90 text-black cursor-pointer hover:bg-white"
           }`}
           whileTap={{ scale: 0.98 }}
-          disabled={isLoading || isAnimating}
+          disabled={isPending || isAnimating}
         >
-          {isLoading ? "Logging in..." : "Login"}
+          {isPending ? "Logging in..." : "Login"}
         </motion.button>
 
         {/* Or Divider */}
@@ -269,13 +223,7 @@ const LoginForm: React.FC = () => {
         </div>
 
         {/* Sign Up with Google */}
-        <button
-          type="button"
-          className="px-6 py-3 w-full bg-black text-white text-[clamp(14px,1.5vw,18px)] font-medium rounded-md cursor-pointer"
-          disabled={isLoading || isAnimating}
-        >
-          Sign In with Google
-        </button>
+        <GoogleAuthButton name="Sign in" />
 
         {/* Sign Up Link */}
         <div className="text-center text-white/80 text-[clamp(12px,1.2vw,16px)]">

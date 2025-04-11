@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ANIMATION_DURATION } from "../utils/constants";
 
 const AuthenticationPage: React.FC = () => {
+  //mode?="login" etc parser
   const [searchParams] = useSearchParams();
   const mode = searchParams.get("mode") || "login"; //default mode is login ie without no params means it directs to login tab
 
@@ -33,21 +34,25 @@ const AuthenticationPage: React.FC = () => {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: mode === "login" ? 50 : -50 }}
                 transition={{
-                  duration: ANIMATION_DURATION * 0.5,
+                  duration: ANIMATION_DURATION,
                   ease: "easeOut",
-                  type: "spring",
-                  stiffness: 100,
-                  damping: 30,
+                  type: "tween",
                 }}
                 className="w-full"
               >
-                {mode == "login" ? <LogIn /> : <SignUp />}
+                {mode == "login" ? (
+                  <LogIn />
+                ) : (
+                  <div>
+                    <SignUp />
+                  </div>
+                )}
               </motion.div>
             </AnimatePresence>
           </div>
 
           {/* illustration section */}
-          <div className="flex-4 illustration-tab-right hidden md:flex">
+          <div className="flex-4 illustration-tab-right hidden md:flex ">
             <img
               className="object-cover"
               src="/images/white-orange.png"

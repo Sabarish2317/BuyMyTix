@@ -19,7 +19,7 @@ const Dropdown: React.FC<DropdownProps> = ({
     <div className="relative w-full z-90">
       {/* Dropdown Button */}
       <div className="title-and-drop-down">
-        <div className="self-stretch justify-start text-white text-[clamp(12px,1vw,16px)]  font-bold leading-loose">
+        <div className="self-stretch justify-start text-white text-[clamp(12px,1vw,16px)]  font-bold leading-loose ">
           {heading}
         </div>
         <div
@@ -59,3 +59,4 @@ const Dropdown: React.FC<DropdownProps> = ({
 };
 
 export default Dropdown;
+

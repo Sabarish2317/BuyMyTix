@@ -35,7 +35,7 @@ const Layout: React.FC<LayoutProps> = ({ children, className = "" }) => {
       ></motion.div>
 
       {/* Wrapper for Page Content */}
-      <div className="wrapper w-full flex flex-col max-w-[1490px] px-4 md:px-6 lg:px-[42px] z-50">
+      <div className="wrapper w-full flex flex-col max-w-[1490px] px-4 md:px-6 items-center lg:px-[42px] z-50">
         {children}
       </div>
     </div>

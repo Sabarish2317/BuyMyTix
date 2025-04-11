@@ -13,8 +13,9 @@ interface MovieTicket {
   time: string; // Format: HH:mm
   seatNos: string;
   postedUsrId: string;
-  price: number;
-  ticketQuant: number;
+  phoneNo: string;
+  price: string;
+  ticketQuant: string;
   imgUrl?: string;
   description?: string;
   usrDescription?: string;

@@ -6,7 +6,8 @@ import Layout from "../components/Global/Layout";
 import TopNavigationBar from "../components/Global/TopNavigationBar";
 import SearchBar from "../components/Global/SearchBar";
 import { MOVEMENT_DISTANCE } from "../utils/constants";
-import FilterDialogBox from "../components/Global/FilterDialogueBox/FilterDialogBox";
+import FilterDialogBox from "../components/DialogBoxes/FilterDialogueBox/FilterDialogBox";
+import AdSpace from "../components/Global/AdSpace";
 
 const ResultsPage: React.FC = () => {
   const [isFilterDialogBoxVisible, ToggleDialogueBoxVisiblity] =
@@ -22,13 +23,9 @@ const ResultsPage: React.FC = () => {
           delay: 1,
           ease: easeInOut,
         }}
-        className="main-container"
+        className="main-container overflow-visible"
       >
-        <img
-          className="w-full h-[200px] object-cover rounded-2xl origin-top"
-          src="/images/ad-space.png"
-          alt="google-ads "
-        />
+        <AdSpace />
         {/* Search bar with filters */}
         <div className="margin relative my-4 h-[56px]">
           <SearchBar type="movie" />
@@ -59,79 +56,94 @@ const ResultsPage: React.FC = () => {
           </div>
           <div className="movies-row flex flex-row gap-6 h-max overflow-hidden overflow-x-scroll ">
             <DetailCard
-              forwardUrl="c"
+              forwardUrl="/moreInfo/:id=1"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
-              forwardUrl="c"
+              forwardUrl="/moreInfo/:id=1"
               imgSrc="/images/vidamuyarchi.png"
               title="vidanc"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
-              forwardUrl="c"
+              forwardUrl="/moreInfo/:id=1"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
-              forwardUrl="c"
+              forwardUrl="/moreInfo/:id=1"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
-              forwardUrl="c"
+              forwardUrl="/moreInfo/:id=1"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
-              forwardUrl="c"
+              forwardUrl="/moreInfo/:id=1"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
-              forwardUrl="c"
+              forwardUrl="/moreInfo/:id=1"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
-              forwardUrl="c"
+              forwardUrl="/moreInfo/:id=1"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
-              forwardUrl="c"
+              forwardUrl="/moreInfo/:id=1"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
-              forwardUrl="c"
+              forwardUrl="/moreInfo/:id=1"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
-              forwardUrl="c"
+              forwardUrl="/moreInfo/:id=1"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
-              forwardUrl="c"
+              forwardUrl="/moreInfo/:id=1"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
-              forwardUrl="c"
+              forwardUrl="/moreInfo/:id=1"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
-              forwardUrl="c"
+              forwardUrl="/moreInfo/:id=1"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
-              forwardUrl="c"
+              forwardUrl="/moreInfo/:id=1"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
           </div>
         </div>
@@ -142,79 +154,94 @@ const ResultsPage: React.FC = () => {
           </div>
           <div className="movies-row flex flex-row gap-6 h-max overflow-hidden overflow-x-scroll ">
             <DetailCard
-              forwardUrl="c"
+              forwardUrl="/moreInfo/:id=1"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
-              forwardUrl="c"
+              forwardUrl="/moreInfo/:id=1"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
-              forwardUrl="c"
+              forwardUrl="/moreInfo/:id=1"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
-              forwardUrl="c"
+              forwardUrl="/moreInfo/:id=1"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
-              forwardUrl="c"
+              forwardUrl="/moreInfo/:id=1"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
-              forwardUrl="c"
+              forwardUrl="/moreInfo/:id=1"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
-              forwardUrl="c"
+              forwardUrl="/moreInfo/:id=1"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
-              forwardUrl="c"
+              forwardUrl="/moreInfo/:id=1"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
-              forwardUrl="c"
+              forwardUrl="/moreInfo/:id=1"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
-              forwardUrl="c"
+              forwardUrl="/moreInfo/:id=1"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
-              forwardUrl="c"
+              forwardUrl="/moreInfo/:id=1"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
-              forwardUrl="c"
+              forwardUrl="/moreInfo/:id=1"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
-              forwardUrl="c"
+              forwardUrl="/moreInfo/:id=1"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
-              forwardUrl="c"
+              forwardUrl="/moreInfo/:id=1"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
             <DetailCard
-              forwardUrl="c"
+              forwardUrl="/moreInfo/:id=1"
               imgSrc="/images/vidamuyarchi.png"
               title="Vidamuyarchi"
+              className="min-w-25 md:min-w-30 lg:min-w-35"
             ></DetailCard>
           </div>
         </div>

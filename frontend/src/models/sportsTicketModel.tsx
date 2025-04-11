@@ -11,8 +11,9 @@ interface SportsTicket {
   row: string;
   seatNos: string; // Single or multiple seat numbers
   postedUsrId: string;
-  price: number;
-  ticketQuant: number;
+  phoneNo: string;
+  price: string;
+  ticketQuant: string;
   imgUrl?: string;
   description?: string;
   usrDescription?: string;

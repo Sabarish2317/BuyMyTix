@@ -1,15 +1,23 @@
 import { useState } from "react";
-import FlippingText from "../../utils/FlippingText";
+import FlippingText from "./FlippingText";
 import {
   citySuggestionsList,
   MovieSuggestionsList,
 } from "../../utils/constants";
+import { useNavigate } from "react-router-dom";
 
 interface SearchBarProps {
   type: string;
+  className?: string;
+  mainClassName?: string;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ type }) => {
+const SearchBar: React.FC<SearchBarProps> = ({
+  type,
+  mainClassName = "",
+  className = "",
+}) => {
+  const navigate = useNavigate();
   const [inputValue, setInputValue] = useState("");
   const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -52,20 +60,26 @@ const SearchBar: React.FC<SearchBarProps> = ({ type }) => {
     } else if (e.key === "Enter") {
       if (selectedIndex >= 0 && selectedIndex < filteredSuggestions.length) {
         handleSelectSuggestion(filteredSuggestions[selectedIndex]);
+        // navigate(`/search/${type}/${suggestion}`);
+        navigate(`/search:id=1`);
       }
+    } else if (e.key === "Escape") {
+      setShowSuggestions(false);
     }
   };
 
   const handleSelectSuggestion = (suggestion: string) => {
     setInputValue(suggestion);
     setShowSuggestions(false);
+    // navigate(`/search/${type}/${suggestion}`);
+    navigate(`/moreInfo/:id=1`);
   };
 
   return (
     <div
-      className="w-full h-max absolute z-50 text-white bg-purple-200/6 rounded-md outline-2 outline-white/20 
+      className={`w-full h-max absolute z-50 text-white bg-purple-200/6 rounded-md outline-2 outline-white/20 
         outline-offset-[-2px] backdrop-blur-3xl text-[clamp(16px,2vw,24px)] font-medium transition-all 
-        duration-200 focus:outline-none active:opacity-100 flex flex-col overflow-clip"
+        duration-200 focus:outline-none active:opacity-100 flex flex-col overflow-clip ${mainClassName}`}
     >
       <div className="seach-input-container flex flex-row justify-start items-center gap-3 px-4 py-2 md:px-6 md:py-3">
         <img
@@ -84,7 +98,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ type }) => {
           />
           {inputValue.length === 0 && type === "movie" && <FlippingText />}
           {inputValue.length === 0 && type === "city" && (
-            <h3 className="absolute text-[clamp(16px,2vw,21px)] top-1/2 -translate-y-1/2 font-medium font-white pointer-events-none">
+            <h3 className="absolute text-[clamp(16px,2vw,21px)] top-1/2 -translate-y-1/2 font-medium  pointer-events-none">
               Location
             </h3>
           )}
@@ -92,7 +106,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ type }) => {
       </div>
 
       {showSuggestions && (
-        <ul className="w-full z-50">
+        <ul className={`w-full z-50 ${className}`}>
           {filteredSuggestions.map((suggestion, index) => (
             <li
               key={index}
