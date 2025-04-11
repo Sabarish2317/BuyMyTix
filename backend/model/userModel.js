@@ -35,6 +35,9 @@ const userSchema = new mongoose.Schema(
         soldAt: { type: Date },
       },
     ],
+    // otp and forgot password handling
+    otp: { type: String, required: false },
+    otpExpiry: { type: Date, required: false },
   },
   {
     timestamps: true,

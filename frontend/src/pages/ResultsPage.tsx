@@ -6,7 +6,7 @@ import Layout from "../components/Global/Layout";
 import TopNavigationBar from "../components/Global/TopNavigationBar";
 import SearchBar from "../components/Global/SearchBar";
 import { MOVEMENT_DISTANCE } from "../utils/constants";
-import FilterDialogBox from "../components/Global/FilterDialogueBox/FilterDialogBox";
+import FilterDialogBox from "../components/DialogBoxes/FilterDialogueBox/FilterDialogBox";
 import AdSpace from "../components/Global/AdSpace";
 
 const ResultsPage: React.FC = () => {

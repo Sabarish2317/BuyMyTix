@@ -1,9 +1,9 @@
 import { AnimatePresence, motion } from "motion/react";
 import React, { useEffect, useState } from "react";
 import { ANIMATION_DURATION } from "../../utils/constants";
-import Dropdown from "./DropDown";
-import Input from "./Input";
-import ProgressIndicator from "./ProgressIndicator";
+import Dropdown from "../Global/DropDown";
+import Input from "../Global/Input";
+import ProgressIndicator from "../Global/ProgressIndicator";
 import Movie from "../../models/movieTicketModel";
 import Event from "../../models/eventTicketModel";
 import Sport from "../../models/sportsTicketModel";

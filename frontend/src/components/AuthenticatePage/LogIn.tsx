@@ -7,11 +7,14 @@ import { SignInRequest } from "../../types/SignIn";
 import { useMutation } from "@tanstack/react-query";
 import { signInUser } from "../../queries/SignIn";
 import GoogleAuthButton from "./googleOauthButton";
+import ForgotPasswordDialogBox from "../DialogBoxes/ForgotPasswordDialogBox";
 
 const LoginForm: React.FC = () => {
   const [form, setForm] = useState<SignInRequest>({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [isForgotPasswordDialogBoxVisible, SetForgotPasswordDialogBoxVisible] =
+    useState(false);
   const hanldeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -41,6 +44,14 @@ const LoginForm: React.FC = () => {
   return (
     <div className="w-full h-min self-center">
       {/* Animation for successful login */}
+      <AnimatePresence>
+        {isForgotPasswordDialogBoxVisible && (
+          <ForgotPasswordDialogBox
+            email={form.email || ""}
+            setToggleDialogueBox={SetForgotPasswordDialogBoxVisible}
+          />
+        )}
+      </AnimatePresence>
       <AnimatePresence>
         {isAnimating && (
           <>
@@ -146,7 +157,7 @@ const LoginForm: React.FC = () => {
               Password
             </label>
             <h3
-              onClick={() => {}}
+              onClick={() => SetForgotPasswordDialogBoxVisible(true)}
               className="text-white/80 text-[clamp(14px,1.5vw,18px)] font-regular cursor-pointer"
             >
               Forgot password ?

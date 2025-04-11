@@ -2,7 +2,7 @@ import { motion } from "motion/react";
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { ANIMATION_DURATION } from "../../utils/constants";
-import CitySearchBar from "./CitySearchBar";
+import CitySearchBar from "../Global/CitySearchBar";
 import { useMutation } from "@tanstack/react-query";
 
 import { updateProfile } from "../../queries/Profile";

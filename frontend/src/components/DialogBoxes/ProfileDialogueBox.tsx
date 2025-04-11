@@ -2,10 +2,10 @@ import { AnimatePresence, motion } from "motion/react";
 
 import { ANIMATION_DURATION } from "../../utils/constants";
 import { useState } from "react";
-import { DropdownDark } from "./ProfileOptionsDropDown";
+import { DropdownDark } from "../Global/ProfileOptionsDropDown";
 import { useNavigate } from "react-router-dom";
 import { ProfileResponse } from "../../types/Profile";
-import ProfileImage from "./profileImage";
+import ProfileImage from "../Global/profileImage";
 
 interface ProfileDialogueBoxProps {
   userData: ProfileResponse;
