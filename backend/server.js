@@ -13,6 +13,9 @@ app.use(express.json());
 
 const userRoute = require("./router/userRouter");
 const cityRoute = require("./router/cityRouter");
+app.get("/,(req,res)=>{
+    res.status(200).send("BuyMyTix Api");
+})
 app.use("/api/", cityRoute);
 app.use("/api/Authenticate", userRoute);
 
