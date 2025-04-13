@@ -7,18 +7,20 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors({
-  origin: 'https://buymytix.vercel.app',
-}));
-
+app.use(
+  cors({
+    origin: process.env.ORIGIN,
+    credentials: true, // if you're sending cookies or headers
+  })
+);
 app.use(logger);
 app.use(express.json());
 
 const userRoute = require("./router/userRouter");
 const cityRoute = require("./router/cityRouter");
-app.get("/",(req,res)=>{
-    res.status(200).send("BuyMyTix Api");
-})
+app.get("/", (req, res) => {
+  res.status(200).send("BuyMyTix Api");
+});
 app.use("/api/", cityRoute);
 app.use("/api/Authenticate", userRoute);
 
