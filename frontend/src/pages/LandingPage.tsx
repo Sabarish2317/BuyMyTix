@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import TopNavigationBar from "../components/Global/TopNavigationBar";
 import Layout from "../components/Global/Layout";
 import HeroSection from "../components/LandingPage/HeroSection";
@@ -7,10 +7,9 @@ import AnimatedBento from "../components/LandingPage/AnimatedBento";
 import { AnimatePresence } from "motion/react";
 import SellTicketDialogBox from "../components/DialogBoxes/SellTicketsDialogBox";
 import CreateNewTicketDialogBox from "../components/DialogBoxes/CreateNewTicketDialogBox";
-import { useQuery } from "@tanstack/react-query";
-import { getProfile } from "../queries/Profile";
 import { ProfileResponse } from "../types/Profile";
 import TickLoader from "../components/Global/LoadingIcon";
+import { useProfile } from "../contexts/ProfileContext";
 
 const LandingPage: React.FC = () => {
   //toggle visiblity of the sell tickets instruction dialog box
@@ -26,35 +25,8 @@ const LandingPage: React.FC = () => {
     setCreateTicketDialogBoxVisible((prev) => !prev);
   };
 
-  const [profileData, setProfileData] = useState<ProfileResponse>({
-    _id: "",
-    email: "",
-    loginType: "",
-    name: "",
-    phone: "",
-    profileImage: {
-      contentType: "",
-      data: "",
-    },
-    city: "",
-    preferredLanguage: "",
-    state: "",
-    soldTickets: [],
-    type: "",
-  });
-
-  const { data, isLoading } = useQuery<ProfileResponse, Error>({
-    queryKey: ["user", localStorage.getItem("token")],
-    queryFn: getProfile,
-    retry: 1,
-    enabled: !!localStorage.getItem("token"),
-  });
-
-  useEffect(() => {
-    if (data) {
-      setProfileData(data);
-    }
-  }, [data]);
+  //profile cntxt api
+  const { userData, isLoading } = useProfile();
 
   if (isLoading)
     return (
@@ -68,7 +40,7 @@ const LandingPage: React.FC = () => {
 
   return (
     <Layout>
-      <TopNavigationBar userData={profileData} />
+      <TopNavigationBar userData={userData || ({} as ProfileResponse)} />
       <div className="home-page-layout flex flex-col gap-4 select-none">
         <HeroSection />
         <HeroButtons
@@ -78,6 +50,7 @@ const LandingPage: React.FC = () => {
         <AnimatePresence mode="wait">
           {isSellTicketDialogBoxVisible && (
             <SellTicketDialogBox
+              userData={userData || ({} as ProfileResponse)}
               setToggleDialogueBox={toggleSellTicketDialogBox}
               callBackToggle={toggleCreateTicketDialogBox}
             />

@@ -1,8 +1,8 @@
-// const express = require('express');
-// const { searchTicket } = require('../controller/searchController');
+const express = require("express");
+const autocompleteHandler = require("../controller/searchController");
 
-// const router = express.Router();
+const router = express.Router();
 
-// router.post('/search' ,  searchTicket );
+router.get("/search/titles", autocompleteHandler);
 
-// module.exports = router;
+module.exports = router;

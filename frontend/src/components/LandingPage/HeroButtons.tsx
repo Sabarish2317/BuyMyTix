@@ -66,7 +66,7 @@ const HeroButtons: React.FC<props> = ({ showSellDialogBoxInstruction }) => {
              pointer-events-none"
         />
 
-        <SearchBar type="movie" />
+        <SearchBar />
       </div>
     </motion.div>
   );

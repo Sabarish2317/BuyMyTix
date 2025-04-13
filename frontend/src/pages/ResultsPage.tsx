@@ -8,13 +8,14 @@ import SearchBar from "../components/Global/SearchBar";
 import { MOVEMENT_DISTANCE } from "../utils/constants";
 import FilterDialogBox from "../components/DialogBoxes/FilterDialogueBox/FilterDialogBox";
 import AdSpace from "../components/Global/AdSpace";
+import { ProfileResponse } from "../types/Profile";
 
 const ResultsPage: React.FC = () => {
   const [isFilterDialogBoxVisible, ToggleDialogueBoxVisiblity] =
     useState(false);
   return (
     <Layout className="bg-[linear-gradient(to_bottom,#0D0B11_10%,#261349_80%)]">
-      <TopNavigationBar isLoggedIn={true} />
+      <TopNavigationBar userData={{} as ProfileResponse} />
       <motion.div
         initial={{ opacity: 0, y: MOVEMENT_DISTANCE }}
         animate={{ opacity: 1, y: 0 }}
@@ -23,12 +24,12 @@ const ResultsPage: React.FC = () => {
           delay: 1,
           ease: easeInOut,
         }}
-        className="main-container overflow-visible"
+        className="main-container overflow-visible w-full"
       >
         <AdSpace />
         {/* Search bar with filters */}
         <div className="margin relative my-4 h-[56px]">
-          <SearchBar type="movie" />
+          <SearchBar />
         </div>
 
         {/* filters panel */}

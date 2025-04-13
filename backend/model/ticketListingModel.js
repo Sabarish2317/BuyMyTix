@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const ticketListingSchema = new mongoose.Schema(
   {
@@ -30,11 +30,9 @@ const ticketListingSchema = new mongoose.Schema(
     userDescription: { type: String },
     ticketImage: { type: String },
 
-    // Status
-    status: {
-      type: String,
-      enum: ["Active", "Sold", "Expired"],
-      default: "Active",
+    // expiry time (same as the event start time )
+    expiryTime: {
+      type: date,
       index: true,
     },
   },
@@ -43,4 +41,4 @@ const ticketListingSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model("TicketListing", ticketListingSchema);
+module.exports = mongoose.model("TicketListing", ticketListingSchema);

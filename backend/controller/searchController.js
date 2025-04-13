@@ -1,66 +1,114 @@
-// const Fuse = require('fuse.js');
-// const Movie = require('../model/movieModel');
-// const Sport = require('../model/sportModel');
-// const Event = require('../model/eventModel');
+const Fuse = require("fuse.js");
+const axios = require("axios");
+const EventReference = require("../model/eventReferenceModel");
 
-// const options = {
-//   includeScore: true,
-//   keys: ['Title'],
-//   threshold: 0.1,
-// };
+/**
+ * Search function that returns event titles and posters for autocomplete
+ * @param {string} q - Search query
+ * @param {number} limit - Maximum number of results (default: 5)
+ * @returns {Promise<Array>} - Array of event titles and posters
+ */
+async function searchEventTitles(q, limit = 5, y) {
+  try {
+    // Step 1: Search through existing event references in database
+    const localResults = await searchLocalEvents({ q, y }, limit);
 
-// const searchTicket = async (req, res) => {
-//   const query = req.query.q;
+    // Step 2: If we have enough local results, return them
+    if (localResults.length >= limit) {
+      return localResults.slice(0, limit);
+    }
 
-//   const { Location , ticketType , movieLanguage , fromDate , toDate } = req.body;
+    // Step 3: If we need more results, search OMDb API
+    const remainingLimit = limit - localResults.length;
+    if (remainingLimit > 0) {
+      const omdbResults = await searchOMDb(q, remainingLimit, y);
+      return [...localResults, ...omdbResults].slice(0, limit);
+    }
 
-//   if (!query) {
-//     return res.status(400).json({ message: 'Query is required' });
-//   }
+    return localResults;
+  } catch (error) {
+    console.error("Search error:", error);
+    throw new Error("Failed to perform search");
+  }
+}
 
-//   try {
+/**
+ * Search local database for events matching the query
+ */
+async function searchLocalEvents(query, limit) {
+  // Get all event references from the database
+  const events = await EventReference.find({})
+    .select("title Poster type")
+    .lean();
 
-//     const filters = {};
-//     if (Location) filters.Location = Location;
-//     if (ticketType) filters.ticketType = ticketType;
-//     if (movieLanguage) filters.movieLanguage = movieLanguage;
+  // Configure Fuse.js for searching
+  const fuseOptions = {
+    keys: ["title"],
+    threshold: 0.4, // Lower threshold means more exact matching
+    includeScore: true,
+  };
 
-//   const dateFilter = {};
-//     if (fromDate || toDate) {
-//       dateFilter.ticketDate = {};
-//       if (fromDate) dateFilter.ticketDate.$gte = new Date(fromDate);
-//       if (toDate) dateFilter.ticketDate.$lte = new Date(toDate);
-//     }
+  const fuse = new Fuse(events, fuseOptions);
+  const results = fuse.search(query);
 
-//     const [movies, sports, events] = await Promise.all([
-//       Movie.find({ ...filters , ...dateFilter }),
-//       Sport.find({ ...filters , ...dateFilter }),
-//       Event.find({ ...filters , ...dateFilter })
-//     ]);
+  // Format results - only include title and poster
+  return results.slice(0, limit).map((result) => ({
+    eventId: result.item._id,
+    title: result.item.title,
+    poster: result.item.Poster || null,
+    type: result.item.type,
+    source: "database",
+  }));
+}
 
-//     const fuseMovies = new Fuse(movies, options);
-//     const fuseSports = new Fuse(sports, options);
-//     const fuseEvents = new Fuse(events, options);
+/**
+ * Search OMDb API for movies matching the query
+ */
+/**
+ * Search OMDb API for movies matching the query
+ */
+async function searchOMDb(query, limit, year) {
+  try {
+    const OMDB_API_KEY = process.env.OMDB_API_KEY;
+    const url = `https://www.omdbapi.com/?apikey=${OMDB_API_KEY}&s=${encodeURIComponent(query)}${year ? `&y=${year}` : ""}`;
 
-//     const movieResults = fuseMovies.search(query).map(result => result.item);
-//     const sportResults = fuseSports.search(query).map(result => result.item);
-//     const eventResults = fuseEvents.search(query).map(result => result.item);
+    const response = await axios.get(url);
 
-//     const allResults = [...movieResults, ...sportResults, ...eventResults];
+    if (response.data.Response === "True" && response.data.Search) {
+      return response.data.Search.slice(0, limit).map((movie) => ({
+        title: movie.Title,
+        poster: movie.Poster !== "N/A" ? movie.Poster : null,
+        type: "Movie",
+        source: "omdb",
+        externalId: movie.imdbID,
+        year: movie.Year,
+      }));
+    }
 
-//     if (allResults.length === 0) {
-//       return res.status(404).json({ message: 'No tickets found' });
-//     }
+    return [];
+  } catch (error) {
+    console.error("OMDb API error:", error);
+    return [];
+  }
+}
 
-//     return res.json({
-//       autocomplete: allResults.map(result => result.Title ),
-//       searchResults: allResults,
-//     });
-//   }
-//    catch (error) {
-//     console.error('Error during search:', error);
-//     return res.status(500).json({ message: 'Internal server error' });
-//   }
-// };
+// Express route handler
+const autocompleteHandler = async (req, res) => {
+  try {
+    const { q, y } = req.query;
 
-// module.exports = { searchTicket };
+    if (!q || !y) return res.status(400).send("Missing query or year");
+
+    if (!q || q.trim() === "") {
+      return res.status(400).json({ error: "Search query is required" });
+    }
+
+    const results = await searchEventTitles(q, 5, y ? y.trim() : null);
+    return res.json({ results });
+  } catch (error) {
+    console.error("Autocomplete handler error:", error);
+    return res.status(500).json({ error: "Search failed" });
+  }
+};
+
+module.exports = autocompleteHandler;

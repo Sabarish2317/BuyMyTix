@@ -7,11 +7,12 @@ import { MOVEMENT_DISTANCE } from "../utils/constants";
 import AdSpace from "../components/Global/AdSpace";
 import HistoryCard from "../components/HistoryPage/HistoryCard";
 import { ticketData } from "./TicketDetailsPage";
+import { ProfileResponse } from "../types/Profile";
 
 const HistoryPage: React.FC = () => {
   return (
     <Layout className="bg-[linear-gradient(to_bottom,#0D0B11_10%,#261349_80%)]">
-      <TopNavigationBar isLoggedIn={true} />
+      <TopNavigationBar userData={{} as ProfileResponse} />
       <motion.div
         initial={{ opacity: 0, y: MOVEMENT_DISTANCE }}
         animate={{ opacity: 1, y: 0 }}
@@ -20,7 +21,7 @@ const HistoryPage: React.FC = () => {
           delay: 1,
           ease: easeInOut,
         }}
-        className="main-container flex flex-col gap-2 md:gap-3"
+        className="main-container w-full flex flex-col gap-2 md:gap-3"
       >
         <AdSpace />
         <div className="justify-start text-white text-[clamp(20px,2.5vw,28px)] select-none font-bold">
