@@ -106,7 +106,8 @@ const loginUser = async (req, res) => {
 // Get profile (cache it)
 const userProfile = async (req, res) => {
   try {
-    const userEmail = req.user.email;
+    let userEmail = req.user.email;
+    email = email.trim().toLowerCase();
 
     const user = await User.findOne({ email: userEmail }).select(
       "-passwordHash"
@@ -126,7 +127,7 @@ const userProfile = async (req, res) => {
 };
 
 const OauthUser = async (req, res) => {
-  const {
+  let {
     email,
     name,
     googleId,
@@ -136,6 +137,7 @@ const OauthUser = async (req, res) => {
   if (!email || !googleId) {
     return res.status(400).json({ message: "Missing email or Google ID" });
   }
+  email = email.trim().toLowerCase();
 
   try {
     let user = await User.findOne({ email });
