@@ -107,7 +107,7 @@ const loginUser = async (req, res) => {
 const userProfile = async (req, res) => {
   try {
     let userEmail = req.user.email;
-    email = email.trim().toLowerCase();
+    userEmail = userEmail.trim().toLowerCase();
 
     const user = await User.findOne({ email: userEmail }).select(
       "-passwordHash"
