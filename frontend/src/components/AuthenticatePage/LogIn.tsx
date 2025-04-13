@@ -4,7 +4,7 @@ import MyDivider from "../Global/Divider";
 import { AnimatePresence, motion } from "motion/react";
 import { SIGNUP_PAGE } from "../../routes/appRoutes";
 import { SignInRequest } from "../../types/SignIn";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { signInUser } from "../../queries/SignIn";
 import GoogleAuthButton from "./googleOauthButton";
 import ForgotPasswordDialogBox from "../DialogBoxes/ForgotPasswordDialogBox";
@@ -24,7 +24,7 @@ const LoginForm: React.FC = () => {
     mutationFn: signInUser,
   });
   const { isError, error, isPending } = mutate;
-
+  const queryClient = useQueryClient();
   //for login via email
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,6 +35,8 @@ const LoginForm: React.FC = () => {
           return;
         }
         localStorage.setItem("token", responseData?.token);
+        // ✅ Invalidate so profile gets fresh data on next render
+        queryClient.invalidateQueries({ queryKey: ["userProfile"] });
 
         setTimeout(() => navigate("/home"), 1000);
       },
