@@ -10,6 +10,7 @@ const registerUser = async (req, res) => {
     res.status(400).json({ message: "All fields are required" });
     return;
   }
+  email.trim().toLowerCase();
   if (password !== confirmPassword) {
     return res.status(400).json({ message: "Passwords do not match" });
   }
@@ -62,7 +63,11 @@ const registerUser = async (req, res) => {
 // Login user
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
-
+  if (!email  || !password ) {
+    res.status(400).json({ message: "All fields are required" });
+    return;
+  }
+email.trim().toLowerCase();
   try {
     const user = await User.findOne({ email });
 
