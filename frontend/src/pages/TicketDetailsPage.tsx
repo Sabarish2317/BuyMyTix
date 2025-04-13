@@ -7,6 +7,7 @@ import { MOVEMENT_DISTANCE } from "../utils/constants";
 import DetailCard from "../components/Global/DetailCard";
 import TicketDetailsTile from "../components/TicketDetailsPage/TicketDetailsTile";
 import TicketDetail from "../components/TicketDetailsPage/TicketDetail";
+import { ProfileResponse } from "../types/Profile";
 
 interface TicketDetailsPageProps {}
 
@@ -14,7 +15,7 @@ const TicketDetailsPage: React.FC<TicketDetailsPageProps> = ({}) => {
   const [selectedTicket, setSelectedTicket] = React.useState(0);
   return (
     <Layout className="bg-[linear-gradient(to_right,#0D0B11_10%,#261349_80%)]">
-      <TopNavigationBar isLoggedIn={true} />
+      <TopNavigationBar userData={{} as ProfileResponse} />
       <motion.div
         initial={{ opacity: 0, y: MOVEMENT_DISTANCE }}
         animate={{ opacity: 1, y: 0 }}
@@ -23,7 +24,7 @@ const TicketDetailsPage: React.FC<TicketDetailsPageProps> = ({}) => {
           delay: 1,
           ease: easeInOut,
         }}
-        className="main-container flex flex-col gap-8 items-start justify-start w-full md:flex-row  "
+        className="main-container  flex flex-col gap-8 items-start justify-start w-full md:flex-row  "
       >
         <div className="tickets-left-side flex-2 w-full flex flex-col gap-6 h-max">
           <div className="poster-and-details-contaienr w-full flex h-[300px] rounded-[12px] overflow-clip relative">

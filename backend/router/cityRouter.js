@@ -44,7 +44,7 @@ const getCity = async (search) => {
   return searchDistricts(search);
 };
 
-router.get("/city", async (req, res) => {
+router.get("/search/cities", async (req, res) => {
   const { search } = req.query;
   try {
     const cities = await getCity(search);

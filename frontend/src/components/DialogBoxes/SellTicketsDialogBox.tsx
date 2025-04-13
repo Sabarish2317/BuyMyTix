@@ -2,6 +2,9 @@ import { motion } from "motion/react";
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { ANIMATION_DURATION } from "../../utils/constants";
+import { ProfileResponse } from "../../types/Profile";
+import { useNavigate } from "react-router-dom";
+import { LOGIN_PAGE } from "../../routes/appRoutes";
 
 const popUpVariants = {
   hidden: { opacity: 0, scale: 0.95 },
@@ -10,15 +13,17 @@ const popUpVariants = {
 };
 
 interface SellTicketDialogBoxProps {
+  userData: ProfileResponse;
   setToggleDialogueBox: React.Dispatch<React.SetStateAction<boolean>>;
   callBackToggle: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const SellTicketDialogBox: React.FC<SellTicketDialogBoxProps> = ({
+  userData,
   setToggleDialogueBox,
   callBackToggle,
 }) => {
-  // const [inputValue, setInputValue] = useState("");
+  const navigate = useNavigate();
   const [domReady, setDomReady] = useState(false);
 
   useEffect(() => {
@@ -69,9 +74,13 @@ const SellTicketDialogBox: React.FC<SellTicketDialogBoxProps> = ({
         <button
           onClick={() => {
             setToggleDialogueBox(false);
-            setTimeout(() => {
-              callBackToggle(true);
-            }, 200);
+            if (userData.email && userData) {
+              setTimeout(() => {
+                callBackToggle(true);
+              }, 200);
+            } else {
+              navigate(LOGIN_PAGE);
+            }
           }}
           className="w-full cursor-pointer px-6 py-3.5 bg-white text-black rounded-md flex justify-center items-center gap-2.5 scale-3d hover:scale-105 hover:opacity-90 hover:bg-[#DC3912] hover:text-white active:opacity-100 transition-all duration-200"
         >

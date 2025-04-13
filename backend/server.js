@@ -2,12 +2,13 @@ const express = require("express");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const cors = require("cors");
-
+const logger = require("./middleware/logger");
 dotenv.config();
 
 const app = express();
 
 app.use(cors({ origin: "*" }));
+app.use(logger);
 app.use(express.json());
 
 const userRoute = require("./router/userRouter");
@@ -18,8 +19,8 @@ app.use("/api/Authenticate", userRoute);
 // const ticketRoute = require("./router/ticketRouter");
 // app.use("/ticket", ticketRoute);
 
-// const searchRoute = require("./router/searchRouter");
-// app.use("/", searchRoute);
+const searchRoute = require("./router/searchRouter");
+app.use("/api/", searchRoute);
 
 // const homeRoute = require("./router/homeRouter");
 // app.use("/home", homeRoute);

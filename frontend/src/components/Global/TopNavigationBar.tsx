@@ -7,7 +7,6 @@ import ProfileDialogueBox from "../DialogBoxes/ProfileDialogueBox";
 import LocationDialogBox from "../DialogBoxes/locationDialogBox";
 import SellTicketDialogBox from "../DialogBoxes/SellTicketsDialogBox";
 import CreateNewTicketDialogBox from "../DialogBoxes/CreateNewTicketDialogBox";
-import { QueryClient } from "@tanstack/react-query";
 import { ProfileResponse } from "../../types/Profile";
 import ProfileImage from "./profileImage";
 
@@ -18,8 +17,7 @@ interface TopNavigationBarProps {
 // Top Navigation Bar Component
 const TopNavigationBar: React.FC<TopNavigationBarProps> = ({ userData }) => {
   const navigate = useNavigate();
-  const queryClient = new QueryClient();
-  queryClient.getMutationCache();
+
   //toggle visibility of the profile dialogues
   const [isProfileVisible, setProfileVisible] = useState(false); //animate aagraku ku ithu venum so rendu state managed
   const toggleProfileDialogueBox = () => {
@@ -96,7 +94,10 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({ userData }) => {
           About us
         </button>
         <button
-          onClick={toggleSellTicketDialogBox}
+          onClick={() => {
+            if (userData.email) toggleSellTicketDialogBox();
+            else navigate(LOGIN_PAGE);
+          }}
           className="help-and-support w-max text-[clamp(20px,2vw,24px)] text-white
           hover:scale-95 transition-all duration-200 active:scale-105 cursor-pointer"
         >
@@ -177,6 +178,7 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({ userData }) => {
             <AnimatePresence mode="wait">
               {isSellTicketDialogBoxVisible && (
                 <SellTicketDialogBox
+                  userData={userData}
                   setToggleDialogueBox={toggleSellTicketDialogBox}
                   callBackToggle={toggleCreateTicketDialogBox}
                 />

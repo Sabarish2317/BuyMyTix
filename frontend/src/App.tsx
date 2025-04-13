@@ -20,26 +20,30 @@ import HomePage from "./pages/HomePage";
 import ResultsPage from "./pages/ResultsPage";
 import TicketDetailsPage from "./pages/TicketDetailsPage";
 import HistoryPage from "./pages/HistoryPage";
+import { ProfileProvider } from "./contexts/ProfileContext";
 
 const queryClient = new QueryClient();
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Router>
-        <Routes>
-          {/* Urls are stored in utils/routing */}
-          <Route path="/*" element={<ErrorPage />} />
-          <Route path="/" element={<Navigate to={LANDING_PAGE} />} />
-          <Route path={LANDING_PAGE} element={<LandingPage />} />
-          <Route path={HOME_PAGE} element={<HomePage />} />
-          <Route path={RESULTS_PAGE} element={<ResultsPage />} />
-          <Route path={HISTORY_PAGE} element={<HistoryPage />} />
-          {/* if there is any userArguments then pass it to home page else landing page */}
-          <Route path={AUTHENTICATE_PAGE} element={<AuthenticationPage />} />
-          <Route path={TICKET_DETAILS_PAGE} element={<TicketDetailsPage />} />
-        </Routes>
-      </Router>
+      <ProfileProvider>
+        <Router>
+          <Routes>
+            {/* Urls are stored in utils/routing */}
+
+            <Route path="/*" element={<ErrorPage />} />
+            <Route path="/" element={<Navigate to={LANDING_PAGE} />} />
+            <Route path={LANDING_PAGE} element={<LandingPage />} />
+            <Route path={HOME_PAGE} element={<HomePage />} />
+            <Route path={RESULTS_PAGE} element={<ResultsPage />} />
+            <Route path={HISTORY_PAGE} element={<HistoryPage />} />
+            {/* if there is any userArguments then pass it to home page else landing page */}
+            <Route path={AUTHENTICATE_PAGE} element={<AuthenticationPage />} />
+            <Route path={TICKET_DETAILS_PAGE} element={<TicketDetailsPage />} />
+          </Routes>
+        </Router>
+      </ProfileProvider>
     </QueryClientProvider>
   );
 }

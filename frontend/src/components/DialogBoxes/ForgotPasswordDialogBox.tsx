@@ -4,7 +4,6 @@ import ReactDOM from "react-dom";
 import { ANIMATION_DURATION } from "../../utils/constants";
 import Input from "../Global/Input";
 import { useMutation } from "@tanstack/react-query";
-import { updateProfile } from "../../queries/Profile";
 import { forgotPassword, resetPassword } from "../../queries/Otp";
 
 const popUpVariants = {
