@@ -2,7 +2,8 @@ const User = require("../model/userModel");
 const bcrypt = require("bcrypt");
 const sendEmail = require("../Utils/emailService");
 const sendOTP = async (req, res) => {
-  const { email } = req.body;
+  let { email } = req.body;
+  email = email.trim().toLowerCase();
 
   try {
     const user = await User.findOne({ email });
@@ -25,7 +26,8 @@ const sendOTP = async (req, res) => {
 };
 
 const resetPassword = async (req, res) => {
-  const { email, otp, newPassword } = req.body;
+  let { email, otp, newPassword } = req.body;
+  email = email.trim().toLowerCase();
 
   try {
     const user = await User.findOne({ email });
