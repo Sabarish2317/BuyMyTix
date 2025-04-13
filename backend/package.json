@@ -18,6 +18,7 @@
   },
   "scripts": {
     "start": "nodemon server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "build": "echo 'no build required'"
   }
 }
