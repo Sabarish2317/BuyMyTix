@@ -7,7 +7,12 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors({ origin: "*" }));
+app.use(
+  cors({
+    origin: "https://buymytix.vercel.app",
+    credentials: true, // if you're sending cookies or headers
+  })
+);
 app.use(logger);
 app.use(express.json());
 
