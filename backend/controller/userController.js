@@ -10,6 +10,7 @@ const registerUser = async (req, res) => {
     res.status(400).json({ message: "All fields are required" });
     return;
   }
+
   if (password !== confirmPassword) {
     return res.status(400).json({ message: "Passwords do not match" });
   }
