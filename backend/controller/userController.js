@@ -230,10 +230,29 @@ const updateProfile = async (req, res) => {
   }
 };
 
+const checkEmail = async (req, res) => {
+  let { email } = req.query;
+  if (!email) return res.status(400).json({ message: "bad request" });
+  email = email.trim().toLowerCase();
+  try {
+    const user = await User.findOne({ email });
+    if (user) {
+      return res.status(409).json({ message: "Email already exists" });
+    } else {
+      return res.status(200).json({ message: "Email available" });
+    }
+  } catch {
+    return res
+      .status(500)
+      .json({ message: "An error occured while checking available email" });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
   userProfile,
   updateProfile,
   OauthUser,
+  checkEmail,
 };

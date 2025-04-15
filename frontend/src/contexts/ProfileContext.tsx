@@ -21,8 +21,8 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({
   } = useQuery<ProfileResponse>({
     queryKey: ["userProfile", localStorage.getItem("token")],
     queryFn: getProfile,
-    retry: 1,
-    staleTime: 1000 * 60,
+    retry: 0,
+    staleTime: 1000 * 60 * 10,
   });
 
   return (

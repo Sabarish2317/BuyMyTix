@@ -2,13 +2,10 @@ const mongoose = require("mongoose");
 
 const eventReferenceSchema = new mongoose.Schema(
   {
-    // Common
-    title: { type: String, required: true, index: true },
-    description: { type: String },
-    venue: { type: String },
-    location: { type: String },
-    date: { type: Date, required: true },
-    Poster: { type: String },
+    // Common for all types
+    title: { type: String, required: true, index: true }, // Eg:{Avengers Endgamse, Anirudh concert, Ind vs Australia cricket}
+    description: { type: String }, // Eg:{"Movie description form imdb given by user from frontend", "No description from source for events and sports"}
+    poster: { type: String }, //{"Poster given by user from frontend"} stored as base64
 
     // type
     type: {
@@ -17,22 +14,9 @@ const eventReferenceSchema = new mongoose.Schema(
       enum: ["Movie", "Sport", "Event"],
     },
 
-    // Movie specific
-    releaseYear: { type: Number },
-    movieLanguage: { type: String },
-    movieType: { type: String },
-
-    // Sport specifi
-    sportType: { type: String },
-    teams: [{ type: String }],
-
-    // Event specifi
-    eventType: { type: String },
-    artist: { type: String },
+    releaseYear: { type: Number }, //treated as year on event and sports cases
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
 module.exports = mongoose.model("EventReference", eventReferenceSchema);

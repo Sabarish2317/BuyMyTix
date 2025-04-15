@@ -60,3 +60,58 @@ const Dropdown: React.FC<DropdownProps> = ({
 
 export default Dropdown;
 
+interface Dropdown2Props {
+  options: string[];
+  selectedOption: string;
+  heading: string;
+  setSelectedOption: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const Dropdown2: React.FC<Dropdown2Props> = ({
+  options,
+  selectedOption,
+  setSelectedOption,
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="w-max h-full z-[999] absolute top-0 right-0 items-center">
+      {/* Dropdown Button */}
+      <div className="title-and-drop-down h-full">
+        <div
+          className="w-max px-3 py-4 bg-white/10 rounded-sm  text-white inline-flex justify-between items-center gap-2 cursor-pointer"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          <span>{selectedOption}</span>
+          <img
+            src="/icons/down-arrow-orange.svg"
+            alt="Dropdown"
+            className={`transition-transform duration-200 ${
+              isOpen ? "rotate-180" : ""
+            }`}
+          />
+        </div>
+      </div>
+
+      {/* Dropdown Options */}
+      {isOpen && (
+        <div className="absolute left-0 mt-2 z[999] w-full bg-black/95  text-white shadow-lg rounded-lg overflow-hidden ">
+          {options.map((option, index) => (
+            <div
+              key={index}
+              className="px-3 py-3 hover:bg-white/10 transition-all cursor-pointer"
+              onClick={() => {
+                setSelectedOption(option);
+                setIsOpen(false);
+              }}
+            >
+              {option}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export { Dropdown2 };

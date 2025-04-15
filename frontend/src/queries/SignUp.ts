@@ -1,6 +1,10 @@
 import axios from "../utils/axios";
 import { SignUpRequest, SignUpResponse } from "../types/SignUp";
-import { signUpApi } from "../routes/apiRoutes";
+import {
+  checkIsEmailAvailablApi,
+  checkIsEmailAvailablepi,
+  signUpApi,
+} from "../routes/apiRoutes";
 
 export const signUpUser = async (
   formData: SignUpRequest
@@ -39,5 +43,24 @@ export const signUpUser = async (
     } else {
       throw new Error("Something went wrong");
     }
+  }
+};
+
+export const checkIsEmailAvailable = async (
+  email: string
+): Promise<boolean> => {
+  if (!email) throw new Error("Email is required");
+  email = email.trim().toLowerCase();
+  try {
+    const response = await axios.get(checkIsEmailAvailablApi, {
+      params: { email },
+    });
+    if (response.status === 200) return true;
+    return false;
+  } catch (err: any) {
+    const status = err?.response?.status;
+    if (status === 409) throw new Error("Email exists, please login");
+    if (status === 400) throw new Error("Email is invalid");
+    throw new Error("Something went wrong");
   }
 };

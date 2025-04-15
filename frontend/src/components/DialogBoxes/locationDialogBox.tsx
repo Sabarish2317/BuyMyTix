@@ -29,7 +29,7 @@ const LocationDialogBox: React.FC<LocationDialogBoxProps> = ({
 
   const mutate = useMutation({
     mutationFn: updateProfile,
-    mutationKey: ["update profile", userData],
+    mutationKey: ["updateProfile", userData],
     onSuccess: () => {
       window.location.reload();
     },

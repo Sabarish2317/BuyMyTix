@@ -1,20 +1,21 @@
 import { AnimatePresence, motion } from "motion/react";
 import React, { useEffect, useState } from "react";
 import { ANIMATION_DURATION } from "../../utils/constants";
-import Dropdown from "../Global/DropDown";
+import Dropdown, { Dropdown2 } from "../Global/DropDown";
 import Input from "../Global/Input";
 import ProgressIndicator from "../Global/ProgressIndicator";
 import Movie from "../../models/movieTicketModel";
 import Event from "../../models/eventTicketModel";
 import Sport from "../../models/sportsTicketModel";
 import ReactDOM from "react-dom";
+import { SearchBarwhite } from "../Global/SearchBar";
 
 type TicketType = Movie | Sport | Event;
 
 const popUpVariants = {
-  hidden: { opacity: 0, y: -10 },
-  visible: { opacity: 1, y: 56 },
-  exit: { opacity: 0, y: -10 },
+  hidden: { opacity: 0, scale: 0.95 },
+  visible: { opacity: 1, scale: 1 },
+  exit: { opacity: 0, scale: 0.95 },
 };
 
 const pageVariants = {
@@ -412,7 +413,7 @@ const CreateNewTicketDialogBox: React.FC<CreateNewTicketDialogBoxProps> = ({
       }}
       className="fixed inset-0 backdrop-blur-sm z-[100] flex items-center justify-center"
     >
-      <div className="dialogue-box w-[300px] md:w[400px] lg:w-[500px] p-4 bg-black rounded-xl backdrop-blur-sm flex flex-col items-center gap-3 mb-32 ">
+      <div className="dialogue-box w-[300px] md:w[400px] lg:w-[500px] p-4 bg-black rounded-xl backdrop-blur-sm flex flex-col items-center gap-3 ">
         {currentPage >= 1 && currentPage < 4 && (
           <ProgressIndicator currentStep={currentPage} />
         )}
@@ -625,19 +626,30 @@ const SecondPage: React.FC<SecondPageProps> = ({
           alt="close"
         />
       </div>
-      <Input
-        intputValue={title}
-        setInputValue={setTitle}
-        title={selectedTicket.type === "Movie" ? "Movie title" : "Event title"}
-        placeholder={`Search for ${selectedTicket.type.toLowerCase()} title`}
-      />
-      {/* year picker */}
-      <Dropdown
-        heading="Select year"
-        options={["2025", "2024", "2023", "2022", "2021", "2020"]}
-        selectedOption={selectedYear}
-        setSelectedOption={setSelectedYear}
-      />
+      <div className="title-and-year-contaienr flex flex-row h-14  w-full relative ">
+        <SearchBarwhite
+          setSelectedTicket={setSelectedTicket}
+          intputValue={title}
+          setInputValue={setTitle}
+          placeholder={`Search for ${selectedTicket.type.toLowerCase()} title`}
+        />
+        {/* <Input
+          intputValue={title}
+          setInputValue={setTitle}
+          title={
+            selectedTicket.type === "Movie" ? "Movie title" : "Event title"
+          }
+          placeholder={`Search for ${selectedTicket.type.toLowerCase()} title`}
+        /> */}
+        {/* year picker */}
+        <Dropdown2
+          heading="Select year"
+          options={["2025", "2024", "2023", "2022", "2021", "2020"]}
+          selectedOption={selectedYear}
+          setSelectedOption={setSelectedYear}
+        />
+      </div>
+
       {/* select image */}
       <div className="select-image w-full flex flex-col gap-2 py-2 overflow-clip rounded-xl">
         <h2 className="w-full justify-start text-white text-[clamp(16px,1.5vw,20px)] font-bold leading-tight">

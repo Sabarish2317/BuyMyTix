@@ -4,7 +4,7 @@ import MyDivider from "../Global/Divider";
 import { AnimatePresence, motion } from "framer-motion";
 import { LOGIN_PAGE } from "../../routes/appRoutes";
 import { useMutation } from "@tanstack/react-query";
-import { signUpUser } from "../../queries/SignUp";
+import { checkIsEmailAvailable } from "../../queries/SignUp";
 import { SignUpRequest } from "../../types/SignUp";
 import AddProfileDialogBox from "./AddProfileDetailsDialogBox";
 import GoogleAuthButton from "./googleOauthButton";
@@ -16,7 +16,7 @@ const SignUpForm: React.FC = () => {
   const toggleProfileDialogueBox = () => {
     setShowProfileDetailsDialog((prev) => !prev);
   };
-  const [isProfileFilled, setProfileFilled] = useState(false);
+  const [err, setErr] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
 
@@ -36,36 +36,27 @@ const SignUpForm: React.FC = () => {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const mutation = useMutation({
-    mutationKey: ["SignUp"],
-    mutationFn: signUpUser,
+  const checkEmailMutation = useMutation({
+    mutationFn: checkIsEmailAvailable,
+    onSuccess: () => {
+      toggleProfileDialogueBox();
+    },
+    onError: (err: any) => {
+      setErr(err.message);
+    },
   });
-
-  const { isError, isPending, error } = mutation;
+  const { isPending } = checkEmailMutation;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isProfileFilled) {
-      toggleProfileDialogueBox();
-      return;
-    }
-    mutation.reset();
+    setErr(""); // Clear old errors
 
-    //ON_SUCCESS
-    mutation.mutate(form, {
-      onSuccess: (responseData) => {
-        setIsAnimating(true);
-        if (!responseData.token) {
-          return;
-        }
-        localStorage.setItem("token", responseData?.token);
-
-        setTimeout(() => navigate("/home"), 1000);
-      },
-      onError: () => {
-        setProfileFilled(false);
-      },
-    });
+    if (!form.email) return setErr("Email is required");
+    if (!form.password || !form.confirmPassword)
+      return setErr("Password is required");
+    if (form.password !== form.confirmPassword)
+      return setErr("Passwords do not match");
+    checkEmailMutation.mutate(form.email);
   };
 
   return (
@@ -73,8 +64,8 @@ const SignUpForm: React.FC = () => {
       <AnimatePresence mode="wait">
         {isProfileDialogBoxVisible && (
           <AddProfileDialogBox
+            setIsAnimating={setIsAnimating}
             form={form}
-            setProfileFilled={setProfileFilled}
             setForm={setForm}
             setToggleDialogueBox={toggleProfileDialogueBox}
           />
@@ -137,14 +128,14 @@ const SignUpForm: React.FC = () => {
         >
           Sign up for your BuyMyTix account
         </div>
-        {isError && (
+        {err && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
             className="text-[#dc3912] font-medium px-4 py-2 rounded-md mb-3 text-center"
           >
-            {error.message}
+            {err}
           </motion.div>
         )}
       </div>
@@ -159,8 +150,8 @@ const SignUpForm: React.FC = () => {
           <motion.div
             initial={false}
             animate={{
-              x: isError ? [-20, 0] : 0,
-              borderColor: isError ? "#dc3912" : "rgba(255,255,255,0.5)",
+              x: err ? [-20, 0] : 0,
+              borderColor: err ? "#dc3912" : "rgba(255,255,255,0.5)",
             }}
             transition={{
               duration: 0.1,
@@ -187,8 +178,8 @@ const SignUpForm: React.FC = () => {
           <motion.div
             initial={false}
             animate={{
-              x: isError ? [-20, 0] : 0,
-              borderColor: isError ? "#dc3912" : "rgba(255,255,255,0.5)",
+              x: err ? [-20, 0] : 0,
+              borderColor: err ? "#dc3912" : "rgba(255,255,255,0.5)",
             }}
             transition={{
               duration: 0.1,
@@ -227,8 +218,8 @@ const SignUpForm: React.FC = () => {
           <motion.div
             initial={false}
             animate={{
-              x: isError ? [-20, 0] : 0,
-              borderColor: isError ? "#dc3912" : "rgba(255,255,255,0.5)",
+              x: err ? [-20, 0] : 0,
+              borderColor: err ? "#dc3912" : "rgba(255,255,255,0.5)",
             }}
             transition={{
               duration: 0.1,
@@ -249,22 +240,13 @@ const SignUpForm: React.FC = () => {
 
         {/* Submit Button */}
         <motion.button
-          type="button"
-          onClick={
-            form.email && form.password === form.confirmPassword
-              ? handleSubmit
-              : () => {}
-          }
+          type="submit"
           className={`px-6 py-3 w-full bg-white/90 text-black text-[clamp(14px,1.5vw,18px)] cursor-pointer font-medium rounded-md relative overflow-hidden
-          hover:bg-white transition-all duration-400 ease-in-out hover:scale-3d hover:scale-105 ${
-            form.email && form.password === form.confirmPassword
-              ? ""
-              : "opacity-50 cursor-not-allowed"
-          }`}
+          hover:bg-white transition-all duration-400 ease-in-out hover:scale-3d hover:scale-105 `}
           whileTap={{ scale: 0.98 }}
           disabled={isAnimating}
         >
-          {isProfileFilled ? (isPending ? "Signing Up..." : "Sign Up") : "Next"}
+          {isPending ? "Signing Up..." : "Sign Up"}
         </motion.button>
 
         {/* Or Divider */}

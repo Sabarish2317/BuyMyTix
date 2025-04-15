@@ -5,6 +5,7 @@ interface SearchTitleResponse {
   source: string;
   externalId: string;
   year: string;
+  releaseYear: string;
 }
 
 interface SearchTitleRequest {

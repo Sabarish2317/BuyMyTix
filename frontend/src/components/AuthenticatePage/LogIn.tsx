@@ -36,6 +36,7 @@ const LoginForm: React.FC = () => {
         }
         localStorage.setItem("token", responseData?.token);
         // ✅ Invalidate so profile gets fresh data on next render
+
         queryClient.invalidateQueries({ queryKey: ["userProfile"] });
 
         setTimeout(() => navigate("/home"), 1000);

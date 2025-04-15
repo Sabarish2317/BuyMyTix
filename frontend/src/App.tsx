@@ -27,7 +27,7 @@ const queryClient = new QueryClient();
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ProfileProvider>
+      <ProfileProvider key={localStorage.getItem("token") || ""}>
         <Router>
           <Routes>
             {/* Urls are stored in utils/routing */}

@@ -9,6 +9,8 @@ import { fetchTitles } from "../../queries/Titles";
 interface SearchBarProps {
   className?: string;
   mainClassName?: string;
+  setInputValue: React.Dispatch<React.SetStateAction<string>>;
+  intputValue: string;
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({
@@ -35,7 +37,6 @@ const SearchBar: React.FC<SearchBarProps> = ({
     queryFn: () =>
       fetchTitles({
         q: debouncedInput.toString(),
-        y: "2024",
       } as SearchTitleRequest), // Updated parameter name to 'q'
     enabled: debouncedInput.length > 2,
   });
@@ -129,7 +130,9 @@ const SearchBar: React.FC<SearchBarProps> = ({
                 <div className="title-year flex flex-col gap-1 justify-start align-middle  text-[clamp(16px,1.5vw,20px)]  ">
                   {item.title}
                   <h3 className="text-[clamp(14px,1.5vw,18px)] text-overflow-ellipsis">
-                    {item.year && ` (${item.year})`}
+                    {item.year ||
+                      (item.releaseYear &&
+                        ` (${item.year || item.releaseYear})`)}
                   </h3>
                 </div>
               </div>
@@ -147,3 +150,155 @@ const SearchBar: React.FC<SearchBarProps> = ({
 };
 
 export default SearchBar;
+import Movie from "../../models/movieTicketModel";
+import Event from "../../models/eventTicketModel";
+import Sport from "../../models/sportsTicketModel";
+type TicketType = Movie | Sport | Event;
+interface SearchBarwhiteProps {
+  className?: string;
+  mainClassName?: string;
+  setInputValue: React.Dispatch<React.SetStateAction<string>>;
+  setSelectedTicket: React.Dispatch<React.SetStateAction<TicketType>>;
+  intputValue: string;
+  placeholder: string;
+}
+
+const SearchBarwhite: React.FC<SearchBarwhiteProps> = ({
+  className = "",
+  mainClassName = "",
+  intputValue,
+  placeholder,
+  setInputValue,
+  setSelectedTicket,
+}) => {
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [debouncedInput, setDebouncedInput] = useState("");
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedInput(intputValue), 300);
+    return () => clearTimeout(timer);
+  }, [intputValue]);
+
+  const {
+    data: titlesData = [],
+    isLoading,
+    isFetched,
+  } = useQuery<SearchTitleResponse[]>({
+    queryKey: ["titles", debouncedInput],
+    staleTime: 1000 * 60,
+
+    queryFn: () =>
+      fetchTitles({
+        q: debouncedInput.toString(),
+      } as SearchTitleRequest), // Updated parameter name to 'q'
+    enabled: debouncedInput.length > 2,
+  });
+  useEffect(() => {
+    console.table(titlesData);
+  }, [titlesData]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+    setSelectedIndex(-1);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (titlesData.length === 0) return;
+
+    if (e.key === "ArrowDown") {
+      setSelectedIndex((prev) => (prev < titlesData.length - 1 ? prev + 1 : 0));
+    } else if (e.key === "ArrowUp") {
+      setSelectedIndex((prev) => (prev > 0 ? prev - 1 : titlesData.length - 1));
+    } else if (e.key === "Enter") {
+      if (selectedIndex >= 0 && selectedIndex < titlesData.length) {
+        handleSelectSuggestion(selectedIndex);
+      }
+    } else if (e.key === "Escape") {
+      setSelectedIndex(-1);
+    }
+  };
+
+  const handleSelectSuggestion = async (index: number) => {
+    const selected = titlesData[index];
+    if (!selected) return;
+
+    setInputValue(`${selected.title}`);
+    setSelectedTicket((prev) => ({
+      ...prev,
+      imgUrl: selected.poster,
+    }));
+    setSelectedIndex(-1);
+  };
+
+  return (
+    <div
+      className={`w-full h-max absolute z-[999] text-white bg-purple-200/6 rounded-md outline-2 outline-white/20
+         outline-offset-[-2px] backdrop-blur-3xl text-[clamp(16px,2vw,24px)] font-medium transition-all
+         duration-200 focus:outline-none active:opacity-100 flex flex-col overflow-clip ${mainClassName}`}
+    >
+      <div className="seach-input-container flex flex-row justify-start items-center gap-3 px-4 py-2 md:px-6 md:py-3">
+        <img
+          src="/icons/search.svg"
+          alt="search"
+          className="w-6 h-6 origin-left scale-80 md:scale-100 hover:scale-105 transition-all
+           duration-200 active:scale-110 active:scale-3d cursor-pointer"
+        />
+        <div className="relative w-full z-100 text-[clamp(16px,2vw,22px)]">
+          <input
+            type="text"
+            value={intputValue}
+            onChange={handleInputChange}
+            placeholder={placeholder}
+            onKeyDown={handleKeyDown}
+          />
+        </div>
+      </div>
+
+      {isLoading && intputValue.length >= 1 && (
+        <div className="p-3 text-white">Searching •••</div>
+      )}
+      {isFetched &&
+        intputValue.length &&
+        titlesData.length === 0 &&
+        !isLoading && <div className="p-3 text-white">No results found</div>}
+
+      {titlesData.length > 0 && (
+        <ul className={`w-full z-[999] bg-[#090e18] ${className}`}>
+          {titlesData.map((item, index) => (
+            <li
+              key={index}
+              role="button"
+              onClick={() => handleSelectSuggestion(index)}
+              className={`p-3 text-white cursor-pointer transition-all flex flex-row justify-between items-center  ${
+                selectedIndex === index
+                  ? "bg-[#7349AD]"
+                  : "hover:bg-[#7349ad8f]"
+              }`}
+            >
+              <div className="image-title-date-container flex flex-row justify-start items-center gap-4">
+                <img
+                  className="w-12 h-16 object-cover rounded-md"
+                  src={item.poster || "/images/popcorn.png"}
+                  alt="poster"
+                />
+                <div className="title-year flex flex-col gap-1 justify-start align-middle  text-[clamp(16px,1.5vw,20px)]  ">
+                  {item.title}
+                  <h3 className="text-[clamp(14px,1.5vw,18px)] text-overflow-ellipsis">
+                    {item.year && ` (${item.year})`}
+                  </h3>
+                </div>
+              </div>
+              {item.type && (
+                <span className="text-[clamp(14px,1.3vw,16px)] text-gray-400 leading-0 ml-2">
+                  ({item.type})
+                </span>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+};
+
+export { SearchBarwhite };

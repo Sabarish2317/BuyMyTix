@@ -16,23 +16,23 @@ const ticketListingSchema = new mongoose.Schema(
     },
 
     // Ticket details
+    venue: { type: String, required: true },
     ticketQuantity: { type: Number, required: true },
-    ticketPrice: { type: Number, required: true, index: true },
+    ticketPrice: { type: Number, required: true, index: true }, //per ticket
+    showTime: {
+      type: Date,
+      required: true,
+    },
     seatDetails: {
-      section: { type: String },
+      entryGate: { type: String },
       row: { type: String },
-      seatNumbers: [{ type: String }],
+      seatNumbers: { type: String, required: true },
     },
 
-    // Optional ticket info
-    showTime: { type: String },
-    entryGate: { type: String },
     userDescription: { type: String },
-    ticketImage: { type: String },
-
     // expiry time (same as the event start time )
     expiryTime: {
-      type: date,
+      type: Date,
       index: true,
     },
   },

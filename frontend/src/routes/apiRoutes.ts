@@ -1,4 +1,5 @@
 const signUpApi: string = "/api/Authenticate/signup"; //post
+const checkIsEmailAvailablApi = "/api/Authenticate/email";
 const signInApi: string = "/api/Authenticate/signin"; // post
 const oAuthApi: string = "/api/Authenticate/googleOauth"; // post
 const profileApi: string = "/api/Authenticate/profile"; // put and get
@@ -8,6 +9,7 @@ const searchCityAPi: string = "/api/search/cities"; //get
 const searchTitleAPi: string = "/api/search/titles"; //get
 export {
   signUpApi,
+  checkIsEmailAvailablApi,
   signInApi,
   oAuthApi,
   profileApi,

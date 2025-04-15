@@ -14,7 +14,7 @@ const StyledInput: React.FC<StyledInputProps> = ({
   icon,
 }) => {
   return (
-    <div className="relative w-full min-w-[180px]">
+    <div className="relative self-stretch w-full min-w-[180px]">
       <div className="w-full justify-start text-white text-[clamp(12px,1vw,16px)] font-bold leading-loose">
         {title}
       </div>

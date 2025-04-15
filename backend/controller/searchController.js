@@ -6,26 +6,23 @@ const EventReference = require("../model/eventReferenceModel");
  * Search function that returns event titles and posters for autocomplete
  * @param {string} q - Search query
  * @param {number} limit - Maximum number of results (default: 5)
+ * @param {string|number} y - Optional year filter
  * @returns {Promise<Array>} - Array of event titles and posters
  */
 async function searchEventTitles(q, limit = 5, y) {
   try {
-    // Step 1: Search through existing event references in database
-    const localResults = await searchLocalEvents({ q, y }, limit);
+    const localResults = await searchLocalEvents(q, limit, y);
 
-    // Step 2: If we have enough local results, return them
+    // If local results are enough
     if (localResults.length >= limit) {
       return localResults.slice(0, limit);
     }
 
-    // Step 3: If we need more results, search OMDb API
+    // Fill remaining with OMDB results if needed
     const remainingLimit = limit - localResults.length;
-    if (remainingLimit > 0) {
-      const omdbResults = await searchOMDb(q, remainingLimit, y);
-      return [...localResults, ...omdbResults].slice(0, limit);
-    }
+    const omdbResults = await searchOMDb(q, remainingLimit, y);
 
-    return localResults;
+    return [...localResults, ...omdbResults].slice(0, limit);
   } catch (error) {
     console.error("Search error:", error);
     throw new Error("Failed to perform search");
@@ -33,37 +30,38 @@ async function searchEventTitles(q, limit = 5, y) {
 }
 
 /**
- * Search local database for events matching the query
+ * Search local MongoDB eventReference collection
  */
-async function searchLocalEvents(query, limit) {
-  // Get all event references from the database
-  const events = await EventReference.find({})
-    .select("title Poster type")
+async function searchLocalEvents(query, limit, year) {
+  let filter = {};
+  if (year) {
+    filter.releaseYear = parseInt(year);
+  }
+
+  const events = await EventReference.find(filter)
+    .select("title Poster type description releaseYear")
     .lean();
 
-  // Configure Fuse.js for searching
-  const fuseOptions = {
+  // Fuse.js setup
+  const fuse = new Fuse(events, {
     keys: ["title"],
-    threshold: 0.4, // Lower threshold means more exact matching
+    threshold: 0.4,
     includeScore: true,
-  };
+  });
 
-  const fuse = new Fuse(events, fuseOptions);
   const results = fuse.search(query);
 
-  // Format results - only include title and poster
   return results.slice(0, limit).map((result) => ({
     eventId: result.item._id,
     title: result.item.title,
     poster: result.item.Poster || null,
     type: result.item.type,
+    description: result.item.description || "",
+    releaseYear: result.item.releaseYear || null,
     source: "database",
   }));
 }
 
-/**
- * Search OMDb API for movies matching the query
- */
 /**
  * Search OMDb API for movies matching the query
  */
@@ -92,18 +90,18 @@ async function searchOMDb(query, limit, year) {
   }
 }
 
-// Express route handler
+/**
+ * Express handler for /autocomplete route
+ */
 const autocompleteHandler = async (req, res) => {
   try {
     const { q, y } = req.query;
-
-    if (!q || !y) return res.status(400).send("Missing query or year");
 
     if (!q || q.trim() === "") {
       return res.status(400).json({ error: "Search query is required" });
     }
 
-    const results = await searchEventTitles(q, 5, y ? y.trim() : null);
+    const results = await searchEventTitles(q.trim(), 5, y?.trim());
     return res.json({ results });
   } catch (error) {
     console.error("Autocomplete handler error:", error);
