@@ -26,7 +26,7 @@ const AnimatedBento: React.FC = () => {
             </h2>
           }
           subtitle={
-            <h3>
+            <h3 className="text-gray-300">
               No Hidden Costs You Keep
               <br />
               100% of Your Sale!
@@ -44,7 +44,7 @@ const AnimatedBento: React.FC = () => {
             </h2>
           }
           subtitle={
-            <h3>
+            <h3 className="text-gray-300">
               Buy and sell worry-free with
               <br />
               our website.
@@ -60,14 +60,14 @@ const AnimatedBento: React.FC = () => {
           offsetBoxClassName="min-h-full"
           className="min-h-full justify-between gradient-border-left py-8"
           title={
-            <h2>
+            <h2 >
               Direct Buyer-to-Seller
               <br />
               Chat
             </h2>
           }
           subtitle={
-            <h3>
+            <h3 className="text-gray-300">
               Talk directly, negotiate instantly,
               <br />
               and make the deal happen.
@@ -89,7 +89,7 @@ const AnimatedBento: React.FC = () => {
             </h2>
           }
           subtitle={
-            <h3>
+            <h3 className="text-gray-300">
               Post your ticket in just a few
               <br />
               clicks, it's that easy!
@@ -107,7 +107,7 @@ const AnimatedBento: React.FC = () => {
             </h2>
           }
           subtitle={
-            <h3>
+            <h3 className="text-gray-300">
               Post your ticket in just a few
               <br />
               clicks, it's that easy!
