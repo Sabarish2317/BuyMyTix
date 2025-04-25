@@ -21,6 +21,7 @@ import ResultsPage from "./pages/ResultsPage";
 import TicketDetailsPage from "./pages/TicketDetailsPage";
 import HistoryPage from "./pages/HistoryPage";
 import { ProfileProvider } from "./contexts/ProfileContext";
+import { ToastContainer } from "react-toastify";
 
 const queryClient = new QueryClient();
 
@@ -28,12 +29,17 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ProfileProvider key={localStorage.getItem("token") || ""}>
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          theme="dark"
+          pauseOnHover={true}
+        />
         <Router>
           <Routes>
             {/* Urls are stored in utils/routing */}
 
             <Route path="/*" element={<ErrorPage />} />
-            <Route path="/" element={<Navigate to={LANDING_PAGE} />} />
             <Route path={LANDING_PAGE} element={<LandingPage />} />
             <Route path={HOME_PAGE} element={<HomePage />} />
             <Route path={RESULTS_PAGE} element={<ResultsPage />} />

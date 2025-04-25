@@ -9,7 +9,9 @@ import { SignUpRequest } from "../../types/SignUp";
 import AddProfileDialogBox from "./AddProfileDetailsDialogBox";
 import GoogleAuthButton from "./googleOauthButton";
 
-const SignUpForm: React.FC = () => {
+const SignUpForm: React.FC<{ redirectUrl: string }> = ({
+  redirectUrl: url,
+}) => {
   const navigate = useNavigate();
   const [isProfileDialogBoxVisible, setShowProfileDetailsDialog] =
     useState(false);
@@ -64,6 +66,7 @@ const SignUpForm: React.FC = () => {
       <AnimatePresence mode="wait">
         {isProfileDialogBoxVisible && (
           <AddProfileDialogBox
+            redirectUrl={url}
             setIsAnimating={setIsAnimating}
             form={form}
             setForm={setForm}

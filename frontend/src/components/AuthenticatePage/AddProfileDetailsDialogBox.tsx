@@ -19,6 +19,8 @@ interface AddProfileDialogBoxProps {
   form: SignUpRequest;
   setIsAnimating: React.Dispatch<React.SetStateAction<boolean>>;
   setForm: React.Dispatch<React.SetStateAction<SignUpRequest>>;
+
+  redirectUrl: string;
 }
 
 const AddProfileDialogBox: React.FC<AddProfileDialogBoxProps> = ({
@@ -26,6 +28,7 @@ const AddProfileDialogBox: React.FC<AddProfileDialogBoxProps> = ({
   setToggleDialogueBox,
   setForm,
   setIsAnimating,
+  redirectUrl,
 }) => {
   const [profile, setProfile] = useState(
     form.profileImage.data || "/icons/no-profile.png"
@@ -77,7 +80,7 @@ const AddProfileDialogBox: React.FC<AddProfileDialogBoxProps> = ({
         localStorage.setItem("token", responseData?.token);
         queryClient.invalidateQueries({ queryKey: ["userProfile"] });
 
-        setTimeout(() => navigate("/home"), 1000);
+        setTimeout(() => navigate(redirectUrl || "/home"), 1000);
       },
       onError: (err) => {
         setError(true);

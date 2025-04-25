@@ -19,10 +19,13 @@ const ticketListingSchema = new mongoose.Schema(
     venue: { type: String, required: true },
     ticketQuantity: { type: Number, required: true },
     ticketPrice: { type: Number, required: true, index: true }, //per ticket
+    screenNo: { type: String },
+    language: { type: String },
     showTime: {
       type: Date,
       required: true,
     },
+
     seatDetails: {
       entryGate: { type: String },
       row: { type: String },

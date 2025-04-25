@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import DetailCard from "../components/Global/DetailCard";
 import Layout from "../components/Global/Layout";
 import TopNavigationBar from "../components/Global/TopNavigationBar";
-import SearchBar from "../components/Global/SearchBar";
+import { SearchBar } from "../components/Global/SearchBarAll";
 import { MOVEMENT_DISTANCE } from "../utils/constants";
 import FilterDialogBox from "../components/DialogBoxes/FilterDialogueBox/FilterDialogBox";
 import AdSpace from "../components/Global/AdSpace";

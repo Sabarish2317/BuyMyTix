@@ -90,7 +90,7 @@ const loginUser = async (req, res) => {
         name: user.name,
       },
       process.env.SECRET_KEY,
-      { expiresIn: "1h" }
+      { expiresIn: "24h" }
     );
 
     return res.status(200).json({
@@ -248,6 +248,45 @@ const checkEmail = async (req, res) => {
   }
 };
 
+const userTicketHistory = async (req, res) => {
+  try {
+    const token = req.headers["authorization"]?.split(" ")[1];
+    if (!token) return res.status(401).send("No token found");
+    let email = "";
+    try {
+      const decoded = jwt.verify(token, process.env.SECRET_KEY);
+      email = decoded.email;
+    } catch {
+      return res.status(401).json({ message: "invalid token", error });
+    }
+
+    const user = await User.findOne({ email: email.toLowerCase() }).populate({
+      path: "soldTickets.ticket",
+      model: "TicketListing",
+      populate: {
+        path: "eventRef",
+        model: "EventReference",
+      },
+    });
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    // Transform the structure
+    const transformed = user.soldTickets.map((entry) => {
+      const { eventRef, ...ticketDetails } = entry.ticket.toObject();
+      return {
+        ticketDetails,
+        eventRef,
+      };
+    });
+
+    return res.status(200).json(transformed);
+  } catch (err) {
+    console.error("Error fetching sold tickets:", err);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
@@ -255,4 +294,5 @@ module.exports = {
   updateProfile,
   OauthUser,
   checkEmail,
+  userTicketHistory,
 };

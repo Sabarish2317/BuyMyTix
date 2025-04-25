@@ -13,7 +13,7 @@ app.use(
     credentials: true,
   })
 );
-app.use(logger);
+// app.use(logger);
 app.use(express.json());
 
 const userRoute = require("./router/userRouter");
@@ -22,6 +22,7 @@ const eventReferenceRoute = require("./router/eventReferenceRouter");
 const ticketListingRoute = require("./router/ticketListingRouter");
 
 app.get("/", (req, res) => {
+  // Testing kaga
   res.status(200).send("BuyMyTix Api");
 });
 

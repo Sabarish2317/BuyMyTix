@@ -3,10 +3,16 @@ import { FastAverageColor } from "fast-average-color";
 
 interface ProfileImageProps {
   data: string;
+  className?: string;
+
   onClick?: () => void;
 }
 
-const ProfileImage: React.FC<ProfileImageProps> = ({ data, onClick }) => {
+const ProfileImage: React.FC<ProfileImageProps> = ({
+  data,
+  onClick,
+  className = "",
+}) => {
   const imgRef = useRef<HTMLImageElement>(null);
   const [shadowColor, setShadowColor] = useState<string>("rgba(220,57,18,1)");
 
@@ -28,7 +34,8 @@ const ProfileImage: React.FC<ProfileImageProps> = ({ data, onClick }) => {
   return (
     <div
       onClick={onClick}
-      className="w-10 h-10 rounded-[290.91px] flex overflow-clip origin-right scale-3d scale-75 md:scale-90 lg:scale-100 hover:scale-105 transition-all duration-200 ease-in-out active:scale-110 cursor-pointer"
+      className={`w-10 h-10 rounded-[290.91px] flex overflow-clip origin-right scale-3d scale-75 md:scale-90 lg:scale-100 hover:scale-105 transition-all
+         duration-200 ease-in-out active:scale-110 cursor-pointer ${className}`}
       style={{
         boxShadow: `0px 0px 24px 0px ${shadowColor}`,
       }}

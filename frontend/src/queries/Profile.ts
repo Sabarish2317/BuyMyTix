@@ -2,7 +2,7 @@ import { profileApi } from "../routes/apiRoutes";
 import { ProfileResponse } from "../types/Profile";
 import axios from "../utils/axios";
 
-export const getProfile = async () => {
+export const getProfile = async (): Promise<ProfileResponse> => {
   const token = localStorage.getItem("token");
   const profileDetails = await axios<ProfileResponse>({
     url: profileApi,

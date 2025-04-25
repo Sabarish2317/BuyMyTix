@@ -1,10 +1,37 @@
 import React from "react";
+import { ProfileResponse } from "../../types/Profile";
+import { Ticket } from "../../types/Ticket";
+import { AddTitlesRequest } from "../../types/Titles";
+import { dateFormatter } from "../../utils/dataConverter";
+import { useProfile } from "../../contexts/ProfileContext";
+import { useNavigate } from "react-router-dom";
+import { LOGIN_PAGE } from "../../routes/appRoutes";
 
-interface TicketDetailProps {}
+interface TicketDetailProps {
+  titlesData: AddTitlesRequest;
+  ticketData: Ticket;
+  sellerData: ProfileResponse;
+  eventId: string;
+}
 
-const TicketDetail: React.FC<TicketDetailProps> = ({}) => {
+const TicketDetail: React.FC<TicketDetailProps> = ({
+  ticketData,
+  titlesData,
+  sellerData,
+  eventId,
+}) => {
+  const handleRedirect = () => {
+    const query = `${ticketData.venue}`; // e.g., "Murugan Cinemas Coimbatore"
+    const encodedQuery = encodeURIComponent(query);
+    const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodedQuery}`;
+    window.open(mapsUrl, "_blank"); // open in new tab
+  };
+
+  const redirectQuery = encodeURIComponent(eventId || "empty");
+  const { userData } = useProfile();
+  const navigate = useNavigate();
   return (
-    <div className="w-full px-5 py-8 bg-white/5 rounded-xl items-start backdrop-blur-lg flex flex-col gap-6 mb-6">
+    <div className="w-full px-5 py-8 bg-white/5 rounded-xl items-start backdrop-blur-lg flex flex-col gap-6 mb-6 select-text">
       {/* Ticket Details Section */}
       <section className="ticket-details-sction flex w-full flex-col gap-3 items-start">
         <h2 className="text-white  text-[clamp(16px,2vw,28px)] font-bold text-center ">
@@ -15,14 +42,30 @@ const TicketDetail: React.FC<TicketDetailProps> = ({}) => {
           {/* Movie Info */}
           <div className="flex flex-col gap-1.5">
             <h3 className="text-[#DC3912]  text-[clamp(16px,1.5vw,22px)] font-bold">
-              Vidamuyarchi (U/A)
+              {`${titlesData.title} (${titlesData.year})`}
             </h3>
-            <div className="flex gap-1.5 text-white  text-[clamp(16px,1.5vw,20px)] font-medium">
-              <span>Tamil</span>
-              <span>|</span>
-              <span>2D</span>
-              <span>|</span>
-              <span>Screen-2</span>
+            <div className="flex gap-1.5 text-white text-[clamp(16px,1.5vw,20px)] font-medium">
+              {ticketData.language && <span>{ticketData.language}</span>}
+              {titlesData.type === "Movie" && ticketData.screenNo && (
+                <>
+                  <span>|</span>
+                  <span>{ticketData.screenNo}</span>
+                </>
+              )}
+              {["Sport", "Event"].includes(titlesData.type) &&
+                ticketData.seatDetails?.entryGate && (
+                  <>
+                    <span>|</span>
+                    <span>{ticketData.seatDetails.entryGate}</span>
+                  </>
+                )}
+              {["Sport", "Event"].includes(titlesData.type) &&
+                ticketData.seatDetails?.row && (
+                  <>
+                    <span>|</span>
+                    <span>{ticketData.seatDetails.row}</span>
+                  </>
+                )}
             </div>
           </div>
 
@@ -34,19 +77,20 @@ const TicketDetail: React.FC<TicketDetailProps> = ({}) => {
               </span>
               <br />
               <span className="text-[#DC3912] text-[clamp(16px,2vw,20px)] font-medium">
-                E-14, E-15
+                {ticketData.seatDetails.seatNumbers}
               </span>
             </div>
 
             <div className="flex flex-col items-center gap-1">
               <div className="text-white text-[clamp(16px,2vw,20px)] font-regular font-medium w-max">
-                ₹240{" "}
+                ₹{ticketData.ticketPrice}{" "}
                 <span className="text-white/70 text-[clamp(16px,2vw,20px)] font-regular font-normal">
                   / per ticket
                 </span>
               </div>
-              <button className="px-4 py-1 w-full bg-[#ffffff33]  text-[clamp(16px,2vw,18px)]  backdrop-blur-lg  rounded-lg text-white text-base font-regular">
-                2 Tickets
+              <button className="px-4 py-1 w-full bg-white/75  text-[clamp(16px,2vw,18px)]  backdrop-blur-lg  rounded-lg text-[#DC3912] text-base font-semibold">
+                {ticketData.ticketQuantity}{" "}
+                {ticketData.ticketQuantity > 1 ? "Tickets" : "Ticket"}
               </button>
             </div>
           </div>
@@ -54,12 +98,15 @@ const TicketDetail: React.FC<TicketDetailProps> = ({}) => {
           {/* Venue and Date */}
           <div className="venuce-and-datetext-center w-full flex flex-col items-start gap-1.5 ">
             <div className="text-white text-[clamp(16px,2vw,20px)] font-regular font-medium">
-              Murugan Cinemas, Coimbatore
+              {ticketData.venue}
             </div>
             <div className="text-white text-[clamp(16px,2vw,20px)] font-regular">
-              Friday, 23 Apr, 09:00 AM
+              {dateFormatter(ticketData.showTime.toString())}
             </div>
-            <button className="text-white/60 text-lg underline cursor-pointer  scale-3d hover:scale-105 hover:text-white active:opacity-80 transition-all duration-200 ease-in-out">
+            <button
+              onClick={handleRedirect}
+              className="text-white/60 text-lg underline cursor-pointer  scale-3d hover:scale-105 hover:text-white active:opacity-80 transition-all duration-200 ease-in-out"
+            >
               View on Maps
             </button>
           </div>
@@ -72,48 +119,63 @@ const TicketDetail: React.FC<TicketDetailProps> = ({}) => {
           Contact Details
         </h2>
 
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-1.5">
           {/* User Info */}
           <div className="flex items-center gap-6">
-            <span className="text-[#DC3912] w-max text-[clamp(16px,1.5vw,22px)] font-bold">
-              Sabarish V S
+            <span className="text-[#DC3912] w-max text-[clamp(16px,1.8vw,24px)] font-bold">
+              {sellerData.name}
             </span>
-            <div className="px-3 py-1.5 bg-[#ffffff33] rounded-lg flex items-center gap-3  backdrop-blur-lg ">
+            {/* <div className="px-3 py-1.5 bg-[#ffffff33] rounded-lg flex items-center gap-3  backdrop-blur-lg ">
               <img src="/icons/heart-liked.svg" alt="" />
               <span className="text-white text-base font-semibold">26</span>
             </div>
             <button className="text-[#DC3912] text-[clamp(16px,2vw,20px)] font-regular underline cursor-pointer  scale-3d hover:text-red-600 hover:scale-105 active:opacity-80 transition-all duration-200 ease-in-out">
               Like
-            </button>
+            </button> */}
           </div>
 
           <div className="flex gap-1.5 text-white text-[clamp(16px,2vw,20px)] font-regular font-medium">
-            <span>Thudiyalur</span>
+            <span>{sellerData.city}</span>
             <span>|</span>
-            <span>Coimbatore</span>
-          </div>
-          {/* const handleRedirect = () => {
-    const query = `${theatre} ${city}`; // e.g., "Murugan Cinemas Coimbatore"
-    const encodedQuery = encodeURIComponent(query);
-    const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodedQuery}`;
-    window.open(mapsUrl, '_blank'); // open in new tab
-  }; */}
-          {/* Phone Number */}
-          <div className="flex gap-3">
-            <span className="text-white  text-[clamp(16px,1.5vw,24px)] font-medium">
-              +91 9344* *****
-            </span>
-            <button className="text-[#DC3912] text-[clamp(16px,2vw,20px)] font-regular underline cursor-pointer  scale-3d hover:text-red-600 hover:scale-105 active:opacity-80 transition-all duration-200 ease-in-out">
-              Log in to view
-            </button>
+            <span>{sellerData.state}</span>
           </div>
 
+          {/* Phone Number */}
+          <div className="flex gap-3">
+            <span className="text-white  text-[clamp(16px,2vw,20px)] font-medium">
+              +91{" "}
+              {userData?.email
+                ? sellerData.phone
+                : sellerData.phone.slice(0, 4) + "*****"}
+            </span>
+            {!userData?.email && (
+              <button
+                onClick={() => {
+                  navigate(
+                    `/Authenticate?mode=login&redirectUrl=${redirectQuery}`
+                  );
+                }}
+                className="text-[#DC3912] text-[clamp(16px,2vw,20px)] font-regular underline cursor-pointer  scale-3d hover:text-red-600 hover:scale-105 active:opacity-80 transition-all duration-200 ease-in-out"
+              >
+                Log in to view
+              </button>
+            )}
+          </div>
+          <div className="description mb-2 flex gap-1.5 text-white text-[clamp(16px,2vw,20px)] font-regular font-medium">
+            {ticketData.userDescription}
+          </div>
           {/* Social Icons Placeholder */}
           <div className="flex gap-5">
-            <button className="w-12 h-12 bg-white/75 rounded-lg flex justify-center items-center cursor-pointer  scale-3d hover:scale-105 active:opacity-80 transition-all duration-200 ease-in-out">
+            <button
+              onClick={() => window.open(`tel:${sellerData.phone}`)}
+              className="w-12 h-12 bg-white/75 rounded-lg flex justify-center items-center cursor-pointer  scale-3d hover:scale-105 active:opacity-80 transition-all duration-200 ease-in-out"
+            >
               <img src="/icons/phone.svg" alt="phone" />
             </button>
-            <button className="w-12 h-12 bg-white/75 rounded-lg flex justify-center items-center cursor-pointer scale-3d hover:scale-105 active:opacity-80 transition-all duration-200 ease-in-out">
+            <button
+              onClick={() => window.open(`https://wa.me/${sellerData.phone}`)}
+              className="w-12 h-12 bg-white/75 rounded-lg flex justify-center items-center cursor-pointer scale-3d hover:scale-105 active:opacity-80 transition-all duration-200 ease-in-out"
+            >
               <img src="/icons/wp.svg" alt="whatsapp" />
             </button>
           </div>

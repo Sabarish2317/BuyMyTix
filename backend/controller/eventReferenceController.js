@@ -3,10 +3,11 @@ const EventReference = require("../model/eventReferenceModel");
 const addTitle = async (req, res) => {
   if (!req.body) return res.status(400).send("Request body missing");
 
-  const { title, description, poster, type, releaseYear } = req.body;
+  const { title, description, poster, type, year, source, rating, imdbID } =
+    req.body;
 
-  if (!title || !description || !poster || !type || !releaseYear) {
-    return res.status(400).send("All fields are required");
+  if (!title || !description || !poster || !type || !year) {
+    return res.status(400).send("All required fields must be provided");
   }
 
   if (type !== "Movie" && type !== "Sport" && type !== "Event") {
@@ -24,11 +25,15 @@ const addTitle = async (req, res) => {
       description,
       poster,
       type,
-      releaseYear,
+      year,
+      source,
+      rating,
+      imdbID,
     });
 
     await newEvent.save();
-
+    console.log("title saved successfyll");
+    console.log(newEvent);
     return res
       .status(201)
       .json({ message: "Event added successfully", event: newEvent });
