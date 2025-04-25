@@ -3,11 +3,13 @@ import { useGoogleLogin } from "@react-oauth/google";
 import { oAuthApi } from "../../routes/apiRoutes";
 import axios from "../../utils/axios";
 import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface OauthProps {
   name: string;
 }
 const GoogleAuthButton: React.FC<OauthProps> = ({ name }) => {
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
@@ -36,6 +38,7 @@ const GoogleAuthButton: React.FC<OauthProps> = ({ name }) => {
         if (backendResponse.status === 401)
           alert("Account with this email already exits");
         localStorage.setItem("token", backendResponse.data.token);
+        queryClient.invalidateQueries({ queryKey: ["userProfile"] });
         navigate("/home");
       } catch (err) {
         console.error("OAuth failed", err);

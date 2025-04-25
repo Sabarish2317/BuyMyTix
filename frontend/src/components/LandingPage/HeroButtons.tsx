@@ -2,7 +2,8 @@ import { motion } from "motion/react";
 import React from "react";
 import { ANIMATION_DURATION, MOVEMENT_DISTANCE } from "../../utils/constants";
 import { useNavigate } from "react-router-dom";
-import SearchBar from "../Global/SearchBar";
+import { SearchBarDb } from "../Global/SearchBarDb";
+import { HOME_PAGE } from "../../routes/appRoutes";
 
 interface props {
   showSellDialogBoxInstruction: React.Dispatch<React.SetStateAction<boolean>>;
@@ -33,7 +34,7 @@ const HeroButtons: React.FC<props> = ({ showSellDialogBoxInstruction }) => {
 
         {/* Buy Now Button */}
         <button
-          onClick={() => navigate("/home:id=1")}
+          onClick={() => navigate(HOME_PAGE)}
           className="px-4 py-2 md:px-6 md:py-3 text-black bg-white rounded-md justify-center items-center gap-2.5 flex
       text-[clamp(16px,2vw,24px)] font-medium hover:scale-95 hover:opacity-80 transition-all duration-200 active:scale-105 active:opacity-100 cursor-pointer"
         >
@@ -41,7 +42,7 @@ const HeroButtons: React.FC<props> = ({ showSellDialogBoxInstruction }) => {
         </button>
       </div>
       {/* search button*/}
-      <div className="relative w-full h-max ">
+      <div className="relative w-full h-max items-center justify-center">
         <motion.div
           initial={{ opacity: 1, y: MOVEMENT_DISTANCE }}
           animate={{
@@ -66,7 +67,7 @@ const HeroButtons: React.FC<props> = ({ showSellDialogBoxInstruction }) => {
              pointer-events-none"
         />
 
-        <SearchBar />
+        <SearchBarDb />
       </div>
     </motion.div>
   );

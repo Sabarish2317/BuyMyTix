@@ -10,28 +10,26 @@ const app = express();
 app.use(
   cors({
     origin: process.env.ORIGIN,
-    credentials: true, // if you're sending cookies or headers
+    credentials: true,
   })
 );
-app.use(logger);
+// app.use(logger);
 app.use(express.json());
 
 const userRoute = require("./router/userRouter");
 const cityRoute = require("./router/cityRouter");
+const eventReferenceRoute = require("./router/eventReferenceRouter");
+const ticketListingRoute = require("./router/ticketListingRouter");
+
 app.get("/", (req, res) => {
+  // Testing kaga
   res.status(200).send("BuyMyTix Api");
 });
-app.use("/api/", cityRoute);
-app.use("/api/Authenticate", userRoute);
 
-// const ticketRoute = require("./router/ticketRouter");
-// app.use("/ticket", ticketRoute);
-
-const searchRoute = require("./router/searchRouter");
-app.use("/api/", searchRoute);
-
-// const homeRoute = require("./router/homeRouter");
-// app.use("/home", homeRoute);
+app.use("/api/", cityRoute); // search for citites (standalone api)
+app.use("/api/Authenticate", userRoute); //(All user authenticaiton methods)
+app.use("/api/", eventReferenceRoute); // CRUD event reference and search
+app.use("/api/", ticketListingRoute); // CRUD titckets
 
 mongoose
   .connect(process.env.MONGO_URI, { dbName: "BuyMyTix" })

@@ -7,6 +7,8 @@ import { useMutation } from "@tanstack/react-query";
 
 import { updateProfile } from "../../queries/Profile";
 import { ProfileResponse } from "../../types/Profile";
+import { toast } from "react-toastify";
+import { useProfile } from "../../contexts/ProfileContext";
 
 const popUpVariants = {
   hidden: { opacity: 0, scale: 0.95 },
@@ -26,12 +28,18 @@ const LocationDialogBox: React.FC<LocationDialogBoxProps> = ({
   const [domReady, setDomReady] = useState(false);
   //second neew instance of userData
   const [usrData, setUserData] = useState<ProfileResponse>(userData);
+  const { setUserData: setUserDataOnContext } = useProfile();
 
   const mutate = useMutation({
     mutationFn: updateProfile,
-    mutationKey: ["update profile", userData],
+    mutationKey: ["updateProfile", userData],
     onSuccess: () => {
-      window.location.reload();
+      toast.success("Updated location successfully");
+      setUserDataOnContext((prev) => ({
+        ...prev,
+        city: usrData.city,
+        state: usrData.state,
+      }));
     },
     onError: () => {
       alert("Couldn't update location");
@@ -54,14 +62,7 @@ const LocationDialogBox: React.FC<LocationDialogBoxProps> = ({
 
   const LocationDialogBoxContent = (
     <motion.div
-      variants={popUpVariants}
-      initial="hidden"
-      animate="visible"
-      exit="exit"
-      transition={{
-        duration: ANIMATION_DURATION * 2,
-        ease: "easeOut",
-      }}
+      
       className="fixed inset-0 backdrop-blur-sm z-[100] flex items-center justify-center"
       //didnnt use childrens direcly as exit animations didnt work i dont know why
       //top positipon is handled via motion variant props y distance

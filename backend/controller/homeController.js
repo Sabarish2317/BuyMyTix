@@ -1,38 +1,67 @@
-// const Movie = require('../model/movieModel');
-// const Sport = require('../model/userModel');
-// const Event = require('../model/eventModel');
+const TicketListing = require("../model/ticketListingModel");
+const EventReference = require("../model/eventReferenceModel");
 
-// const latestTicket = async (req, res) => {
+const home = async (req, res) => {
+  try {
+    const { type, category } = req.query;
 
-//     const requiredCount = req.query.c || 10;
-//     const ticketType = req.body;
+    if (!type) {
+      return res.status(400).json({ error: "Query param 'type' is required" });
+    }
 
-//     try {
-//         if(isNaN(requiredCount) || requiredCount <= 0) {
-//             return res.status(404).json({ message : "invalid count limit"});
-//         }
+    // Set default to "Movie" if category is not provided
+    const eventType = category || "Movie";
 
-//         let Ticket;
+    if (!["Movie", "Sport", "Event"].includes(eventType)) {
+      return res.status(400).json({ error: "Invalid 'category' value" });
+    }
 
-//         if(ticketType == "movie"){
-//             Ticket = Movie;
-//         }
-//         else if(ticketType == "sport"){
-//             Ticket = Sport;
-//         }
-//         else if(ticketType == "event"){
-//             Ticket = Event;
-//         }
+    if (type === "popular") {
+      const popular = await TicketListing.aggregate([
+        {
+          $lookup: {
+            from: "eventreferences",
+            localField: "eventRef",
+            foreignField: "_id",
+            as: "eventData",
+          },
+        },
+        { $unwind: "$eventData" },
+        { $match: { "eventData.type": eventType } },
+        {
+          $group: {
+            _id: "$eventRef",
+            count: { $sum: "$ticketQuantity" },
+            event: { $first: "$eventData" },
+          },
+        },
+        { $sort: { count: -1 } },
+        { $limit: 10 },
+        {
+          $project: {
+            _id: 0,
+            event: 1,
+            ticketsListed: "$count",
+          },
+        },
+      ]);
 
-//         const latestTic = await Ticket.find() .sort({timestamp :  -1}) .limit(requiredCount);
+      return res.status(200).json(popular);
+    }
 
-//         return res.status(200).json({ message : "latest tic" , latestTic});
-//     }
+    if (type === "latest" || type === "trending") {
+      const latest = await EventReference.find({ type: eventType })
+        .sort({ createdAt: -1 })
+        .limit(10);
 
-//     catch(error){
-//         console.log(error);
-//         return res.status(400).json({ message : "Error while fetching the latest ticket"});
-//     }
-// };
+      return res.status(200).json(latest);
+    }
 
-// module.exports = { latestTicket };
+    return res.status(400).json({ error: "Invalid 'type' value provided" });
+  } catch (err) {
+    console.error("Error in movie controller:", err);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+module.exports = { home };

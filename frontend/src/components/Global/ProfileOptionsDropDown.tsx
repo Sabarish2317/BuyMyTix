@@ -4,16 +4,19 @@ import React, { useRef, useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { updateProfile } from "../../queries/Profile";
 import { ProfileResponse } from "../../types/Profile";
+import { useProfile } from "../../contexts/ProfileContext";
+import { toast } from "react-toastify";
 
 const DropdownDark: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
-
+  const { setUserData } = useProfile();
   const heading = "";
   const options = ["Edit profile", "Remove Profile"];
   const selectedOption = "Actions";
   // Close dropdown when clicking outside
+  const [image, setImage] = useState("");
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -35,7 +38,11 @@ const DropdownDark: React.FC = () => {
     mutationKey: ["updateProfile"],
     retry: 1,
     onSuccess: () => {
-      window.location.reload();
+      toast.success("Updated profile successfully");
+      setUserData((prev) => ({
+        ...prev,
+        profileImage: { contentType: "image/webp", data: image },
+      }));
     },
     onError: () => {
       alert("Failed to upload image");
@@ -62,6 +69,7 @@ const DropdownDark: React.FC = () => {
 
       const compressedFile = await imageCompression(file, options);
       const base64 = await imageCompression.getDataUrlFromFile(compressedFile);
+      setImage(base64);
 
       const requestData: ProfileResponse = {
         profileImage: {
@@ -152,7 +160,7 @@ const DropdownDark: React.FC = () => {
                     loginType: "",
                     soldTickets: [],
                   };
-                  window.location.reload();
+                  setImage("empty");
                   Mutation.mutate(requestData);
                   setIsOpen(false);
                 }

@@ -32,7 +32,6 @@ const userSchema = new mongoose.Schema(
           type: mongoose.Schema.Types.ObjectId,
           ref: "TicketListing",
         },
-        soldAt: { type: Date },
       },
     ],
     // otp and forgot password handling

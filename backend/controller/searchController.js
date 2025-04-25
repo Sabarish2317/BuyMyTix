@@ -2,87 +2,109 @@ const Fuse = require("fuse.js");
 const axios = require("axios");
 const EventReference = require("../model/eventReferenceModel");
 
-/**
- * Search function that returns event titles and posters for autocomplete
- * @param {string} q - Search query
- * @param {number} limit - Maximum number of results (default: 5)
- * @returns {Promise<Array>} - Array of event titles and posters
- */
-async function searchEventTitles(q, limit = 5, y) {
+async function searchEventTitles(q, limit = 5, y, type) {
   try {
-    // Step 1: Search through existing event references in database
-    const localResults = await searchLocalEvents({ q, y }, limit);
+    const localResults = await searchLocalEvents(q, limit, y, type);
 
-    // Step 2: If we have enough local results, return them
-    if (localResults.length >= limit) {
+    // If local results are enough or OMDB isn't needed
+    if (
+      localResults.length >= limit ||
+      (type && type !== "Movie" && type !== "All")
+    ) {
       return localResults.slice(0, limit);
     }
 
-    // Step 3: If we need more results, search OMDb API
     const remainingLimit = limit - localResults.length;
-    if (remainingLimit > 0) {
-      const omdbResults = await searchOMDb(q, remainingLimit, y);
-      return [...localResults, ...omdbResults].slice(0, limit);
-    }
+    const omdbResults = await searchOMDb(q, remainingLimit, y);
 
-    return localResults;
+    return [...localResults, ...omdbResults].slice(0, limit);
   } catch (error) {
     console.error("Search error:", error);
     throw new Error("Failed to perform search");
   }
 }
 
-/**
- * Search local database for events matching the query
- */
-async function searchLocalEvents(query, limit) {
-  // Get all event references from the database
-  const events = await EventReference.find({})
-    .select("title Poster type")
+async function searchLocalEvents(query, limit, year, type) {
+  let filter = {};
+  if (year) filter.year = year;
+  if (type && type !== "All") filter.type = type;
+
+  const events = await EventReference.find(filter)
+    .select("title poster type description year source rating imdbID")
     .lean();
 
-  // Configure Fuse.js for searching
-  const fuseOptions = {
+  const fuse = new Fuse(events, {
     keys: ["title"],
-    threshold: 0.4, // Lower threshold means more exact matching
+    threshold: 0.4,
     includeScore: true,
-  };
+  });
 
-  const fuse = new Fuse(events, fuseOptions);
   const results = fuse.search(query);
 
-  // Format results - only include title and poster
   return results.slice(0, limit).map((result) => ({
     eventId: result.item._id,
     title: result.item.title,
-    poster: result.item.Poster || null,
+    poster: result.item.poster || null,
     type: result.item.type,
-    source: "database",
+    description: result.item.description || "",
+    year: result.item.year || null,
+    source: result.item.source || "database",
+    rating: result.item.rating || null,
+    imdbID: result.item.imdbID || null,
   }));
 }
 
-/**
- * Search OMDb API for movies matching the query
- */
-/**
- * Search OMDb API for movies matching the query
- */
 async function searchOMDb(query, limit, year) {
   try {
     const OMDB_API_KEY = process.env.OMDB_API_KEY;
-    const url = `https://www.omdbapi.com/?apikey=${OMDB_API_KEY}&s=${encodeURIComponent(query)}${year ? `&y=${year}` : ""}`;
-
-    const response = await axios.get(url);
+    const searchUrl = `https://www.omdbapi.com/?apikey=${OMDB_API_KEY}&s=${encodeURIComponent(query)}${year ? `&y=${year}` : ""}`;
+    const response = await axios.get(searchUrl);
 
     if (response.data.Response === "True" && response.data.Search) {
-      return response.data.Search.slice(0, limit).map((movie) => ({
-        title: movie.Title,
-        poster: movie.Poster !== "N/A" ? movie.Poster : null,
-        type: "Movie",
-        source: "omdb",
-        externalId: movie.imdbID,
-        year: movie.Year,
-      }));
+      const topResults = response.data.Search.slice(0, limit);
+      const imdbIDs = topResults.map((m) => m.imdbID);
+      const existing = await EventReference.find({
+        imdbID: { $in: imdbIDs },
+      }).select("imdbID");
+      const existingIDs = new Set(existing.map((e) => e.imdbID));
+      const filtered = topResults.filter((m) => !existingIDs.has(m.imdbID));
+
+      const detailedResults = await Promise.all(
+        filtered.slice(0, limit).map(async (movie) => {
+          try {
+            const detailsUrl = `https://www.omdbapi.com/?apikey=${OMDB_API_KEY}&i=${movie.imdbID}${year ? `&y=${year}` : ""}`;
+            const detailsResponse = await axios.get(detailsUrl);
+
+            if (detailsResponse.data.Response === "True") {
+              return {
+                title: detailsResponse.data.Title,
+                poster:
+                  detailsResponse.data.Poster !== "N/A"
+                    ? detailsResponse.data.Poster
+                    : null,
+                type: "Movie",
+                source: "omdb",
+                description: detailsResponse.data.Plot || "",
+                rating: detailsResponse.data.imdbRating || null,
+                year: detailsResponse.data.Year || null,
+                imdbID: detailsResponse.data.imdbID,
+              };
+            }
+          } catch {}
+          return {
+            title: movie.Title,
+            poster: movie.Poster !== "N/A" ? movie.Poster : null,
+            type: "Movie",
+            source: "omdb",
+            description: "",
+            rating: null,
+            year: movie.Year,
+            imdbID: movie.imdbID,
+          };
+        })
+      );
+
+      return detailedResults;
     }
 
     return [];
@@ -92,19 +114,41 @@ async function searchOMDb(query, limit, year) {
   }
 }
 
-// Express route handler
+// Handler
 const autocompleteHandler = async (req, res) => {
   try {
-    const { q, y } = req.query;
-
-    if (!q || !y) return res.status(400).send("Missing query or year");
+    let { source, q, y, type } = req.query;
 
     if (!q || q.trim() === "") {
       return res.status(400).json({ error: "Search query is required" });
     }
 
-    const results = await searchEventTitles(q, 5, y ? y.trim() : null);
-    return res.json({ results });
+    const query = q.trim();
+    let year = y?.trim();
+    type = type?.trim() || "All";
+
+    if (year === "All") year = "";
+
+    // Handle source
+    if (source === "db") {
+      const results = await searchLocalEvents(query, 5, year, type);
+      return res.status(200).json({ results });
+    }
+
+    if (source === "omdb") {
+      if (type !== "Movie") {
+        return res.status(200).json({ results: [] }); // Not applicable
+      }
+      const results = await searchOMDb(query, 3, year);
+      return res.status(200).json({ results });
+    }
+
+    if (source === "All" || !source) {
+      const results = await searchEventTitles(query, 5, year, type);
+      return res.status(200).json({ results });
+    }
+
+    return res.status(400).json({ error: "Invalid source type" });
   } catch (error) {
     console.error("Autocomplete handler error:", error);
     return res.status(500).json({ error: "Search failed" });

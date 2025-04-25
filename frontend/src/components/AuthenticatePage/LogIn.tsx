@@ -9,7 +9,9 @@ import { signInUser } from "../../queries/SignIn";
 import GoogleAuthButton from "./googleOauthButton";
 import ForgotPasswordDialogBox from "../DialogBoxes/ForgotPasswordDialogBox";
 
-const LoginForm: React.FC = () => {
+const LoginForm: React.FC<{ redirect: string | null }> = ({
+  redirect: url,
+}) => {
   const [form, setForm] = useState<SignInRequest>({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -36,8 +38,13 @@ const LoginForm: React.FC = () => {
         }
         localStorage.setItem("token", responseData?.token);
         // ✅ Invalidate so profile gets fresh data on next render
-        queryClient.invalidateQueries({ queryKey: ["userProfile"] });
 
+        queryClient.invalidateQueries({ queryKey: ["userProfile"] });
+        window.location.replace("cec");
+        if (url) {
+          window.location.replace("cec");
+          return;
+        }
         setTimeout(() => navigate("/home"), 1000);
       },
     });
@@ -232,7 +239,9 @@ const LoginForm: React.FC = () => {
           Don't have an account?{" "}
           <span
             className="underline cursor-pointer hover:text-white transition-all duration-100 ease-in-out"
-            onClick={() => navigate(`${SIGNUP_PAGE}`)}
+            onClick={() => {
+              navigate(url || SIGNUP_PAGE);
+            }}
           >
             Sign Up
           </span>

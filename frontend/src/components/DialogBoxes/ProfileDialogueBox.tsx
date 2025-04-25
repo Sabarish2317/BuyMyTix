@@ -2,22 +2,24 @@ import { AnimatePresence, motion } from "motion/react";
 
 import { ANIMATION_DURATION } from "../../utils/constants";
 import { useState } from "react";
-import { DropdownDark } from "../Global/ProfileOptionsDropDown";
 import { useNavigate } from "react-router-dom";
 import { ProfileResponse } from "../../types/Profile";
 import ProfileImage from "../Global/profileImage";
+import { HISTORY_PAGE } from "../../routes/appRoutes";
 
 interface ProfileDialogueBoxProps {
   userData: ProfileResponse;
+  toggleSettingsDialogBox: React.Dispatch<React.SetStateAction<boolean>>;
 }
 const profileVariants = {
   hidden: { opacity: 0, y: -10 },
-  visible: { opacity: 1, y: 56 },
+  visible: { opacity: 1, y: 36 },
   exit: { opacity: 0, y: -10 },
 };
 // Forward the ref to allow parent components to control visibility
 const ProfileDialogueBox: React.FC<ProfileDialogueBoxProps> = ({
   userData,
+  toggleSettingsDialogBox,
 }) => {
   const navigate = useNavigate();
   const [isQuickLinksExpanded, setIsQuickLinksExpanded] = useState(false); // Add state for quick links]useState
@@ -43,9 +45,10 @@ const ProfileDialogueBox: React.FC<ProfileDialogueBoxProps> = ({
         className="profile-dialogue-box-container fixed lg:absolute  right-0 min-w-80 pb-3 bg-black rounded-xl shadow-[0px_0px_55px_-11px_rgba(74,0,147,1.00)] outline-2 
         outline-offset-[-2px] outline-zinc-700  flex-col justify-center items-center overflow-hidden cursor-pointer z-100"
       >
-        <div className="profile-detail-container w-max profile-details-container self-stretch px-4 py-4 bg-zinc-900 rounded-md inline-flex justify-start items-center gap-3">
-          <div className="min-w-10 min-h-10 max-w-10 max-h-10 rounded-full flex items-center justify-center overflow-hidden origin-right scale-3d scale-75 md:scale-90 lg:scale-100 hover:scale-105 transition-all duration-200 ease-in-out active:scale-110 cursor-pointer">
+        <div className="profile-detail-container w-full profile-details-container self-stretch px-4 py-4 bg-zinc-900 rounded-md inline-flex justify-start items-center gap-3">
+          <div className="min-w-13 min-h-13 max-w-13 max-h-13 rounded-full flex items-center justify-center overflow-hidden origin-right scale-3d scale-75 md:scale-90 lg:scale-100 hover:scale-105 transition-all duration-200 ease-in-out active:scale-110 cursor-pointer">
             <ProfileImage
+              className="min-w-13 min-h-13 max-w-13 max-h-13"
               data={
                 !userData.profileImage?.data ||
                 userData.profileImage.data.trim().toLowerCase() !== "empty"
@@ -63,10 +66,12 @@ const ProfileDialogueBox: React.FC<ProfileDialogueBoxProps> = ({
               {userData.email}
             </div>
           </div>
-          <DropdownDark />
         </div>
         {/* buttons rows */}
-        <button className="settings-button cursor-pointer w-full flex flex-row items-center justify-start gap-6 pl-5 pr-5 pb-3 pt-3 scale-3d hover:bg-zinc-800 hover:scale-105 active:bg-zinc-700 active:scale-110 transition-all duration-200">
+        <button
+          onClick={() => toggleSettingsDialogBox(true)}
+          className="settings-button cursor-pointer w-full flex flex-row items-center justify-start gap-6 pl-5 pr-5 pb-3 pt-3 scale-3d hover:bg-zinc-800 hover:scale-105 active:bg-zinc-700 active:scale-110 transition-all duration-200"
+        >
           <img src="/icons/settings-icon.svg" alt="settings" />
           <div className="justify-start text-white text-[clamp(20px,2vw,24px)] font-regular">
             Settings
@@ -75,11 +80,11 @@ const ProfileDialogueBox: React.FC<ProfileDialogueBoxProps> = ({
         <button
           onClick={() => {
             toggleQuickLinks();
-            navigate("/history/id:1");
+            navigate(HISTORY_PAGE);
           }}
           className="logout-button cursor-pointer w-full flex flex-row items-center justify-start gap-6 pl-5 pr-5 pb-3 pt-3 scale-3d hover:bg-zinc-800 hover:scale-105 active:bg-zinc-700 active:scale-110 transition-all duration-200"
         >
-          <img src="/icons/history-icon.svg" alt="settings" />
+          <img src="/icons/history-icon.svg" alt="setthistoryings" />
           <div className="justify-start text-white text-[clamp(20px,2vw,24px)] font-regular">
             History
           </div>
@@ -91,7 +96,7 @@ const ProfileDialogueBox: React.FC<ProfileDialogueBoxProps> = ({
           }}
           className="logout-button cursor-pointer w-full flex flex-row items-center justify-start gap-6 pl-5 pr-5 pb-3 pt-3 scale-3d hover:bg-zinc-800 hover:scale-105 active:bg-zinc-700 active:scale-110 transition-all duration-200"
         >
-          <img src="/icons/logout-icon.svg" alt="settings" />
+          <img src="/icons/logout-icon.svg" alt="logout" />
           <div className="justify-start text-white text-[clamp(20px,2vw,24px)] font-regular">
             Logout
           </div>

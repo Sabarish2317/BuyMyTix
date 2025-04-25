@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import SearchBar from "../../../Global/SearchBar";
+import { SearchBar } from "../../../Global/SearchBarAll";
 
 interface DynamicOptionsProps {
   option: number;

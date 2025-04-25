@@ -5,6 +5,8 @@ const {
   userProfile,
   updateProfile,
   OauthUser,
+  checkEmail,
+  userTicketHistory,
 } = require("../controller/userController");
 const checkToken = require("../middleware/authware");
 const {
@@ -18,6 +20,8 @@ router.post("/signin", loginUser);
 router.post("/googleOauth", OauthUser);
 router.get("/profile", checkToken, userProfile);
 router.put("/profile", checkToken, updateProfile);
+router.get("/history", checkToken, userTicketHistory);
+router.get("/email", checkEmail);
 router.post("/forgot-password", sendOTP);
 router.post("/reset-password", resetPassword);
 

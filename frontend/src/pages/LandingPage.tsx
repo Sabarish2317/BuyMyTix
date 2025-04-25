@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TopNavigationBar from "../components/Global/TopNavigationBar";
 import Layout from "../components/Global/Layout";
 import HeroSection from "../components/LandingPage/HeroSection";
@@ -6,23 +6,34 @@ import HeroButtons from "../components/LandingPage/HeroButtons";
 import AnimatedBento from "../components/LandingPage/AnimatedBento";
 import { AnimatePresence } from "motion/react";
 import SellTicketDialogBox from "../components/DialogBoxes/SellTicketsDialogBox";
-import CreateNewTicketDialogBox from "../components/DialogBoxes/CreateNewTicketDialogBox";
 import { ProfileResponse } from "../types/Profile";
 import TickLoader from "../components/Global/LoadingIcon";
 import { useProfile } from "../contexts/ProfileContext";
+import PostNewTickDialogBox from "../components/DialogBoxes/CreateNewTicketDialogBox/PostNewTicketDialogBox";
 
 const LandingPage: React.FC = () => {
+  // Testing component
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "F1") {
+        e.preventDefault(); // prevent browser help menu
+        togglePostNewTicketDialogBox();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+  }, []);
   //toggle visiblity of the sell tickets instruction dialog box
   const [isSellTicketDialogBoxVisible, setSellTicketDialogBoxVisible] =
     useState(false);
   const toggleSellTicketDialogBox = () => {
     setSellTicketDialogBoxVisible((prev) => !prev);
   };
-  //toggles visiblity of the create new ticket dialog box
-  const [isCreateTicketDialogBoxVisible, setCreateTicketDialogBoxVisible] =
+
+  const [isPostNewTicketDialogBoxVisible, setPostNewTicketDialogBoxVisible] =
     useState(false);
-  const toggleCreateTicketDialogBox = () => {
-    setCreateTicketDialogBoxVisible((prev) => !prev);
+  const togglePostNewTicketDialogBox = () => {
+    setPostNewTicketDialogBoxVisible((prev) => !prev);
   };
 
   //profile cntxt api
@@ -52,18 +63,19 @@ const LandingPage: React.FC = () => {
             <SellTicketDialogBox
               userData={userData || ({} as ProfileResponse)}
               setToggleDialogueBox={toggleSellTicketDialogBox}
-              callBackToggle={toggleCreateTicketDialogBox}
+              callBackToggle={togglePostNewTicketDialogBox}
             />
           )}
         </AnimatePresence>
-        {/* create new ticket dialog box */}
+        {/* New create ne wticket dialog box */}
         <AnimatePresence mode="wait">
-          {isCreateTicketDialogBoxVisible && (
-            <CreateNewTicketDialogBox
-              closeDialogBox={toggleCreateTicketDialogBox}
+          {isPostNewTicketDialogBoxVisible && (
+            <PostNewTickDialogBox
+              toggleDialogBox={togglePostNewTicketDialogBox}
             />
           )}
         </AnimatePresence>
+
         <AnimatedBento />
       </div>
     </Layout>

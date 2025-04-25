@@ -9,7 +9,8 @@ const AuthenticationPage: React.FC = () => {
   //mode?="login" etc parser
   const [searchParams] = useSearchParams();
   const mode = searchParams.get("mode") || "login"; //default mode is login ie without no params means it directs to login tab
-
+  const redirectUrl = searchParams.get("redirect");
+  console.log(redirectUrl);
   return (
     <Layout className="justify-center relative ">
       {/* max width section */}
@@ -41,10 +42,10 @@ const AuthenticationPage: React.FC = () => {
                 className="w-full"
               >
                 {mode == "login" ? (
-                  <LogIn />
+                  <LogIn redirect={redirectUrl} />
                 ) : (
                   <div>
-                    <SignUp />
+                    <SignUp redirectUrl={redirectUrl || ""} />
                   </div>
                 )}
               </motion.div>

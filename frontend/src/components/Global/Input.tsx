@@ -1,34 +1,69 @@
-interface StyledInputProps {
-  placeholder?: string;
-  setInputValue: React.Dispatch<React.SetStateAction<string>>;
-  intputValue: string;
+import React from "react";
+
+type InputType = "str" | "num";
+
+interface SmartInputProps<T extends string | number> {
   title: string;
+  placeholder?: string;
+  intputValue: T;
+  setInputValue: React.Dispatch<React.SetStateAction<T>>;
+  type?: InputType;
+  name?: string;
   icon?: string;
+  prefixText?: string;
+  maxLength?: number;
 }
 
-const StyledInput: React.FC<StyledInputProps> = ({
-  placeholder,
+const SmartInput = <T extends string | number>({
+  title,
+  placeholder = "",
   intputValue,
   setInputValue,
-  title,
+  type = "str",
+  name = "",
   icon,
-}) => {
+  prefixText = "",
+  maxLength = 36,
+}: SmartInputProps<T>) => {
+  const inputType = type === "num" ? "number" : "text";
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value;
+
+    if (type === "num") {
+      setInputValue(raw === "" ? ("" as T) : (Number(raw) as T));
+    } else {
+      setInputValue(raw as T);
+    }
+  };
+
   return (
-    <div className="relative w-full min-w-[180px]">
-      <div className="w-full justify-start text-white text-[clamp(12px,1vw,16px)] font-bold leading-loose">
+    <div className="relative self-stretch w-full min-w-[180px] ">
+      <h3 className="w-full justify-start text-white text-[clamp(12px,1vw,16px)] font-bold leading-loose">
         {title}
+      </h3>
+      <div className="input-container flex flex-row gap-0 items-center justify-center bg-white rounded-sm outline-2 outline-white ">
+        {prefixText && (
+          <h3
+            className="w-min  text-black  
+                   inline-flex justify-start items-center  pl-4 text-[clamp(12px,1vw,16px)] font-medium leading-loose"
+          >
+            {prefixText}
+          </h3>
+        )}
+        <input
+          maxLength={maxLength}
+          type={inputType}
+          name={name}
+          value={intputValue}
+          onChange={handleChange}
+          placeholder={placeholder}
+          className="w-full focus:outline-none  text-black px-3 py-3 text-start "
+        />
       </div>
-      <input
-        type="text"
-        value={intputValue}
-        onChange={(e) => setInputValue(e.target.value)}
-        placeholder={placeholder}
-        className="w-full  px-3 py-3 bg-white rounded-sm outline-2 outline-white 
-                   inline-flex justify-start items-center gap-2 text-black focus:outline-none"
-      />
-      <img src={icon} alt="" />
+      {icon && <img src={icon} alt="" />}
     </div>
   );
 };
 
-export default StyledInput;
+export default SmartInput;

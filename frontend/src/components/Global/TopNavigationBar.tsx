@@ -2,26 +2,38 @@ import { AnimatePresence, motion } from "motion/react";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ANIMATION_DURATION, MOVEMENT_DISTANCE } from "../../utils/constants";
-import { LOGIN_PAGE, SIGNUP_PAGE } from "../../routes/appRoutes";
+import { LANDING_PAGE, LOGIN_PAGE, SIGNUP_PAGE } from "../../routes/appRoutes";
 import ProfileDialogueBox from "../DialogBoxes/ProfileDialogueBox";
 import LocationDialogBox from "../DialogBoxes/locationDialogBox";
 import SellTicketDialogBox from "../DialogBoxes/SellTicketsDialogBox";
-import CreateNewTicketDialogBox from "../DialogBoxes/CreateNewTicketDialogBox";
 import { ProfileResponse } from "../../types/Profile";
 import ProfileImage from "./profileImage";
+import PostNewTickDialogBox from "../DialogBoxes/CreateNewTicketDialogBox/PostNewTicketDialogBox";
+import { useProfile } from "../../contexts/ProfileContext";
+import SettingsDialogBox from "../DialogBoxes/SettingsDialogBox";
 
 interface TopNavigationBarProps {
-  userData: ProfileResponse;
+  userData: ProfileResponse; // response from parent from context
+  delay?: number;
 }
 
 // Top Navigation Bar Component
-const TopNavigationBar: React.FC<TopNavigationBarProps> = ({ userData }) => {
+const TopNavigationBar: React.FC<TopNavigationBarProps> = ({
+  userData,
+  delay = 6,
+}) => {
   const navigate = useNavigate();
 
   //toggle visibility of the profile dialogues
   const [isProfileVisible, setProfileVisible] = useState(false); //animate aagraku ku ithu venum so rendu state managed
   const toggleProfileDialogueBox = () => {
     setProfileVisible((prev) => !prev);
+  };
+  //toggle setitings dialog box
+  const [isSettingsDialogBoxVisible, setSettingsDialogBoxVisible] =
+    useState(false); //animate aagraku ku ithu venum so rendu state managed
+  const toggleSettingsDialogBox = () => {
+    setSettingsDialogBoxVisible((prev) => !prev);
   };
   //toggle visibility of the location dialogue box
   const [isCityDialogueVisible, setCityDialogueVisible] = useState(false);
@@ -36,12 +48,12 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({ userData }) => {
   const toggleSellTicketDialogBox = () => {
     setSellTicketDialogBoxVisible((prev) => !prev);
   };
-
+  const { userData: userDataFromProfileContext } = useProfile();
   //toggles visiblity of the create new ticket dialog box
-  const [isCreateTicketDialogBoxVisible, setCreateTicketDialogBoxVisible] =
+  const [isPostNewTicketDialogBoxVisible, setPostNewTicketDialogBoxVisible] =
     useState(false);
-  const toggleCreateTicketDialogBox = () => {
-    setCreateTicketDialogBoxVisible((prev) => !prev);
+  const togglePostNewTicketDialogBox = () => {
+    setPostNewTicketDialogBoxVisible((prev) => !prev);
   };
   return (
     // Main navigation container
@@ -50,14 +62,20 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({ userData }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{
         duration: ANIMATION_DURATION,
-        delay: ANIMATION_DURATION * 6,
+        delay: ANIMATION_DURATION * delay,
         ease: "easeOut",
       }}
       className="top-navigation-bar w-full flex flex-row justify-between items-center py-5 cursor-default overflow-visible "
     >
       {/* Logo Section */}
       <div
-        onClick={() => navigate("/home")}
+        onClick={() => {
+          if (window.location.pathname != "/home") {
+            navigate("/home");
+          } else {
+            window.location.reload();
+          }
+        }}
         className="logo-padding w-full flex justify-start flex-row scale-3d hover:scale-95 hover:opacity-80 active:scale-105 active:opacity-100 transition-all duration-200"
       >
         <img
@@ -70,7 +88,7 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({ userData }) => {
       {/* Navigation Links - Hidden on mobile, visible on medium screens and larger */}
       <div className="navigation-links gap-8 flex-row hidden md:flex">
         <button
-          onClick={() => navigate("/home")}
+          onClick={() => navigate(LANDING_PAGE)}
           className="home w-max text-[clamp(20px,2vw,24px)] text-white font-medium primary
          hover:scale-95 transition-all duration-200 active:scale-105 cursor-pointer"
         >
@@ -79,10 +97,10 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({ userData }) => {
         <button
           onClick={() => {
             const currentPath = window.location.pathname;
-            if (currentPath === "/home") {
+            if (currentPath === LANDING_PAGE) {
               window.scrollTo({ top: 400, behavior: "smooth" });
             } else {
-              navigate("/home");
+              navigate(LANDING_PAGE);
               setTimeout(() => {
                 window.scrollTo({ top: 400, behavior: "smooth" });
               }, 100);
@@ -152,10 +170,11 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({ userData }) => {
           <div className="profile-container relative flex flex-row items-center justify-end ">
             <ProfileImage
               data={
-                !userData.profileImage?.data ||
-                userData.profileImage.data.trim().toLowerCase() !== "empty"
-                  ? userData.profileImage.data
-                  : "/icons/no-profile.png"
+                (userDataFromProfileContext?.profileImage.data
+                  .trim()
+                  .toLowerCase() !== "empty"
+                  ? userDataFromProfileContext?.profileImage.data
+                  : "/icons/no-profile.png") || "/icons/no-profile.png"
               }
               onClick={toggleProfileDialogueBox}
             />
@@ -180,15 +199,15 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({ userData }) => {
                 <SellTicketDialogBox
                   userData={userData}
                   setToggleDialogueBox={toggleSellTicketDialogBox}
-                  callBackToggle={toggleCreateTicketDialogBox}
+                  callBackToggle={togglePostNewTicketDialogBox}
                 />
               )}
             </AnimatePresence>
             {/* create new ticket dialog box */}
             <AnimatePresence mode="wait">
-              {isCreateTicketDialogBoxVisible && (
-                <CreateNewTicketDialogBox
-                  closeDialogBox={toggleCreateTicketDialogBox}
+              {isPostNewTicketDialogBoxVisible && (
+                <PostNewTickDialogBox
+                  toggleDialogBox={togglePostNewTicketDialogBox}
                 />
               )}
             </AnimatePresence>
@@ -203,7 +222,25 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({ userData }) => {
             </AnimatePresence>
             {/* profile dialogue box */}
             <AnimatePresence mode="wait">
-              {isProfileVisible && <ProfileDialogueBox userData={userData} />}
+              {isProfileVisible && (
+                <ProfileDialogueBox
+                  toggleSettingsDialogBox={toggleSettingsDialogBox}
+                  userData={
+                    userDataFromProfileContext || ({} as ProfileResponse)
+                  }
+                />
+              )}
+            </AnimatePresence>
+            {/* settings dialog box */}
+            <AnimatePresence mode="wait">
+              {isSettingsDialogBoxVisible && (
+                <SettingsDialogBox
+                  setToggleDialogueBox={toggleSettingsDialogBox}
+                  userData={
+                    userDataFromProfileContext || ({} as ProfileResponse)
+                  }
+                />
+              )}
             </AnimatePresence>
           </div>
         </div>

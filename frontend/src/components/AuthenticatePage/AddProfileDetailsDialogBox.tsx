@@ -4,6 +4,9 @@ import ReactDOM from "react-dom";
 import { ANIMATION_DURATION } from "../../utils/constants";
 import { SignUpRequest } from "../../types/SignUp";
 import imageCompression from "browser-image-compression";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { signUpUser } from "../../queries/SignUp";
+import { useNavigate } from "react-router-dom";
 
 const popUpVariants = {
   hidden: { opacity: 0, scale: 0.95 },
@@ -13,16 +16,19 @@ const popUpVariants = {
 
 interface AddProfileDialogBoxProps {
   setToggleDialogueBox: React.Dispatch<React.SetStateAction<boolean>>;
-  setProfileFilled: React.Dispatch<React.SetStateAction<boolean>>;
   form: SignUpRequest;
+  setIsAnimating: React.Dispatch<React.SetStateAction<boolean>>;
   setForm: React.Dispatch<React.SetStateAction<SignUpRequest>>;
+
+  redirectUrl: string;
 }
 
 const AddProfileDialogBox: React.FC<AddProfileDialogBoxProps> = ({
   form,
   setToggleDialogueBox,
   setForm,
-  setProfileFilled,
+  setIsAnimating,
+  redirectUrl,
 }) => {
   const [profile, setProfile] = useState(
     form.profileImage.data || "/icons/no-profile.png"
@@ -32,7 +38,17 @@ const AddProfileDialogBox: React.FC<AddProfileDialogBoxProps> = ({
   const [isError, setError] = useState(false);
   const [error, setErrorMsg] = useState("");
 
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const signUpMutation = useMutation({
+    mutationKey: ["SignUp"],
+    mutationFn: signUpUser,
+  });
+  const { isPending } = signUpMutation;
+
   const hanldeContinue = () => {
     if (!form.name || !form.phone) {
       setError(true);
@@ -50,8 +66,27 @@ const AddProfileDialogBox: React.FC<AddProfileDialogBoxProps> = ({
       return;
     }
 
-    setProfileFilled(true);
-    setToggleDialogueBox(false);
+    signUpMutation.mutate(form, {
+      onSuccess: (responseData) => {
+        if (!responseData.token) {
+          setError(true);
+          setErrorMsg("Could not sign up");
+          return;
+        }
+        setToggleDialogueBox(false);
+        setError(false);
+        setIsAnimating(true);
+
+        localStorage.setItem("token", responseData?.token);
+        queryClient.invalidateQueries({ queryKey: ["userProfile"] });
+
+        setTimeout(() => navigate(redirectUrl || "/home"), 1000);
+      },
+      onError: (err) => {
+        setError(true);
+        setErrorMsg(err.message);
+      },
+    });
   };
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -77,7 +112,6 @@ const AddProfileDialogBox: React.FC<AddProfileDialogBoxProps> = ({
 
       setProfile(base64);
 
-      // Set into form state or preview
       setForm((prev) => ({
         ...prev,
         profileImage: {
@@ -96,18 +130,16 @@ const AddProfileDialogBox: React.FC<AddProfileDialogBoxProps> = ({
       fileInputRef.current.click();
     }
   };
+
+  //For managing portal dont worry abt this
   useEffect(() => {
     setDomReady(true);
-    // Lock body scroll when dialog is open
     document.body.style.overflow = "hidden";
 
     return () => {
-      // Restore scroll when component unmounts
       document.body.style.overflow = "auto";
     };
   }, []);
-
-  // Early return before DOM is ready (for SSR compatibility)
   if (!domReady) return null;
 
   const AddProfileDialogBoxContent = (
@@ -225,7 +257,7 @@ const AddProfileDialogBox: React.FC<AddProfileDialogBoxProps> = ({
           className="w-full px-6 py-3.5 cursor-pointer bg-[#9F64DA] rounded-md flex justify-center items-center gap-2.5 scale-3d hover:scale-105 hover:opacity-90 active:opacity-100 transition-all duration-200"
         >
           <span className="text-white text-xl font-medium leading-7">
-            continue
+            {isPending ? "Signing up ..." : "Continue"}
           </span>
         </button>
       </div>
