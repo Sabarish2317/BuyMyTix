@@ -1,6 +1,6 @@
 const express = require("express");
-const router = express.Router();
 const mongoose = require("mongoose");
+const axios = require("axios");
 
 const TicketListing = require("../model/ticketListingModel");
 const User = require("../model/userModel");
@@ -177,10 +177,12 @@ const getTicketsByEventRefId = async (req, res) => {
 };
 
 const deleteTicket = async (req, res) => {
-  const userId = req.user.userId;
+  let userId = req.user.userId; //comes from auth middleware
+  const { ticketId } = req.params;
+
   if (!userId)
     return res.status(401).send("Unauthorized to delete this ticket");
-  const { ticketId } = req.params;
+
   if (!ticketId) return res.status(401).send("Ticket id is required ");
 
   if (!ticketId)
@@ -188,12 +190,19 @@ const deleteTicket = async (req, res) => {
       return res.status(400).json({ message: "Invalid ticket ID" });
     }
 
-  try {
-    const ticket = await TicketListing.findById(ticketId);
-    if (!ticket) {
-      return res.status(404).json({ message: "Ticket not found" });
-    }
+  const ticket = await TicketListing.findById(ticketId);
+  if (!ticket) {
+    return res.status(404).json({ message: "Ticket not found" });
+  }
 
+  //gives admin access
+  const adminUser = await User.findOne({ email: req.user.email });
+
+  if (adminUser && adminUser.type === "admin") {
+    userId = ticket.sellerId.toString(); // Use the sellerId from the ticket to replace his id which wll make the rest of runction work
+  }
+
+  try {
     if (ticket.sellerId.toString() !== userId) {
       return res
         .status(403)
@@ -217,7 +226,7 @@ const deleteTicket = async (req, res) => {
 };
 
 const updateTicket = async (req, res) => {
-  const userId = req.user.userId;
+  let userId = req.user.userId;
   const { ticketId } = req.params;
   if (!userId) return res.status(401).json({ message: "Unauthorized" });
 
@@ -225,8 +234,16 @@ const updateTicket = async (req, res) => {
     return res.status(400).json({ message: "Invalid ticket ID" });
   }
 
+  const ticket = await TicketListing.findById(ticketId);
+
+  //give admin his access
+  const adminUser = await User.findOne({ email: req.user.email });
+
+  if (adminUser && adminUser.type === "admin") {
+    userId = ticket.sellerId.toString(); // Use the sellerId from the ticket to replace his id which wll make the rest of runction work
+  }
+
   try {
-    const ticket = await TicketListing.findById(ticketId);
     if (!ticket) {
       return res.status(404).json({ message: "Ticket not found" });
     }
@@ -298,9 +315,67 @@ const updateTicket = async (req, res) => {
   }
 };
 
+/**
+ * User send the bms ticket url from the frontend and this wll parse only the required details and store it in the database,
+ * if the title doesnt exist it wll manually create it and attach the ref id else it wll use the exisiting one
+ */
+
+const parseBmsTIcket = async (req, res) => {
+  const { url } = req.body;
+
+  if (!url) {
+    return res.status(400).json({ error: "URL is required" });
+  }
+
+  try {
+    const response = await axios.get(url, {
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Accept-Language": "en-US,en;q=0.9",
+        Connection: "keep-alive",
+        Referer: "https://in.bookmyshow.com/",
+        Origin: "https://in.bookmyshow.com",
+        Host: "in.bookmyshow.com",
+        "Upgrade-Insecure-Requests": "1",
+        "Sec-Fetch-Site": "same-origin",
+        "Sec-Fetch-Mode": "navigate",
+        "Sec-Fetch-User": "?1",
+        "Sec-Fetch-Dest": "document",
+      },
+    });
+
+    const html = response.data;
+    const $ = cheerio.load(html);
+
+    // 📄 Extract details here (depends on how the BMS ticket page looks)
+
+    const movieName = $("h1.movie-name").text() || $("div.movie-name").text();
+    const theatreName = $("div.theatre-name").text();
+    const dateTime = $("div.show-date-time").text();
+    const seatInfo = $("div.seat-info").text();
+
+    const parsedTicket = {
+      movieName: movieName.trim(),
+      theatreName: theatreName.trim(),
+      dateTime: dateTime.trim(),
+      seatInfo: seatInfo.trim(),
+    };
+
+    console.log("🎟️ Parsed Ticket:", parsedTicket);
+
+    res.json(parsedTicket);
+  } catch (error) {
+    console.error("Failed to fetch and parse ticket:", error);
+    res.status(500).json({ error: "Failed to parse ticket" });
+  }
+};
+
 module.exports = {
   ticketListingController,
   getTicketsByEventRefId,
   deleteTicket,
   updateTicket,
+  parseBmsTIcket,
 };

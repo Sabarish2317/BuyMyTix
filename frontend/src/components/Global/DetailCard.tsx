@@ -1,7 +1,6 @@
 import React from "react";
 import { getImageForType } from "../../utils/getImageForType";
 import { AddTitlesRequest } from "../../types/Titles";
-import { useNavigate } from "react-router-dom";
 import { TICKET_DETAILS_PAGE } from "../../routes/appRoutes";
 
 interface DetailCardProps {
@@ -20,22 +19,25 @@ const DetailCard: React.FC<DetailCardProps> = ({
   alt,
 }) => {
   const fallbackImg = getImageForType({ type: alt } as AddTitlesRequest);
-  const navigate = useNavigate();
+
   return (
     <div
       onClick={() =>
-        navigate(`${TICKET_DETAILS_PAGE}/?eventRefId=${forwardUrl}`)
+        window.open(
+          `${TICKET_DETAILS_PAGE}/?eventRefId=${forwardUrl}`,
+          "_blank"
+        )
       }
-      className={`detail-card-container flex flex-col items-center cursor-pointer transition-transform duration-150 hover:scale-[1.03] active:scale-95 ${className}`}
+      className={`detail-card-container w-[clamp(80px,10vw,140px)] flex flex-col items-center cursor-pointer transition-transform duration-150 hover:scale-[1.03] active:scale-95 ${className}`}
     >
-      <div className="image-container w-[clamp(80px,10vw,140px)] aspect-[2/3] bg-zinc-800 rounded-lg overflow-hidden">
+      <div className="image-container  aspect-[2/3] ">
         <img
           src={imgSrc || fallbackImg}
           alt={`${title} Poster`}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover  aspect-[2/3]  rounded-lg"
         />
       </div>
-      <h3 className="mt-2 text-center text-white text-[clamp(14px,1.2vw,18px)] font-medium leading-snug px-1">
+      <h3 className="mt-2  text-center text-white/80 text-[clamp(14px,1.2vw,18px)]  font-medium leading-snug px-0.5 overflow-ellipsis line-clamp-2">
         {title}
       </h3>
     </div>

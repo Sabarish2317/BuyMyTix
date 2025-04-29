@@ -37,6 +37,10 @@ const userSchema = new mongoose.Schema(
     // otp and forgot password handling
     otp: { type: String, required: false },
     otpExpiry: { type: Date, required: false },
+
+    // account banning and deletion based on this
+    isBanned: { type: Boolean, default: false },
+    dateOfBan: { type: Date, required: false },
   },
   {
     timestamps: true,

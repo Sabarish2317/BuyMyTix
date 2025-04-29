@@ -114,7 +114,7 @@ async function searchOMDb(query, limit, year) {
   }
 }
 
-// Handler
+// Handler for autcomplete
 const autocompleteHandler = async (req, res) => {
   try {
     let { source, q, y, type } = req.query;
@@ -155,4 +155,77 @@ const autocompleteHandler = async (req, res) => {
   }
 };
 
-module.exports = autocompleteHandler;
+const searchDbTitlesHandler = async (req, res) => {
+  try {
+    const {
+      q = "",
+      city = "",
+      ticketType = "All",
+      language = "All",
+    } = req.query;
+
+    if (!q.trim()) {
+      return res.status(400).json({ error: "Search query (q) is required." });
+    }
+
+    const query = q.trim();
+    const filters = {};
+
+    if (ticketType !== "All") {
+      filters.type = ticketType;
+    }
+
+    if (city && city !== "All") {
+      filters.city = city;
+    }
+
+    if (language && language !== "All") {
+      filters.language = language;
+    }
+
+    const events = await EventReference.find(filters)
+      .select("title poster type ")
+      .lean();
+
+    const fuse = new Fuse(events, {
+      keys: ["title"],
+      threshold: 0.6,
+      includeScore: true,
+    });
+
+    const results = fuse.search(query);
+
+    // Prepare categorized result
+    const categorizedResults = {
+      Movie: [],
+      Sport: [],
+      Event: [],
+    };
+
+    results.forEach((result) => {
+      const event = result.item;
+
+      const dbTitleResponse = {
+        eventId: event._id.toString(),
+        title: event.title,
+        poster: event.poster || null,
+        type: event.type,
+      };
+
+      if (event.type === "Movie") {
+        categorizedResults.Movie.push(dbTitleResponse);
+      } else if (event.type === "Sport") {
+        categorizedResults.Sport.push(dbTitleResponse);
+      } else if (event.type === "Event") {
+        categorizedResults.Event.push(dbTitleResponse);
+      }
+    });
+
+    return res.status(200).json(categorizedResults);
+  } catch (error) {
+    console.error("Search DB Titles Handler Error:", error);
+    return res.status(500).json({ error: "Failed to search titles" });
+  }
+};
+
+module.exports = { autocompleteHandler, searchDbTitlesHandler };

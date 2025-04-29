@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { ProfileResponse } from "../../types/Profile";
 import ProfileImage from "../Global/profileImage";
 import { HISTORY_PAGE } from "../../routes/appRoutes";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface ProfileDialogueBoxProps {
   userData: ProfileResponse;
@@ -26,6 +27,7 @@ const ProfileDialogueBox: React.FC<ProfileDialogueBoxProps> = ({
   const toggleQuickLinks = () => {
     setIsQuickLinksExpanded((prev) => !prev);
   };
+  const queryClient = useQueryClient();
 
   return (
     <motion.div
@@ -91,7 +93,11 @@ const ProfileDialogueBox: React.FC<ProfileDialogueBoxProps> = ({
         </button>
         <button
           onClick={() => {
+            queryClient.invalidateQueries({
+              queryKey: ["userProfile", localStorage.getItem("token")],
+            });
             localStorage.clear();
+            localStorage.removeItem("token");
             navigate("/authenticate?type-login");
           }}
           className="logout-button cursor-pointer w-full flex flex-row items-center justify-start gap-6 pl-5 pr-5 pb-3 pt-3 scale-3d hover:bg-zinc-800 hover:scale-105 active:bg-zinc-700 active:scale-110 transition-all duration-200"

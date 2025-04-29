@@ -58,7 +58,7 @@ const SmartInput = <T extends string | number>({
           value={intputValue}
           onChange={handleChange}
           placeholder={placeholder}
-          className="w-full focus:outline-none  text-black px-3 py-3 text-start "
+          className="w-full focus:outline-none min-h-max text-black px-3 py-3 text-start  autofill:text-black"
         />
       </div>
       {icon && <img src={icon} alt="" />}

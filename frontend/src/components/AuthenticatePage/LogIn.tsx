@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MyDivider from "../Global/Divider";
 import { AnimatePresence, motion } from "motion/react";
-import { SIGNUP_PAGE } from "../../routes/appRoutes";
+import {
+  LANDING_PAGE,
+  SIGNUP_PAGE,
+  TICKET_DETAILS_PAGE,
+} from "../../routes/appRoutes";
 import { SignInRequest } from "../../types/SignIn";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { signInUser } from "../../queries/SignIn";
@@ -37,15 +41,14 @@ const LoginForm: React.FC<{ redirect: string | null }> = ({
           return;
         }
         localStorage.setItem("token", responseData?.token);
-        // ✅ Invalidate so profile gets fresh data on next render
-
-        queryClient.invalidateQueries({ queryKey: ["userProfile"] });
-        window.location.replace("cec");
+        queryClient.invalidateQueries({ queryKey: ["userProfile"] }); //invalide the user profile query used in profilecontext so re render
         if (url) {
-          window.location.replace("cec");
+          window.location.replace(`${TICKET_DETAILS_PAGE}/?eventRefId=${url}`);
+          console.log(`${TICKET_DETAILS_PAGE}/?eventRefId=${url}`);
           return;
+        } else {
+          setTimeout(() => navigate(LANDING_PAGE), 1000);
         }
-        setTimeout(() => navigate("/home"), 1000);
       },
     });
   };
@@ -146,7 +149,7 @@ const LoginForm: React.FC<{ redirect: string | null }> = ({
               duration: 0.1,
               ease: "backInOut",
             }}
-            className="w-full px-3 py-[14px] rounded-md border-2 flex items-center justify-between"
+            className="w-full px-3 py-[14px] rounded-md border-2 flex items-center justify-between remove-auto-fill-background"
           >
             <input
               name="email"
@@ -154,7 +157,7 @@ const LoginForm: React.FC<{ redirect: string | null }> = ({
               value={form.email}
               onChange={hanldeChange}
               placeholder="m@example.com"
-              className="w-full bg-transparent text-white/80 text-[clamp(14px,1.3vw,16px)] font-normal outline-none"
+              className="w-full bg-transparent text-white/80 text-[clamp(14px,1.3vw,16px)] font-normal outline-none remove-auto-fill-background"
             />
           </motion.div>
         </div>
@@ -167,7 +170,7 @@ const LoginForm: React.FC<{ redirect: string | null }> = ({
             </label>
             <h3
               onClick={() => SetForgotPasswordDialogBoxVisible(true)}
-              className="text-white/80 text-[clamp(14px,1.5vw,18px)] font-regular cursor-pointer"
+              className="text-white/80 text-[clamp(14px,1.5vw,18px)] font-regular cursor-pointer remove-auto-fill-background"
             >
               Forgot password ?
             </h3>
@@ -182,7 +185,7 @@ const LoginForm: React.FC<{ redirect: string | null }> = ({
               duration: 0.1,
               ease: "backInOut",
             }}
-            className="w-full px-3 py-[14px] rounded-md border-2 flex items-center justify-between"
+            className="w-full px-3 py-[14px] rounded-md border-2 flex items-center justify-between remove-auto-fill-background"
           >
             <input
               type={showPassword ? "text" : "password"}
@@ -190,7 +193,7 @@ const LoginForm: React.FC<{ redirect: string | null }> = ({
               value={form.password}
               onChange={hanldeChange}
               placeholder="••••••••"
-              className="w-full bg-transparent text-white/80 text-[clamp(14px,1.3vw,16px)] font-normal outline-none"
+              className="w-full bg-transparent text-white/80 text-[clamp(14px,1.3vw,16px)] font-normal outline-none remove-auto-fill-background"
             />
             <button
               type="button"

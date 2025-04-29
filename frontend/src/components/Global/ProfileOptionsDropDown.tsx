@@ -7,13 +7,18 @@ import { ProfileResponse } from "../../types/Profile";
 import { useProfile } from "../../contexts/ProfileContext";
 import { toast } from "react-toastify";
 
-const DropdownDark: React.FC = () => {
+const DropdownDark: React.FC<{ isProfileNull: boolean }> = ({
+  isProfileNull,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { setUserData } = useProfile();
   const heading = "";
-  const options = ["Edit profile", "Remove Profile"];
+  let options = ["Edit profile", "Remove Profile"];
+  if (isProfileNull) {
+    options = ["Edit profile"];
+  }
   const selectedOption = "Actions";
   // Close dropdown when clicking outside
   const [image, setImage] = useState("");
@@ -143,7 +148,7 @@ const DropdownDark: React.FC = () => {
                   triggerFileInput();
                   setIsOpen(false);
                 }
-                if (index == 1) {
+                if (index == 1 && !isProfileNull) {
                   const requestData: ProfileResponse = {
                     profileImage: {
                       data: "empty",

@@ -4,7 +4,7 @@ import { fetchTitles } from "../../queries/Titles";
 import { DbSearchTitleResponse, SearchTitleRequest } from "../../types/Titles";
 import FlippingText from "./FlippingText";
 import { useNavigate } from "react-router-dom";
-import { TICKET_DETAILS_PAGE } from "../../routes/appRoutes";
+import { RESULTS_PAGE, TICKET_DETAILS_PAGE } from "../../routes/appRoutes";
 
 export const SearchBarDb: React.FC = () => {
   const [inputValue, setInputValue] = useState("");
@@ -57,19 +57,43 @@ export const SearchBarDb: React.FC = () => {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (titlesData.length === 0) return;
+    const hasResults = titlesData.length > 0;
+    const canShowSearchFor =
+      inputValue.length > 0 && titlesData.length === 0 && isFetched;
+
+    if (!hasResults && !canShowSearchFor) return;
 
     if (e.key === "ArrowDown") {
-      setSelectedIndex((prev) => (prev < titlesData.length - 1 ? prev + 1 : 0));
+      setSelectedIndex((prev) => {
+        const maxIndex = hasResults ? titlesData.length - 1 : 0; // 0 because only "search for"
+        return prev < maxIndex ? prev + 1 : 0;
+      });
     } else if (e.key === "ArrowUp") {
-      setSelectedIndex((prev) => (prev > 0 ? prev - 1 : titlesData.length - 1));
+      setSelectedIndex((prev) => {
+        const maxIndex = hasResults ? titlesData.length - 1 : 0;
+        return prev > 0 ? prev - 1 : maxIndex;
+      });
     } else if (e.key === "Enter") {
-      if (selectedIndex >= 0 && selectedIndex < titlesData.length) {
-        handleSelectSuggestion(selectedIndex);
+      if (selectedIndex >= 0) {
+        if (hasResults) {
+          handleSelectSuggestion(selectedIndex);
+        } else if (canShowSearchFor && selectedIndex === 0) {
+          handleSearchForClick(); // 👈 new function
+        }
       }
     } else if (e.key === "Escape") {
       setSelectedIndex(-1);
       setDebouncedInput("");
+    }
+  };
+
+  const handleSearchForClick = () => {
+    if (debouncedInput.trim()) {
+      navigate(`${RESULTS_PAGE}?query=${encodeURIComponent(debouncedInput)}`);
+      setInputValue(debouncedInput);
+      setDebouncedInput("");
+      setSelectedIndex(-1);
+      setIsValidTitleSelected(true);
     }
   };
 
@@ -80,10 +104,13 @@ export const SearchBarDb: React.FC = () => {
     setSelectedIndex(-1); // always reset
 
     if (selected.eventId) {
-      //cleanup
-      setDebouncedInput("");
+      //cleanup and navigation
       setIsValidTitleSelected(true);
-      navigate(`${TICKET_DETAILS_PAGE}/?eventRefId=${selected.eventId}`);
+      const updatedTickets = titlesData.filter((_, i) => i !== index);
+      navigate(`${TICKET_DETAILS_PAGE}/?eventRefId=${selected.eventId}`, {
+        state: { data: updatedTickets, searchQuery: debouncedInput },
+      });
+      setDebouncedInput("");
       setInputValue(`${selected.title}`);
       return;
     }
@@ -112,7 +139,7 @@ export const SearchBarDb: React.FC = () => {
               value={inputValue}
               onChange={handleInputChange}
               onKeyDown={handleKeyDown}
-              className="bg-transparent border-none outline-none text-[clamp(16px,2vw,24px)] font-medium"
+              className="w-full bg-transparent border-none outline-none text-[clamp(16px,2vw,24px)] font-medium"
             />
             {inputValue.length === 0 && <FlippingText />}
           </div>
@@ -145,9 +172,24 @@ export const SearchBarDb: React.FC = () => {
         inputValue.length &&
         titlesData.length === 0 &&
         !isLoading && (
-          <div className="p-4 w-full text-start overflow-y-scroll rounded-md  bg-[#0e1524]  text-white flex flex-col gap-2 items-center absolute mt-17 z-[100] max-h-[300px]  justify-start text-[clamp(12px,1vw,16px)] ">
-            No results found
-          </div>
+          <ul
+            ref={suggestionsRef}
+            className="w-full absolute mt-16 z-[100] max-h-[300px] overflow-y-scroll rounded-md  bg-[#090e18]"
+          >
+            <li
+              role="button"
+              data-index={0}
+              onClick={handleSearchForClick}
+              className={`p-4 w-full text-start overflow-y-scroll rounded-md text-white flex flex-col gap-2 items-center justify-start 
+        font-semibold text-[clamp(16px,1.5vw,20px)] cursor-pointer transition-all ${
+          selectedIndex === 0 ? "bg-[#7349AD]" : "hover:bg-[#7349ad8f]"
+        }`}
+            >
+              <h1 className="w-full text-start">
+                See all results for "{debouncedInput}"
+              </h1>
+            </li>
+          </ul>
         )}
 
       {Array.isArray(titlesData) && titlesData.length > 0 && (

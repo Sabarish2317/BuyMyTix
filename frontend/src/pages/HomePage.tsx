@@ -13,6 +13,7 @@ import { AddTitlesRequest } from "../types/Titles";
 import { useProfile } from "../contexts/ProfileContext";
 import TickLoader from "../components/Global/LoadingIcon";
 import { SearchBarDb } from "../components/Global/SearchBarDb";
+import LoadingTitlesCard from "../components/LoadingSkeletons/LoadingTitlesCard";
 
 // interface HomePageProps {}
 
@@ -53,6 +54,7 @@ const HomePage: React.FC = () => {
   // Sports
   const popularSportsQuery = useQuery({
     staleTime: 1000 * 60 * 10,
+
     queryKey: ["popularSports"],
     queryFn: () => getHomePageRecommendations("popular", "Sport"),
     retry: 1,
@@ -138,7 +140,7 @@ const HomePage: React.FC = () => {
 export default HomePage;
 
 //helper slave
-const RecommendationRow: React.FC<{
+export const RecommendationRow: React.FC<{
   title: string;
   data?: AddTitlesRequest[];
   isLoading?: boolean;
@@ -146,11 +148,15 @@ const RecommendationRow: React.FC<{
 }> = ({ title, data = [], isLoading = false, alt }) => {
   if (isLoading) {
     return (
-      <div className="flex flex-col gap-4 mt-4 h-max items-center justify-center">
-        <div className="text-[clamp(18px,3vw,28px)] text-white font-regular">
+      <div className="component-movies-row flex flex-col gap-4 mt-4 h-max">
+        <div className="justify-center text-[clamp(18px,3vw,28px)] text-white font-regular">
           {title}
         </div>
-        <TickLoader />
+        <div className="movies-row flex flex-row gap-6 h-max  overflow-x-scroll">
+          {[...Array(10)].map((i) => (
+            <LoadingTitlesCard key={i} />
+          ))}
+        </div>
       </div>
     );
   }
@@ -158,11 +164,11 @@ const RecommendationRow: React.FC<{
   if (!data.length) return null;
 
   return (
-    <div className="popular-movies-row flex flex-col gap-4 mt-4 h-max">
+    <div className="component-movies-row flex flex-col gap-2 mt-4 h-max">
       <div className="justify-center text-[clamp(18px,3vw,28px)] text-white font-regular">
         {title}
       </div>
-      <div className="movies-row flex flex-row gap-6 h-max overflow-hidden overflow-x-scroll">
+      <div className="movies-row flex flex-row gap-6 h-max overflow-visible overflow-x-scroll py-2">
         {data.map((item) => (
           <DetailCard
             key={item.eventId}

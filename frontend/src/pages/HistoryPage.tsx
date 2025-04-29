@@ -1,6 +1,6 @@
 import { easeInOut } from "motion";
 import { motion } from "motion/react";
-import React, { useState } from "react";
+import React from "react";
 import Layout from "../components/Global/Layout";
 import TopNavigationBar from "../components/Global/TopNavigationBar";
 import { MOVEMENT_DISTANCE } from "../utils/constants";
@@ -11,6 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getUserHistory } from "../queries/Tickets";
 import TickLoader from "../components/Global/LoadingIcon";
 import { useProfile } from "../contexts/ProfileContext";
+import LoadingHistoryCard from "../components/LoadingSkeletons/LoadingHistoryCard";
 
 const HistoryPage: React.FC = () => {
   const {
@@ -19,7 +20,6 @@ const HistoryPage: React.FC = () => {
     userData,
   } = useProfile();
 
-  const [selectedIndex, setSelectedIndex] = useState(0);
   const {
     data: historyData,
     isLoading: isHistoryLoading,
@@ -49,8 +49,8 @@ const HistoryPage: React.FC = () => {
         className="w-screen h-screen flex justify-center self-center items-center bg-black"
         isHomePage={true}
       >
-        <div className="error container flex flex-row gap-2 items-center justify-center h-screen mt-[-100px]">
-          <motion.img
+        <div className="error container flex flex-row gap-2 items-center justify-center h-screen ">
+          {/* <motion.img
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.2, ease: easeInOut }}
@@ -64,7 +64,14 @@ const HistoryPage: React.FC = () => {
             className="text-white text-[clamp(20px,2.5vw,32px)] font-semibold"
           >
             {isHistoryError ? String(historyError) : "Something went wrong"}
-          </motion.h2>
+          </motion.h2> */}
+          <motion.img
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.2, ease: easeInOut }}
+            src="/images/page-not-found-illustration.svg"
+            alt="sad"
+          />
         </div>
       </Layout>
     );
@@ -72,11 +79,11 @@ const HistoryPage: React.FC = () => {
 
   return (
     <Layout className="bg-[linear-gradient(to_bottom,#0D0B11_10%,#261349_80%)]">
-      <TopNavigationBar userData={userData as ProfileResponse} />
+      <TopNavigationBar userData={userData as ProfileResponse} delay={0.2} />
       <motion.div
         initial={{ opacity: 0, y: MOVEMENT_DISTANCE }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, delay: 1, ease: easeInOut }}
+        transition={{ duration: 0.2, delay: 0.2, ease: easeInOut }}
         className="main-container w-full flex flex-col gap-2 md:gap-3"
       >
         <AdSpace />
@@ -85,7 +92,19 @@ const HistoryPage: React.FC = () => {
         </div>
 
         {isHistoryLoading ? (
-          <TickLoader />
+          <div className="history-cards-container grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 w-full mt-1 md:mt-2 lg:mt-3">
+            {[...Array(10)].map((_, i) => (
+              <LoadingHistoryCard key={i} />
+            ))}
+          </div>
+        ) : historyData?.length === 0 || isHistoryError || historyError ? (
+          <div className="history-cards-container items-start justify-center  flex overflow-visible mb-12">
+            <img
+              className="scale-[60%] origin-top"
+              src="/images/tickets-not-found-illustration.svg"
+              alt="tickets-not-found-illustration "
+            />
+          </div>
         ) : (
           <div className="history-cards-container grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 w-full mt-1 md:mt-2 lg:mt-3">
             {historyData?.map((listing) => (

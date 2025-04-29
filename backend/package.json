@@ -3,17 +3,20 @@
   "private": true,
   "version": "0.0.1",
   "dependencies": {
-    "axios": "^1.8.4",
+    "axios": "^1.9.0",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "fuse.js": "^7.1.0",
+    "image-compressor": "^2.0.3",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.13.1",
     "mongoose-sequence": "^6.0.1",
     "nodemailer": "^6.10.0",
     "nodemon": "^3.1.9",
+    "puppeteer": "^24.7.2",
+    "puppeteer-core": "^24.7.2",
     "resend": "^4.2.0"
   },
   "scripts": {

@@ -32,7 +32,7 @@ const GoogleAuthButton: React.FC<OauthProps> = ({ name }) => {
           name,
           profileImage: {
             data: picture,
-            contentType: "image/jpeg", // assume jpeg from Google
+            contentType: "image/jpeg", 
           },
         });
         if (backendResponse.status === 401)

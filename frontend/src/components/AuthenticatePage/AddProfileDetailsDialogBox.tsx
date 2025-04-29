@@ -7,6 +7,7 @@ import imageCompression from "browser-image-compression";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { signUpUser } from "../../queries/SignUp";
 import { useNavigate } from "react-router-dom";
+import { LANDING_PAGE, TICKET_DETAILS_PAGE } from "../../routes/appRoutes";
 
 const popUpVariants = {
   hidden: { opacity: 0, scale: 0.95 },
@@ -20,7 +21,7 @@ interface AddProfileDialogBoxProps {
   setIsAnimating: React.Dispatch<React.SetStateAction<boolean>>;
   setForm: React.Dispatch<React.SetStateAction<SignUpRequest>>;
 
-  redirectUrl: string;
+  redirect: string | null;
 }
 
 const AddProfileDialogBox: React.FC<AddProfileDialogBoxProps> = ({
@@ -28,7 +29,7 @@ const AddProfileDialogBox: React.FC<AddProfileDialogBoxProps> = ({
   setToggleDialogueBox,
   setForm,
   setIsAnimating,
-  redirectUrl,
+  redirect: url,
 }) => {
   const [profile, setProfile] = useState(
     form.profileImage.data || "/icons/no-profile.png"
@@ -79,8 +80,13 @@ const AddProfileDialogBox: React.FC<AddProfileDialogBoxProps> = ({
 
         localStorage.setItem("token", responseData?.token);
         queryClient.invalidateQueries({ queryKey: ["userProfile"] });
-
-        setTimeout(() => navigate(redirectUrl || "/home"), 1000);
+        if (url) {
+          window.location.replace(`${TICKET_DETAILS_PAGE}/?eventRefId=${url}`);
+          console.log(`${TICKET_DETAILS_PAGE}/?eventRefId=${url}`);
+          return;
+        } else {
+          setTimeout(() => navigate(LANDING_PAGE), 1000);
+        }
       },
       onError: (err) => {
         setError(true);
@@ -218,10 +224,10 @@ const AddProfileDialogBox: React.FC<AddProfileDialogBoxProps> = ({
           >
             <input
               name="name"
-              type="email"
+              type="text"
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
-              placeholder="m@example.com"
+              placeholder="Enter your name"
               className="w-full bg-transparent text-white/80 text-[clamp(14px,1.3vw,16px)] font-normal outline-none"
             />
           </motion.div>

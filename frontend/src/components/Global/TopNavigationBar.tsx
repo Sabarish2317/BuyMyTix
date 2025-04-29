@@ -11,6 +11,7 @@ import ProfileImage from "./profileImage";
 import PostNewTickDialogBox from "../DialogBoxes/CreateNewTicketDialogBox/PostNewTicketDialogBox";
 import { useProfile } from "../../contexts/ProfileContext";
 import SettingsDialogBox from "../DialogBoxes/SettingsDialogBox";
+import { toast } from "react-toastify";
 
 interface TopNavigationBarProps {
   userData: ProfileResponse; // response from parent from context
@@ -79,7 +80,7 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({
         className="logo-padding w-full flex justify-start flex-row scale-3d hover:scale-95 hover:opacity-80 active:scale-105 active:opacity-100 transition-all duration-200"
       >
         <img
-          className="scale-75 md:scale-90 lg:scale-100 origin-left cursor-pointer"
+          className="scale-75 md:scale-90 lg:scale-100 origin-left cursor-pointer user-drag-none "
           src="/icons/logo.svg"
           alt="logo"
         />
@@ -90,7 +91,7 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({
         <button
           onClick={() => navigate(LANDING_PAGE)}
           className="home w-max text-[clamp(20px,2vw,24px)] text-white font-medium primary
-         hover:scale-95 transition-all duration-200 active:scale-105 cursor-pointer"
+         hover:scale-95 transition-all duration-200 active:scale-105 cursor-pointer select-none"
         >
           Home
         </button>
@@ -107,17 +108,23 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({
             }
           }}
           className="about-us w-max text-[clamp(20px,2vw,24px)] text-white
-          hover:scale-95 transition-all duration-200 active:scale-105 cursor-pointer"
+          hover:scale-95 transition-all duration-200 active:scale-105 cursor-pointer select-none"
         >
           About us
         </button>
         <button
           onClick={() => {
-            if (userData.email) toggleSellTicketDialogBox();
-            else navigate(LOGIN_PAGE);
+            if (userData.email) {
+              if (userData.phone.toString() === "0000000000") {
+                toast.error("Please add your phone number");
+                setSettingsDialogBoxVisible(true);
+              } else {
+                toggleSellTicketDialogBox();
+              }
+            } else navigate(LOGIN_PAGE);
           }}
           className="help-and-support w-max text-[clamp(20px,2vw,24px)] text-white
-          hover:scale-95 transition-all duration-200 active:scale-105 cursor-pointer"
+          hover:scale-95 transition-all duration-200 active:scale-105 cursor-pointer select-none"
         >
           Sell tickets
         </button>
@@ -140,7 +147,7 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({
         hover:bg-white/80 hover:scale-95 transition-all duration-200 active:scale-105 active:bg-white cursor-pointer"
           >
             <h2
-              className="text-[clamp(20px,2vw,24px)] text-black font-medium"
+              className="text-[clamp(20px,2vw,24px)] text-black font-medium select-none"
               onClick={() => navigate(SIGNUP_PAGE)}
             >
               Get started
@@ -155,10 +162,14 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({
             className="location-container w-max flex-row gap-2 flex max-[1290px]:hidden cursor-pointer"
             onClick={toggleCityDialogueBox}
           >
-            <img src="/icons/location-icon.svg" alt="" />
+            <img
+              className="user-drag-none"
+              src="/icons/location-icon.svg"
+              alt=""
+            />
             <div
               className="login-button w-max  text- text-[clamp(20px,2vw,24px)] text-white
-         hover:text-zinc-300 transition-all duration-200 active:text-zinc-400 cursor-pointer"
+         hover:text-zinc-300 transition-all duration-200 active:text-zinc-400 cursor-pointer select-none"
             >
               {userData.city
                 ? userData.city + ", " + userData.state
@@ -184,6 +195,7 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({
               className="w-5 ml-1.5 relative overflow-clip hover:scale-105 transition-all duration-200 ease-in-out active:scale-110 cursor-pointer"
             >
               <img
+                className="user-drag-none"
                 src={
                   isProfileVisible
                     ? "/icons/down-arrow-orange.svg"

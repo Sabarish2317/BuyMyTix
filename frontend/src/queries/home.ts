@@ -6,6 +6,7 @@ export const getHomePageRecommendations = async (
   type: string,
   category: string
 ): Promise<AddTitlesRequest[]> => {
+  // await new Promise((r) => setTimeout(r, 10000));
   const res = await axios.get(getHomePageRecommendationsApi, {
     params: { type, category },
   });

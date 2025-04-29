@@ -12,6 +12,9 @@ const getHomePageRecommendationsApi = "/api/home"; //get
 const getUserHistoryApi = "/api/Authenticate/history"; //get
 const deleteTicketApi = "/api/ticket/"; //delete
 const editTicketApi = "api/ticket/"; //put , change it into patch later (marakamey)
+const searchWithFilter = "/api/search";
+const reportApi = "/api/Authenticate/report";
+const blockApi = "/api/Authenticate/block";
 export {
   signUpApi,
   checkIsEmailAvailablApi,
@@ -22,9 +25,12 @@ export {
   resetPasswordApi,
   searchCityAPi,
   searchTitleAPi,
+  searchWithFilter,
   addTicketAPi,
   getHomePageRecommendationsApi,
   getUserHistoryApi,
   deleteTicketApi,
   editTicketApi,
+  reportApi,
+  blockApi,
 };

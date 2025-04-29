@@ -1,10 +1,6 @@
 import axios from "../utils/axios";
 import { SignUpRequest, SignUpResponse } from "../types/SignUp";
-import {
-  checkIsEmailAvailablApi,
-  checkIsEmailAvailablepi,
-  signUpApi,
-} from "../routes/apiRoutes";
+import { checkIsEmailAvailablApi, signUpApi } from "../routes/apiRoutes";
 
 export const signUpUser = async (
   formData: SignUpRequest
@@ -22,12 +18,6 @@ export const signUpUser = async (
 
   if (formData.password !== formData.confirmPassword) {
     throw new Error("Passwords do not match");
-  }
-
-  if (!formData.password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/)) {
-    throw new Error(
-      "Password must be at least 8 characters and include upper, lower, and a number"
-    );
   }
 
   try {

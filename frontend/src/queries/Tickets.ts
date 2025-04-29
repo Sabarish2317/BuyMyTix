@@ -11,7 +11,6 @@ import {
   getUserHistoryApi,
 } from "../routes/apiRoutes";
 import { toast } from "react-toastify";
-import { useQueryClient } from "@tanstack/react-query";
 
 export const addTicket = async (
   addTicketRequest: Ticket
@@ -53,7 +52,9 @@ export const getUserHistory = async (): Promise<userTicketHistory[]> => {
 
   try {
     const response = await axios.get(getUserHistoryApi, {
-      headers: { authorization: `bearer ${token}` },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
       timeout: 5000,
     });
 
