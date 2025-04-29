@@ -9,6 +9,8 @@
 
 :root {
   --font-satoshi: "Satoshi", sans-serif;
+  -webkit-user-drag: none;
+  user-drag: none;
 }
 
 input:focus,
@@ -35,14 +37,6 @@ body {
 }
 .body-text {
   font-size: 24px;
-}
-
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
-  transition: background-color 5000000s;
-  -webkit-text-fill-color: #ffffff !important;
 }
 
 /* Hide scrollbar for all browsers */
@@ -125,4 +119,24 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   }
 
   /* } //generate a gray to black border gradient */
+  @layer utilities {
+    .user-drag-none {
+      -webkit-user-drag: none;
+      -khtml-user-drag: none;
+      -moz-user-drag: none;
+      -o-user-drag: none;
+      user-drag: none;
+      user-select: none;
+    }
+
+    .remove-auto-fill-background {
+      input:-webkit-autofill,
+      input:-webkit-autofill:hover,
+      input:-webkit-autofill:focus,
+      input:-webkit-autofill:active {
+        transition: background-color 5000000s;
+        -webkit-text-fill-color: #ffffff !important;
+      }
+    }
+  }
 }

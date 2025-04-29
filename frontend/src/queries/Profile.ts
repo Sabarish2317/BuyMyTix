@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import { profileApi } from "../routes/apiRoutes";
 import { ProfileResponse } from "../types/Profile";
 import axios from "../utils/axios";
@@ -22,5 +23,6 @@ export const updateProfile = async (form: ProfileResponse) => {
     headers: { Authorization: `Bearer ${token}` },
     data: form,
   });
+  toast.success(profileDetails.data.city);
   return profileDetails.data;
 };

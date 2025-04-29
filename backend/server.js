@@ -13,7 +13,7 @@ app.use(
     credentials: true,
   })
 );
-// app.use(logger);
+app.use(logger);
 app.use(express.json());
 
 const userRoute = require("./router/userRouter");

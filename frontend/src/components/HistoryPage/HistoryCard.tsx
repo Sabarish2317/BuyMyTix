@@ -51,7 +51,7 @@ const HistoryCard: React.FC<HistoryCardProps> = ({
   return (
     <div
       className="ticket-tile-container flex flex-row gap-3 min-w-[300px] max-w-[450px] 
-      rounded-xl p-[10px] items-center select-none transition-all bg-white/5"
+      rounded-xl p-[10px] items-center select-none transition-all text-gray bg-white/5"
     >
       <div className="relative w-[80px] md:w-[100px] lg:w-[120px] flex-shrink-0">
         <img
@@ -85,7 +85,7 @@ const HistoryCard: React.FC<HistoryCardProps> = ({
             </button>
           </div>
 
-          <div className="flex items-center gap-1 text-white/80 text-sm">
+          <div className="flex items-center gap-1 text-white/80 text-sm ">
             <img
               className="w-4"
               src="/icons/location-icon.svg"

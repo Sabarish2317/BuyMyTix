@@ -2,6 +2,7 @@ import { ProfileResponse } from "./Profile";
 import { AddTitlesRequest } from "./Titles";
 
 export interface Ticket {
+  ticketId: string;
   email: string; //user id wll be parsed later in the the backend so just send email check if email is valid (security nigga)
   eventRef: string; //refere id of the titles object after added to the db or form the db
   venue: string;

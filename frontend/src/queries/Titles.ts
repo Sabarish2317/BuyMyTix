@@ -3,10 +3,10 @@ import {
   AddTitlesRequest,
   AddTitlesResponse,
   DbSearchTitleResponse,
-  OMDBSearchTitleResponse,
   SearchTitleRequest,
 } from "../types/Titles";
 import { searchTitleAPi } from "../routes/apiRoutes";
+import { toast } from "react-toastify";
 
 export const fetchTitles = async (
   SearchTitleRequest: SearchTitleRequest
@@ -43,5 +43,38 @@ export const addTitles = async (
     if (err.response?.status === 409)
       throw new Error("Title already exists please choose it");
     throw new Error("Something went wrong");
+  }
+};
+
+type SearchWithFilterResponse = {
+  Movie: DbSearchTitleResponse[];
+  Sport: DbSearchTitleResponse[];
+  Event: DbSearchTitleResponse[];
+};
+
+export const searchWithFilter = async (
+  q: string,
+  y: string,
+  ticketType: string,
+  language: string
+): Promise<SearchWithFilterResponse> => {
+  if (!q || q.trim() === "") {
+    toast.error("Search query is required");
+    throw new Error("Search query is required");
+  }
+
+  try {
+    const res = await axios.get<SearchWithFilterResponse>("/api/search", {
+      params: {
+        q,
+        y,
+        ticketType,
+        language,
+      },
+    });
+    return res.data;
+  } catch (err: any) {
+    toast.error("Error searching title");
+    throw new Error("Error searching title");
   }
 };

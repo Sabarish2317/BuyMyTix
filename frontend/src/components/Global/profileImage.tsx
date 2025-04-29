@@ -42,7 +42,7 @@ const ProfileImage: React.FC<ProfileImageProps> = ({
     >
       <img
         ref={imgRef}
-        className="w-full h-full object-cover"
+        className="w-full h-full object-cover user-drag-none"
         src={isEmpty}
         alt="profile"
       />

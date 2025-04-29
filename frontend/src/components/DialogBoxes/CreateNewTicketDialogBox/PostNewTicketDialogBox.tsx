@@ -10,7 +10,6 @@ import PageOne from "./PageOne";
 import PageTwo from "./PageTwo";
 import PageThree from "./PageThree";
 import { useMutation } from "@tanstack/react-query";
-import { ticketData } from "../../../pages/TicketDetailsPage";
 import { addTicket } from "../../../queries/Tickets";
 import { toast } from "react-toastify";
 const popUpVariants = {
@@ -60,7 +59,7 @@ const PostNewTickDialogBox: React.FC<PostNewTickDialogBoxProps> = ({
    */
   const addTicketMutation = useMutation({
     mutationFn: addTicket,
-    mutationKey: ["Add ticket", ticketData],
+    mutationKey: ["Add ticket"],
     onSuccess: (data) => {
       console.table(data);
     },
@@ -276,7 +275,7 @@ const PostNewTickDialogBox: React.FC<PostNewTickDialogBoxProps> = ({
       }}
       className="blurred-background fixed inset-0 backdrop-blur-sm z-[100] flex items-center justify-center "
     >
-      <div className="create-new-ticket-dialogue-box mt-[-36px] w-[300px] md:w[400px] lg:w-[500px] p-4 bg-black rounded-xl backdrop-blur-sm flex flex-col items-center gap-3 ">
+      <div className="create-new-ticket-dialogue-box  w-[300px] md:w[400px] lg:w-[500px] p-4 bg-black rounded-xl backdrop-blur-sm flex flex-col items-center gap-3 scale-90 ">
         {currentPageIndex >= 1 && currentPageIndex < 4 && (
           <ProgressIndicator currentStep={currentPageIndex} />
         )}

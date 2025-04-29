@@ -118,6 +118,9 @@ export const EditDialogBox: React.FC<EditDialogBoxProps> = ({
       getTicketHistoryQuery.invalidateQueries({
         queryKey: ["ticketHistory", localStorage.getItem("token")],
       });
+      getTicketHistoryQuery.invalidateQueries({
+        queryKey: ["tickets"],
+      });
     },
     onError: () => {
       setErr("Something went wrong. Try again.");

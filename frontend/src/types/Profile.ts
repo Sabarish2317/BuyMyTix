@@ -7,6 +7,7 @@ interface ProfileResponse {
     contentType: string;
   };
   _id: string;
+
   email: string;
   name: string;
   preferredLanguage: string;

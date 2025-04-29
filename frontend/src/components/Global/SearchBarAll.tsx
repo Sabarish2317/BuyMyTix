@@ -1,4 +1,3 @@
-// Fixed SearchBar.tsx
 import { useState, useEffect } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
@@ -22,7 +21,7 @@ interface SearchBarProps {
   className?: string;
   mainClassName?: string;
   setInputValue?: React.Dispatch<React.SetStateAction<string>>;
-  intputValue?: string;
+  intputValue: string;
   moveOnTap?: number;
 }
 
@@ -30,8 +29,11 @@ const SearchBar: React.FC<SearchBarProps> = ({
   className = "",
   mainClassName = "",
   moveOnTap = 0,
+  intputValue = "",
 }) => {
-  const [inputValue, setInputValue] = useState("");
+  const [isUserTyped, setIsUserTyped] = useState(false);
+
+  const [inputValue, setInputValue] = useState(intputValue);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [debouncedInput, setDebouncedInput] = useState("");
 
@@ -63,6 +65,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
     setSelectedIndex(-1);
+    setIsUserTyped(true);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -116,15 +119,16 @@ const SearchBar: React.FC<SearchBarProps> = ({
         </div>
       </div>
 
-      {isLoading && inputValue.length >= 1 && (
+      {isLoading && isUserTyped && inputValue.length >= 1 && (
         <div className="p-3 text-white">Searching •••</div>
       )}
       {isFetched &&
+        isUserTyped &&
         inputValue.length &&
         titlesData.length === 0 &&
         !isLoading && <div className="p-3 text-white">No results found</div>}
 
-      {Array.isArray(titlesData) && titlesData.length > 0 && (
+      {Array.isArray(titlesData) && titlesData.length > 0 && isUserTyped && (
         <ul className={`w-full z-[100] bg-[#090e18] ${className}`}>
           {titlesData.map((item, index) => (
             <li
@@ -330,7 +334,7 @@ const SearchBarWhite: React.FC<SearchBarWhiteProps> = ({
             onChange={handleInputChange}
             placeholder="Search"
             onKeyDown={handleKeyDown}
-            className="w-full bg-transparent border-none outline-none text-[clamp(16px,2vw,24px)] font-medium"
+            className="min-w-full bg-transparent border-none outline-none text-[clamp(16px,2vw,24px)] font-medium"
           />
         </div>
         {/* year picker */}

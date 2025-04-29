@@ -54,7 +54,7 @@ const SettingsDialogBox: React.FC<SettingsDialogBoxProps> = ({
       setUserDataOnContext(usrData);
     },
     onError: () => {
-      alert("Couldn't update location");
+      toast.error("Couldn't update profile");
     },
   });
 
@@ -116,7 +116,12 @@ const SettingsDialogBox: React.FC<SettingsDialogBoxProps> = ({
                 }
               />
               <div className="z-[999] absolute bottom-0 left-20 w-max">
-                <DropdownDark />
+                <DropdownDark
+                  isProfileNull={
+                    userData.profileImage?.data === "" ||
+                    userData.profileImage?.data === "empty"
+                  }
+                />
               </div>
             </div>
           </div>
@@ -146,14 +151,25 @@ const SettingsDialogBox: React.FC<SettingsDialogBoxProps> = ({
         />
         <button
           onClick={() => {
-            if (JSON.stringify(usrData) !== JSON.stringify(userData)) {
+            if (name.length > 54) {
+              return toast.error("Name is too long");
+            } else if (preferredLanguage.length > 54) {
+              return toast.error("Language is too long");
+            } else if (phoneNumber.toString().length !== 10) {
+              return toast.error("Invalid phone number");
+            }
+            if (
+              JSON.stringify(usrData) !== JSON.stringify(userData) &&
+              usrData.profileImage.data === userData.profileImage.data
+            ) {
               mutate.mutate(usrData);
               setToggleDialogueBox(false);
             }
           }}
           className={`w-full px-6 py-3.5 cursor-pointer rounded-md flex justify-center items-center gap-2.5 scale-3d 
             hover:scale-105 hover:opacity-90 active:opacity-100 transition-all duration-200 mt-2 ${
-              JSON.stringify(usrData) !== JSON.stringify(userData)
+              JSON.stringify(usrData) !== JSON.stringify(userData) &&
+              usrData.profileImage.data === userData.profileImage.data
                 ? "bg-[#9F64DA]"
                 : "bg-white/50"
             }`}

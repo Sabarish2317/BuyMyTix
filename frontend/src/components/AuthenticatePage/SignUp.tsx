@@ -8,9 +8,10 @@ import { checkIsEmailAvailable } from "../../queries/SignUp";
 import { SignUpRequest } from "../../types/SignUp";
 import AddProfileDialogBox from "./AddProfileDetailsDialogBox";
 import GoogleAuthButton from "./googleOauthButton";
+import { toast } from "react-toastify";
 
-const SignUpForm: React.FC<{ redirectUrl: string }> = ({
-  redirectUrl: url,
+const SignUpForm: React.FC<{ redirect: string | null }> = ({
+  redirect: url,
 }) => {
   const navigate = useNavigate();
   const [isProfileDialogBoxVisible, setShowProfileDetailsDialog] =
@@ -44,7 +45,7 @@ const SignUpForm: React.FC<{ redirectUrl: string }> = ({
       toggleProfileDialogueBox();
     },
     onError: (err: any) => {
-      setErr(err.message);
+      toast.error(err.message);
     },
   });
   const { isPending } = checkEmailMutation;
@@ -53,11 +54,28 @@ const SignUpForm: React.FC<{ redirectUrl: string }> = ({
     e.preventDefault();
     setErr(""); // Clear old errors
 
-    if (!form.email) return setErr("Email is required");
-    if (!form.password || !form.confirmPassword)
-      return setErr("Password is required");
-    if (form.password !== form.confirmPassword)
+    if (!form.email) {
+      setErr("Email is required"); //this error wont be displayed but other componentes are dependent on it
+      toast.error("Email is required");
+      return;
+    }
+    if (!form.password || !form.confirmPassword) {
+      setErr("Password and confirm password are required");
+      toast.error("Password and confirm password are required");
+      return;
+    }
+    if (form.password !== form.confirmPassword) {
+      toast.error("Passwords do not match");
       return setErr("Passwords do not match");
+    }
+
+    if (!form.password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/)) {
+      toast.error(
+        "Password must be at least 8 characters and include upper, lower, and a number"
+      );
+      return;
+    }
+
     checkEmailMutation.mutate(form.email);
   };
 
@@ -66,7 +84,7 @@ const SignUpForm: React.FC<{ redirectUrl: string }> = ({
       <AnimatePresence mode="wait">
         {isProfileDialogBoxVisible && (
           <AddProfileDialogBox
-            redirectUrl={url}
+            redirect={url}
             setIsAnimating={setIsAnimating}
             form={form}
             setForm={setForm}
@@ -131,16 +149,6 @@ const SignUpForm: React.FC<{ redirectUrl: string }> = ({
         >
           Sign up for your BuyMyTix account
         </div>
-        {err && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="text-[#dc3912] font-medium px-4 py-2 rounded-md mb-3 text-center"
-          >
-            {err}
-          </motion.div>
-        )}
       </div>
 
       {/* Form */}
@@ -160,7 +168,7 @@ const SignUpForm: React.FC<{ redirectUrl: string }> = ({
               duration: 0.1,
               ease: "backInOut",
             }}
-            className="w-full px-3 py-[14px] rounded-md border-2 flex items-center justify-between"
+            className="w-full px-3 py-[14px] rounded-md border-2 flex items-center justify-between remove-auto-fill-background"
           >
             <input
               name="email"
@@ -168,7 +176,7 @@ const SignUpForm: React.FC<{ redirectUrl: string }> = ({
               value={form.email}
               onChange={handleChange}
               placeholder="m@example.com"
-              className="w-full bg-transparent text-white/80 text-[clamp(14px,1.3vw,16px)] font-normal outline-none"
+              className="w-full bg-transparent text-white/80 text-[clamp(14px,1.3vw,16px)] font-normal outline-none remove-auto-fill-background"
             />
           </motion.div>
         </div>
@@ -188,7 +196,7 @@ const SignUpForm: React.FC<{ redirectUrl: string }> = ({
               duration: 0.1,
               ease: "backInOut",
             }}
-            className="w-full px-3 py-[14px] rounded-md border-2 flex items-center justify-between"
+            className="w-full px-3 py-[14px] rounded-md border-2 flex items-center justify-between remove-auto-fill-background"
           >
             <input
               type={showPassword ? "text" : "password"}
@@ -196,7 +204,7 @@ const SignUpForm: React.FC<{ redirectUrl: string }> = ({
               value={form.password}
               onChange={handleChange}
               placeholder="••••••••"
-              className="w-full bg-transparent text-white/80 text-[clamp(14px,1.3vw,16px)] font-normal outline-none"
+              className="w-full bg-transparent text-white/80 text-[clamp(14px,1.3vw,16px)] font-normal outline-none remove-auto-fill-background"
             />
             <button
               type="button"
@@ -228,7 +236,7 @@ const SignUpForm: React.FC<{ redirectUrl: string }> = ({
               duration: 0.1,
               ease: "backInOut",
             }}
-            className="w-full px-3 py-[14px] rounded-md border-2 flex items-center justify-between"
+            className="w-full px-3 py-[14px] rounded-md border-2 flex items-center justify-between remove-auto-fill-background"
           >
             <input
               type="password"
@@ -236,7 +244,7 @@ const SignUpForm: React.FC<{ redirectUrl: string }> = ({
               value={form.confirmPassword}
               onChange={handleChange}
               placeholder="••••••••"
-              className="w-full bg-transparent text-white/80 text-[clamp(14px,1.3vw,16px)] font-normal outline-none"
+              className="w-full bg-transparent text-white/80 text-[clamp(14px,1.3vw,16px)] font-normal outline-none remove-auto-fill-background"
             />
           </motion.div>
         </div>
