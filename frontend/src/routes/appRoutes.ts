@@ -8,7 +8,8 @@ const LOGIN_PAGE: string = "/Authenticate?mode=login";
 const SIGNUP_PAGE: string = "/Authenticate?mode=signup";
 const TICKET_DETAILS_PAGE = "/title";
 const HISTORY_PAGE = "/history";
-
+const ADMIN_PAGE = "/admin/titles";
+const REPORT_PAGE = "/admin/report";
 export {
   BASE_URL,
   ERROR_PAGE,
@@ -20,4 +21,6 @@ export {
   LOGIN_PAGE,
   SIGNUP_PAGE,
   TICKET_DETAILS_PAGE,
+  ADMIN_PAGE,
+  REPORT_PAGE,
 };

@@ -20,6 +20,7 @@ const userRoute = require("./router/userRouter");
 const cityRoute = require("./router/cityRouter");
 const eventReferenceRoute = require("./router/eventReferenceRouter");
 const ticketListingRoute = require("./router/ticketListingRouter");
+const adminRoute = require("./router/adminRouter");
 
 app.get("/", (req, res) => {
   // Testing kaga
@@ -30,6 +31,7 @@ app.use("/api/", cityRoute); // search for citites (standalone api)
 app.use("/api/Authenticate", userRoute); //(All user authenticaiton methods)
 app.use("/api/", eventReferenceRoute); // CRUD event reference and search
 app.use("/api/", ticketListingRoute); // CRUD titckets
+app.use("/api/", adminRoute); //admin route to crud titles
 
 mongoose
   .connect(process.env.MONGO_URI, { dbName: "BuyMyTix" })

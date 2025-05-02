@@ -31,7 +31,7 @@ const DynamicOptions: React.FC<DynamicOptionsProps> = ({ option }) => {
     case 1:
       return (
         <div className="margin relative my-4 h-[56px]">
-          <SearchBar type="city" />
+          <SearchBar intputValue="" />
         </div>
       );
     case 2:

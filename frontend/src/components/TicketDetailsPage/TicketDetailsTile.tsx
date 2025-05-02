@@ -35,9 +35,9 @@ const TicketDetailsTile: React.FC<TicketDetailsTileProps> = ({
 }) => {
   //for that kutti oval
   const now = new Date();
-  const showTime = new Date(ticketData.showTime);
-  const diffInMs = showTime - now.getTime();
-  const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
+  const showTime = new Date(ticketData.showTime); // Ensuring showTime is a Date object
+  const diffInMs = showTime.getTime() - now.getTime(); // getTime() ensures you're working with timestamps (numbers)
+  const diffInDays = diffInMs / (1000 * 60 * 60 * 24); // Convert to days
   const isMoreThanOneDay = diffInDays >= 1;
 
   //theriyama rendu type use panitu so ipo custom map

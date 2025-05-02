@@ -1,5 +1,6 @@
 const TicketListing = require("../model/ticketListingModel");
 const EventReference = require("../model/eventReferenceModel");
+const redisClient = require("../config/redisClient"); // adjust path accordingly
 
 const home = async (req, res) => {
   try {
@@ -9,15 +10,24 @@ const home = async (req, res) => {
       return res.status(400).json({ error: "Query param 'type' is required" });
     }
 
-    // Set default to "Movie" if category is not provided
     const eventType = category || "Movie";
 
     if (!["Movie", "Sport", "Event"].includes(eventType)) {
       return res.status(400).json({ error: "Invalid 'category' value" });
     }
 
+    const cacheKey = `home:${type}:${eventType}`;
+    const cachedData = await redisClient.get(cacheKey);
+
+    if (cachedData) {
+      console.log("Cache hit");
+      return res.status(200).json(JSON.parse(cachedData));
+    }
+
+    let data;
+
     if (type === "popular") {
-      const popular = await TicketListing.aggregate([
+      data = await TicketListing.aggregate([
         {
           $lookup: {
             from: "eventreferences",
@@ -45,19 +55,19 @@ const home = async (req, res) => {
           },
         },
       ]);
-
-      return res.status(200).json(popular);
-    }
-
-    if (type === "latest" || type === "trending") {
-      const latest = await EventReference.find({ type: eventType })
+    } else if (type === "latest" || type === "trending") {
+      data = await EventReference.find({ type: eventType })
         .sort({ createdAt: -1 })
         .limit(10);
-
-      return res.status(200).json(latest);
+    } else {
+      return res.status(400).json({ error: "Invalid 'type' value provided" });
     }
 
-    return res.status(400).json({ error: "Invalid 'type' value provided" });
+    // Cache the data for 5 minutes (300 seconds)
+    console.log("Cache miss");
+    await redisClient.setEx(cacheKey, 300, JSON.stringify(data));
+
+    return res.status(200).json(data);
   } catch (err) {
     console.error("Error in movie controller:", err);
     return res.status(500).json({ error: "Internal Server Error" });

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { fetchTitles } from "../../queries/Titles";
 import { DbSearchTitleResponse, SearchTitleRequest } from "../../types/Titles";
 import FlippingText from "./FlippingText";
@@ -15,7 +15,7 @@ export const SearchBarDb: React.FC = () => {
   const [isValidTitleSelected, setIsValidTitleSelected] = useState(Boolean);
 
   //Scroll the suggestions into the view of the users when using array keys
-  const suggestionsRef = React.useRef<HTMLDivElement>(null);
+  const suggestionsRef = useRef<HTMLUListElement | null>(null);
   useEffect(() => {
     const activeItem = suggestionsRef.current?.querySelector(
       `[data-index='${selectedIndex}']`

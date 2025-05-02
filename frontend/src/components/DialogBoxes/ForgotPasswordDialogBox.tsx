@@ -143,7 +143,9 @@ const ForgotPasswordDialogBox: React.FC<ForgotPasswordDialogBoxProps> = ({
                   className="w-16 h-16  bg-white/90 rounded-lg outline-2 outline-offset-[-2px] outline-purple-800/70 justify-center items-center gap-2.5"
                 >
                   <input
-                    ref={(el) => (inputs.current[index] = el)}
+                    ref={(el) => {
+                      inputs.current[index] = el;
+                    }}
                     className="w-full h-full text-center justify-center text-gray-800 text-[clamp(20px,2vw,24px)] font-medium  bg-transparent outline-none"
                     type="text"
                     maxLength={1}

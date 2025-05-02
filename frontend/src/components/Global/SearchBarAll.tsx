@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import FlippingText from "./FlippingText";
@@ -196,7 +196,7 @@ const SearchBarWhite: React.FC<SearchBarWhiteProps> = ({
   const [year, setYear] = useState("All");
   const currentYear = new Date().getFullYear(); //to populat the year selecting the drop down box
   //Scroll the suggestions into the view of the users when using array keys
-  const suggestionsRef = React.useRef<HTMLDivElement>(null);
+  const suggestionsRef = useRef<HTMLUListElement | null>(null);
   useEffect(() => {
     const activeItem = suggestionsRef.current?.querySelector(
       `[data-index='${selectedIndex}']`

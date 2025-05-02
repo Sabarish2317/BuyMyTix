@@ -31,6 +31,6 @@ router.get("/email", checkEmail);
 router.post("/forgot-password", sendOTP);
 router.post("/reset-password", resetPassword);
 router.post("/report", checkToken, banCheckMiddleware, reportUser);
-router.delete("/block", checkToken, banCheckMiddleware, blockUser);
+router.post("/block", checkToken, banCheckMiddleware, blockUser);
 
 module.exports = router;

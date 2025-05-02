@@ -45,7 +45,7 @@ const AuthenticationPage: React.FC = () => {
                   <LogIn redirect={redirectUrl} />
                 ) : (
                   <div>
-                    <SignUp redirectUrl={redirectUrl || ""} />
+                    <SignUp redirect={redirectUrl || ""} />
                   </div>
                 )}
               </motion.div>
@@ -56,7 +56,7 @@ const AuthenticationPage: React.FC = () => {
           <div className="flex-4 illustration-tab-right hidden md:flex ">
             <img
               className="object-cover"
-              src="/images/white-orange.png"
+              src="/images/auth-image.png"
               alt="image"
             />
           </div>

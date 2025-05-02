@@ -1,7 +1,7 @@
 import { motion } from "motion/react";
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
-import { ANIMATION_DURATION } from "../../utils/constants";
+
 import CitySearchBar from "../Global/CitySearchBar";
 import { useMutation } from "@tanstack/react-query";
 
@@ -9,12 +9,6 @@ import { updateProfile } from "../../queries/Profile";
 import { ProfileResponse } from "../../types/Profile";
 import { toast } from "react-toastify";
 import { useProfile } from "../../contexts/ProfileContext";
-
-const popUpVariants = {
-  hidden: { opacity: 0, scale: 0.95 },
-  visible: { opacity: 1, scale: 1 },
-  exit: { opacity: 0, scale: 0.95 },
-};
 
 interface LocationDialogBoxProps {
   userData: ProfileResponse;
@@ -62,7 +56,6 @@ const LocationDialogBox: React.FC<LocationDialogBoxProps> = ({
 
   const LocationDialogBoxContent = (
     <motion.div
-      
       className="fixed inset-0 backdrop-blur-sm z-[100] flex items-center justify-center"
       //didnnt use childrens direcly as exit animations didnt work i dont know why
       //top positipon is handled via motion variant props y distance
