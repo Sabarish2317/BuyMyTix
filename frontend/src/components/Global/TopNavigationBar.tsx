@@ -134,13 +134,13 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({
         /* Action Buttons - Hidden on mobile and the user havent logeed inn*/
         <div className="action-buttons-container flex flex-row gap-6 items-center justify-end w-full">
           {/* Login Button (Only visible on large screens) */}
-          <button
+          {/* <button
             className="login-button w-max text-[clamp(20px,2vw,24px)] text-white underline hidden lg:flex
          hover:scale-95 transition-all duration-200 active:scale-105 cursor-pointer"
             onClick={() => navigate(LOGIN_PAGE)}
           >
             Log in
-          </button>
+          </button> */}
           {/* Get Started Button (Hidden on small screens, visible on medium+) */}
           <button
             className="get-started-button w-max bg-white px-3 py-2 md:px-4 md:py-3 rounded-md backdrop-blur-sm justify-center items-center gap-2.5 flex 

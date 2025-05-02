@@ -124,9 +124,10 @@ const ProfileDialogueBox: React.FC<ProfileDialogueBoxProps> = ({
             queryClient.invalidateQueries({
               queryKey: ["userProfile", localStorage.getItem("token")],
             });
+            queryClient.clear();
             localStorage.clear();
             localStorage.removeItem("token");
-            navigate("/authenticate?type-login");
+            navigate("/authenticate?type-login", { replace: true });
           }}
           className="logout-button cursor-pointer w-full flex flex-row items-center justify-start gap-6 pl-5 pr-5 pb-3 pt-3 scale-3d hover:bg-zinc-800 hover:scale-105 active:bg-zinc-700 active:scale-110 transition-all duration-200"
         >
