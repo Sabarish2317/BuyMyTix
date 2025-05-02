@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ProfileResponse } from "../../types/Profile";
 import ProfileImage from "../Global/profileImage";
-import { HISTORY_PAGE } from "../../routes/appRoutes";
+import { ADMIN_PAGE, HISTORY_PAGE, REPORT_PAGE } from "../../routes/appRoutes";
 import { useQueryClient } from "@tanstack/react-query";
 
 interface ProfileDialogueBoxProps {
@@ -93,6 +93,34 @@ const ProfileDialogueBox: React.FC<ProfileDialogueBoxProps> = ({
         </button>
         <button
           onClick={() => {
+            navigate(ADMIN_PAGE);
+          }}
+          className={`admin-button cursor-pointer w-full flex flex-row items-center justify-start gap-6 pl-5 pr-5 pb-3 pt-3 scale-3d hover:bg-zinc-800 
+            hover:scale-105 active:bg-zinc-700 active:scale-110 transition-all duration-200 ${
+              userData.type === "admin" ? "" : "hidden"
+            }`}
+        >
+          <img src="/icons/admin.svg" alt="logout" />
+          <div className="justify-start text-white text-[clamp(20px,2vw,24px)] font-regular">
+            Titles (admin)
+          </div>
+        </button>
+        <button
+          onClick={() => {
+            navigate(REPORT_PAGE);
+          }}
+          className={`admin-button cursor-pointer w-full flex flex-row items-center justify-start gap-6 pl-5 pr-5 pb-3 pt-3 scale-3d hover:bg-zinc-800 
+            hover:scale-105 active:bg-zinc-700 active:scale-110 transition-all duration-200 ${
+              userData.type === "admin" ? "" : "hidden"
+            }`}
+        >
+          <img src="/icons/admin.svg" alt="logout" />
+          <div className="justify-start text-white text-[clamp(20px,2vw,24px)] font-regular">
+            Reports (admin)
+          </div>
+        </button>
+        <button
+          onClick={() => {
             queryClient.invalidateQueries({
               queryKey: ["userProfile", localStorage.getItem("token")],
             });
@@ -107,6 +135,7 @@ const ProfileDialogueBox: React.FC<ProfileDialogueBoxProps> = ({
             Logout
           </div>
         </button>
+
         <div
           className="quick-links-container w-full flex flex-col items-center justify-start gap-2 pl-5 pr-5 pb-3 pt-3 
       text-white text-[clamp(20px,2vw,24px)] font-regular lg:hidden"

@@ -21,9 +21,9 @@ const ResultsPage: React.FC = () => {
 
   const [q, setQ] = useState(query || "");
   //wll be used later if filter function is involved
-  const [y, setY] = useState("All");
-  const [ticketType, setTicketType] = useState("All");
-  const [language, setLanguage] = useState("All");
+  const [y] = useState("All");
+  const [ticketType] = useState("All");
+  const [language] = useState("All");
 
   useEffect(() => {
     if (query === "undefined" || !query) {

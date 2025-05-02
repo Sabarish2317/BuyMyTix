@@ -206,7 +206,7 @@ const TicketDetailsPage: React.FC = () => {
     );
   }
 
-  // === Fallback: No data ===
+  
   return (
     <Layout
       className="w-screen h-screen flex justify-center items-center bg-black"

@@ -11,7 +11,13 @@ import {
   RESULTS_PAGE,
   TICKET_DETAILS_PAGE,
   HISTORY_PAGE,
+  ADMIN_PAGE,
+  REPORT_PAGE,
 } from "./routes/appRoutes";
+const Layout = lazy(() => import("./components/Global/Layout"));
+const TickLoader = lazy(() => import("./components/Global/LoadingIcon"));
+const AdminDashboard = lazy(() => import("./pages/AdminTitles"));
+const ReportsPage = lazy(() => import("./pages/ReportPage"));
 
 // Lazy-loaded pages
 const LandingPage = lazy(() => import("./pages/LandingPage"));
@@ -35,7 +41,16 @@ function App() {
           pauseOnHover={true}
         />
         <Router>
-          <Suspense fallback={<div className="p-4">Loading...</div>}>
+          <Suspense
+            fallback={
+              <Layout
+                className=" w-screen h-screen flex justify-center self-center items-center bg-black "
+                isHomePage={true}
+              >
+                <TickLoader />
+              </Layout>
+            }
+          >
             <Routes>
               <Route path="/*" element={<ErrorPage />} />
               <Route path={LANDING_PAGE} element={<LandingPage />} />
@@ -50,6 +65,8 @@ function App() {
                 path={TICKET_DETAILS_PAGE}
                 element={<TicketDetailsPage />}
               />
+              <Route path={ADMIN_PAGE} element={<AdminDashboard />} />
+              <Route path={REPORT_PAGE} element={<ReportsPage />} />
             </Routes>
           </Suspense>
         </Router>

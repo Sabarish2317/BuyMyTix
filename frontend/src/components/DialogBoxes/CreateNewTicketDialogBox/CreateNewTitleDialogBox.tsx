@@ -117,7 +117,12 @@ const CreateNewTitleDialogBox: React.FC<CreateNewTitleDialogBoxProps> = ({
       document.body.style.overflow = "auto";
     };
   }, []);
-
+  const currentYear = new Date().getFullYear();
+  const years = Array.from(
+    { length: currentYear - 1950 + 1 },
+    (_, index) => `${currentYear - index}`
+  );
+  years.push("All");
   // Early return before DOM is ready (for SSR compatibility)
   if (!domReady) return null;
 
@@ -188,17 +193,7 @@ const CreateNewTitleDialogBox: React.FC<CreateNewTitleDialogBoxProps> = ({
               type="num"
             />
             <Dropdown2
-              options={[
-                "2025",
-                "2024",
-                "2023",
-                "2022",
-                "2021",
-                "2020",
-                "2019",
-                "2018",
-                "2017",
-              ]}
+              options={years}
               heading="Select Year"
               selectedOption={year}
               setSelectedOption={setYear}

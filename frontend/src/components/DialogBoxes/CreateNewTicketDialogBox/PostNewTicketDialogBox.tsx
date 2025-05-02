@@ -93,6 +93,7 @@ const PostNewTickDialogBox: React.FC<PostNewTickDialogBoxProps> = ({
       row: "",
       seatNumbers: "",
     },
+    ticketId: "",
     showTime: new Date("2025-04-14T18:30:00Z"),
     ticketPrice: 130,
     ticketQuantity: 1,

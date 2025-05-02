@@ -24,6 +24,12 @@ const PageTwo: React.FC<PageTwoProps> = ({
     ticketData.ticketPrice || 0
   );
   const [venue, setVenue] = React.useState<string>(ticketData.venue || "");
+  const [venueName, setVenueName] = React.useState<string>(
+    ticketData.venue || ""
+  );
+  const [venueCity, setVenueCity] = React.useState<string>(
+    ticketData.venue || ""
+  );
   const [language, setLanguage] = React.useState<string>(
     ticketData.language || ""
   );
@@ -55,6 +61,7 @@ const PageTwo: React.FC<PageTwoProps> = ({
   }, [showDateTime]);
 
   useEffect(() => {
+    setVenue(`${venueName}, ${venueCity}`);
     //imput sanitastion other things are handles by default html
     if (
       ticketPrice.toString().length > 4 ||
@@ -86,6 +93,8 @@ const PageTwo: React.FC<PageTwoProps> = ({
     showDateTime,
     expiryDateTime,
     language,
+    venueCity,
+    venueName,
     screenNo,
     seatNumbers,
     entryGate,
@@ -140,18 +149,29 @@ const PageTwo: React.FC<PageTwoProps> = ({
         />
       </div>
       {/* venue spclific */}
-      <Input
-        name={titlesData.type === "Movie" ? "Theatre & city" : "Venue & city"}
-        intputValue={venue}
-        setInputValue={setVenue}
-        title={titlesData.type === "Movie" ? "Theatre & city" : "Venue & city"}
-        placeholder={
-          titlesData.type === "Movie"
-            ? "eg.,: PVR Cinemas, Chennai"
-            : "eg.,: Chinnaswamy stadium, Chennai"
-        }
-        maxLength={52}
-      />
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-5">
+        <Input
+          name={titlesData.type === "Movie" ? "Theatre" : "Venue"}
+          intputValue={venueName}
+          setInputValue={setVenueName}
+          title={titlesData.type === "Movie" ? "Theatre" : "Venue"}
+          placeholder={
+            titlesData.type === "Movie"
+              ? "eg.,: PVR Cinemas"
+              : "eg.,: Chinnaswamy stadium"
+          }
+          maxLength={52}
+        />
+        <Input
+          name="city"
+          intputValue={venueCity}
+          setInputValue={setVenueCity}
+          title={titlesData.type === "Movie" ? "Theatre city" : "Venue city"}
+          placeholder="Coimbatore"
+          maxLength={32}
+        />
+      </div>
+
       {/* Movie-specific */}
       {titlesData.type === "Movie" && (
         <div className="grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-5">
