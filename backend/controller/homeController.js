@@ -1,6 +1,11 @@
 const TicketListing = require("../model/ticketListingModel");
 const EventReference = require("../model/eventReferenceModel");
-const redisClient = require("../config/redisClient"); // adjust path accordingly
+const { Redis } = require("@upstash/redis");
+
+const redisClient = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL,
+  token: process.env.UPSTASH_REDIS_REST_TOKEN,
+});
 
 const home = async (req, res) => {
   try {
@@ -17,11 +22,13 @@ const home = async (req, res) => {
     }
 
     const cacheKey = `home:${type}:${eventType}`;
+
+    // Try fetching from Redis
     const cachedData = await redisClient.get(cacheKey);
 
     if (cachedData) {
       console.log("Cache hit");
-      return res.status(200).json(JSON.parse(cachedData));
+      return res.status(200).json(cachedData);
     }
 
     let data;
@@ -63,9 +70,9 @@ const home = async (req, res) => {
       return res.status(400).json({ error: "Invalid 'type' value provided" });
     }
 
-    // Cache the data for 5 minutes (300 seconds)
+    // Cache result for 5 minutes
     console.log("Cache miss");
-    await redisClient.setEx(cacheKey, 300, JSON.stringify(data));
+    await redisClient.set(cacheKey, data, { ex: 300 }); // 300 seconds = 5 mins
 
     return res.status(200).json(data);
   } catch (err) {
