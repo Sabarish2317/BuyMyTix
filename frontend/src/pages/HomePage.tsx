@@ -14,6 +14,8 @@ import { useProfile } from "../contexts/ProfileContext";
 import TickLoader from "../components/Global/LoadingIcon";
 import { SearchBarDb } from "../components/Global/SearchBarDb";
 import LoadingTitlesCard from "../components/LoadingSkeletons/LoadingTitlesCard";
+import { useNavigate } from "react-router-dom";
+import { CATERGORY_PAGE } from "../routes/appRoutes";
 
 // interface HomePageProps {}
 
@@ -21,7 +23,7 @@ const HomePage: React.FC = () => {
   const { isLoading, userData } = useProfile();
   // Movies
   const popularMoviesQuery = useQuery({
-    queryKey: ["popularMovies"],
+    queryKey: ["category", "popular", "Movie", 1],
     queryFn: () => getHomePageRecommendations("popular", "Movie"),
     staleTime: 1000 * 60 * 10,
     retry: 1,
@@ -102,7 +104,7 @@ const HomePage: React.FC = () => {
           alt="Movie"
         />
         <RecommendationRow
-          title="Trending Movies now"
+          title="Trending Movies"
           data={trendingMoviesQuery.data}
           isLoading={trendingMoviesQuery.isLoading}
           alt="Movie"
@@ -114,7 +116,7 @@ const HomePage: React.FC = () => {
           alt="Event"
         />
         <RecommendationRow
-          title="Trending Events now"
+          title="Trending Events"
           data={trendingEventsQuery.data}
           isLoading={trendingEventsQuery.isLoading}
           alt="Event"
@@ -127,7 +129,7 @@ const HomePage: React.FC = () => {
         />
 
         <RecommendationRow
-          title="Trending Sports now"
+          title="Trending Sports"
           data={trendingSportsQuery.data}
           isLoading={trendingSportsQuery.isLoading}
           alt="Sport"
@@ -146,6 +148,7 @@ export const RecommendationRow: React.FC<{
   isLoading?: boolean;
   alt: string;
 }> = ({ title, data = [], isLoading = false, alt }) => {
+  const navigate = useNavigate();
   if (isLoading) {
     return (
       <div className="component-movies-row flex flex-col gap-4 mt-4 h-max">
@@ -169,8 +172,11 @@ export const RecommendationRow: React.FC<{
         {title}
       </div>
       <div className="movies-row flex flex-row gap-6 h-max overflow-visible overflow-x-scroll py-2">
-        {data.map((item) => (
+        {data.map((item, index) => (
           <DetailCard
+            forwardingData={data}
+            index={index}
+            forwardTitle={title}
             key={item.eventId}
             forwardUrl={item.eventId}
             imgSrc={item.poster}
@@ -180,6 +186,31 @@ export const RecommendationRow: React.FC<{
           />
         ))}
       </div>
+      <div
+        onClick={() => {
+          const [type, category] = title.split(" ") as [string, string];
+          const filteredType = type.toLowerCase();
+          const filteredCategory = toSingular(category);
+          navigate(
+            `${CATERGORY_PAGE}?type=${filteredType}&category=${filteredCategory}&page=1`
+          );
+        }}
+        className=" text-[clamp(12px,1vw,18px)] text-white flex flex-row items-center justify-end font-regular gap-2 cursor-pointer hover:underline"
+      >
+        More
+        <img className="w-6" src="/icons/arrow-right.svg" alt="arrow-right" />
+      </div>
     </div>
   );
+};
+
+const toSingular = (word: string): string => {
+  const irregular: Record<string, string> = {
+    Movies: "Movie",
+    Sports: "Sport",
+    Events: "Event",
+    // add more as needed
+  };
+
+  return irregular[word] || word.replace(/s$/i, "");
 };

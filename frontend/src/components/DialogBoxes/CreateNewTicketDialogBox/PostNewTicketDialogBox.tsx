@@ -68,13 +68,13 @@ const PostNewTickDialogBox: React.FC<PostNewTickDialogBoxProps> = ({
 
   useEffect(() => {
     //Closing the dialog box if success
-    if (isSuccess) {
+    if (isSuccess || isError) {
       const timeout = setTimeout(() => {
         toggleDialogBox(false);
       }, 1500);
       return () => clearTimeout(timeout);
     }
-  }, [isSuccess, toggleDialogBox]);
+  }, [isSuccess, isError, toggleDialogBox]);
 
   useEffect(() => {
     if (isError) {
@@ -138,12 +138,12 @@ const PostNewTickDialogBox: React.FC<PostNewTickDialogBoxProps> = ({
           titlesData.type !== "Event" &&
           titlesData.type !== "Sport"
         )
-          return alert("Please select a valid ticket type");
+          return toast.error("Please select a valid ticket type");
       }
       //Error checking for page one
       if (currentPageIndex === 1) {
-        if (titlesData.eventId == "")
-          return toast.error("Please select a valid event");
+        if (titlesData.title === "")
+          return toast.error("Please select a valid  title");
       }
       //Error checking for page two
       if (currentPageIndex === 2) {
@@ -250,9 +250,11 @@ const PostNewTickDialogBox: React.FC<PostNewTickDialogBoxProps> = ({
           );
         if (isError)
           return (
-            <div className="text-red-500 text-center py-4">
-              Failed to post ticket. Please try again.
-            </div>
+            // failureSnackBarActually
+            <SuccessSnackBar
+              imgUrl="/icons/error-icon.svg"
+              SuccessMessage="Error occured while posting the ticket"
+            />
           );
         if (isSuccess)
           return (

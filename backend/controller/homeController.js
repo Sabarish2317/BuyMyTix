@@ -9,7 +9,7 @@ const redisClient = new Redis({
 
 const home = async (req, res) => {
   try {
-    const { type, category } = req.query;
+    const { type, category, page = 1, pageSize = 10 } = req.query;
 
     if (!type) {
       return res.status(400).json({ error: "Query param 'type' is required" });
@@ -21,7 +21,11 @@ const home = async (req, res) => {
       return res.status(400).json({ error: "Invalid 'category' value" });
     }
 
-    const cacheKey = `home:${type}:${eventType}`;
+    const pageNum = parseInt(page);
+    const limit = parseInt(pageSize);
+    const skip = (pageNum - 1) * limit;
+
+    const cacheKey = `home:${type}:${eventType}:page:${pageNum}:pageSize:${limit}`;
 
     // Try fetching from Redis
     const cachedData = await redisClient.get(cacheKey);
@@ -53,7 +57,8 @@ const home = async (req, res) => {
           },
         },
         { $sort: { count: -1 } },
-        { $limit: 10 },
+        { $skip: skip },
+        { $limit: limit },
         {
           $project: {
             _id: 0,
@@ -65,7 +70,8 @@ const home = async (req, res) => {
     } else if (type === "latest" || type === "trending") {
       data = await EventReference.find({ type: eventType })
         .sort({ createdAt: -1 })
-        .limit(10);
+        .skip(skip)
+        .limit(limit);
     } else {
       return res.status(400).json({ error: "Invalid 'type' value provided" });
     }

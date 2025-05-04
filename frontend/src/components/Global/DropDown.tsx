@@ -39,7 +39,7 @@ const Dropdown: React.FC<DropdownProps> = ({
 
       {/* Dropdown Options */}
       {isOpen && (
-        <div className="absolute left-0 mt-2 w-full bg-white shadow-lg rounded-lg overflow-hidden z-50">
+        <div className="absolute left-0 mt-2 w-full bg-white shadow-lg rounded-lg h-32 overflow-scroll z-50">
           {options.map((option, index) => (
             <div
               key={index}
@@ -95,14 +95,14 @@ const Dropdown2: React.FC<Dropdown2Props> = ({
   return (
     <div
       ref={dropdownRef}
-      className="relative inline-block text-left z-[110] min-w-[100px] min-h-full"
+      className="relative inline-block text-left  z-[110] min-w-[100px] min-h-full"
     >
       <h2 className="text-[clamp(12px,1.5vw,16px)] font-bold text-white">
         {heading}
       </h2>
       <div
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-between gap-2  h-full text-white px-4 py-2 rounded-md cursor-pointer transition-all"
+        className="flex items-center justify-between gap-2   h-full text-white px-4 py-2 rounded-md cursor-pointer transition-all"
       >
         <span className="text-[clamp(16px,1.5vw,20px)]">{selectedOption}</span>
         <img

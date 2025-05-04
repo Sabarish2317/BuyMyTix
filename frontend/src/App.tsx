@@ -13,7 +13,9 @@ import {
   HISTORY_PAGE,
   ADMIN_PAGE,
   REPORT_PAGE,
+  CATERGORY_PAGE,
 } from "./routes/appRoutes";
+import CategoryPage from "./pages/DetailedPopularAndTrendingPage";
 const Layout = lazy(() => import("./components/Global/Layout"));
 const TickLoader = lazy(() => import("./components/Global/LoadingIcon"));
 const AdminDashboard = lazy(() => import("./pages/AdminTitles"));
@@ -67,6 +69,7 @@ function App() {
               />
               <Route path={ADMIN_PAGE} element={<AdminDashboard />} />
               <Route path={REPORT_PAGE} element={<ReportsPage />} />
+              <Route path={CATERGORY_PAGE} element={<CategoryPage />} />
             </Routes>
           </Suspense>
         </Router>

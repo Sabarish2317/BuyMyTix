@@ -4,11 +4,12 @@ import axios from "../utils/axios";
 
 export const getHomePageRecommendations = async (
   type: string,
-  category: string
+  category: string,
+  page = 1,
+  pageSize = 10
 ): Promise<AddTitlesRequest[]> => {
-  // await new Promise((r) => setTimeout(r, 10000));
   const res = await axios.get(getHomePageRecommendationsApi, {
-    params: { type, category },
+    params: { type, category, page, pageSize },
   });
 
   const data = res.data;

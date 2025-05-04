@@ -10,6 +10,7 @@ const TICKET_DETAILS_PAGE = "/title";
 const HISTORY_PAGE = "/history";
 const ADMIN_PAGE = "/admin/titles";
 const REPORT_PAGE = "/admin/report";
+const CATERGORY_PAGE = "/home/category";
 export {
   BASE_URL,
   ERROR_PAGE,
@@ -23,4 +24,5 @@ export {
   TICKET_DETAILS_PAGE,
   ADMIN_PAGE,
   REPORT_PAGE,
+  CATERGORY_PAGE,
 };

@@ -3,10 +3,12 @@ import React from "react";
 
 interface SuccessSnackBarProps {
   SuccessMessage: string;
+  imgUrl?: string;
 }
 
 const SuccessSnackBar: React.FC<SuccessSnackBarProps> = ({
   SuccessMessage,
+  imgUrl = "/icons/tick.svg",
 }) => {
   return (
     <div className="flex flex-row  gap-3">
@@ -20,7 +22,7 @@ const SuccessSnackBar: React.FC<SuccessSnackBarProps> = ({
           repeatType: "reverse",
         }}
         className="w-[32px]   bg-transparent "
-        src="/icons/tick.svg"
+        src={imgUrl}
         alt="Success"
       />
 
