@@ -185,11 +185,16 @@ const TicketDetailsPage: React.FC = () => {
             {searchQuery && titlesDataFromSearch && (
               <>
                 <h2 className="text-white text-[clamp(16px,1.5vw,24px)] font-semibold mb-4">
-                  Other results for "{searchQuery}"
+                  {searchQuery.startsWith("Popular") ||
+                  searchQuery.startsWith("Trending")
+                    ? searchQuery
+                    : `Other results for ${searchQuery}`}
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                   {Object.entries(titlesDataFromSearch).map(([id, listing]) => (
                     <DetailCard
+                      forwardingData={{} as DbSearchTitleResponse[]}
+                      index={0}
                       key={id}
                       alt={listing.title}
                       forwardUrl={listing.eventId}
@@ -206,7 +211,6 @@ const TicketDetailsPage: React.FC = () => {
     );
   }
 
-  
   return (
     <Layout
       className="w-screen h-screen flex justify-center items-center bg-black"

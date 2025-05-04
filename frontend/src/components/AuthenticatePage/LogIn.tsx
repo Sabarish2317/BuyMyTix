@@ -47,7 +47,7 @@ const LoginForm: React.FC<{ redirect: string | null }> = ({
           console.log(`${TICKET_DETAILS_PAGE}/?eventRefId=${url}`);
           return;
         } else {
-          setTimeout(() => navigate(LANDING_PAGE), 1000);
+          setTimeout(() => navigate(LANDING_PAGE,{replace: true}), 1000);
         }
       },
     });

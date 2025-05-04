@@ -236,7 +236,7 @@ const TicketDetail: React.FC<TicketDetailProps> = ({
           <div className="flex gap-3">
             <span className="text-white  text-[clamp(16px,2vw,20px)] font-medium">
               +91{" "}
-              {sellerData?.email
+              {userDetail?.email && userDetail.email.length > 4
                 ? sellerData.phone
                 : sellerData.phone.slice(0, 4) + "*****"}
             </span>

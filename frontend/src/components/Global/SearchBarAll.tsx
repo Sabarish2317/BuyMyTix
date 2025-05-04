@@ -15,6 +15,8 @@ import React from "react";
 import CreateNewTitleDialogBox from "../DialogBoxes/CreateNewTicketDialogBox/CreateNewTitleDialogBox";
 import { Ticket } from "../../types/Ticket";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { TICKET_DETAILS_PAGE } from "../../routes/appRoutes";
 
 //Used in the landing page
 interface SearchBarProps {
@@ -37,6 +39,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [debouncedInput, setDebouncedInput] = useState("");
 
+  const navigate = useNavigate();
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedInput(inputValue), 300);
     return () => clearTimeout(timer);
@@ -89,6 +92,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
     if (!selected) return;
 
     setInputValue(`${selected.title}`);
+    navigate(`${TICKET_DETAILS_PAGE}/?eventRefId=${selected.eventId}`, {});
   };
 
   return (
@@ -186,18 +190,24 @@ const SearchBarWhite: React.FC<SearchBarWhiteProps> = ({
   const [isCreateNewTitleDialogBoxVisible, SetCreateNewTitleDialogBoxVisible] =
     useState(false);
 
-  const [inputValue, setInputValue] = useState("");
-
+  const [inputValue, setInputValue] = useState(titlesData.title || "");
+  const [isResultsVisible, setIsResultsVisible] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
-  const [debouncedInput, setDebouncedInput] = useState("");
+  const [debouncedInput, setDebouncedInput] = useState(titlesData.title || "");
 
   const [isValidTitleSelected, setIsValidTitleSelected] = useState(Boolean);
-
-  const [year, setYear] = useState("All");
-  const currentYear = new Date().getFullYear(); //to populat the year selecting the drop down box
+  const currentYear = new Date().getFullYear().toString();
+  const [year, setYear] = useState(currentYear);
+  //to populat the year selecting the drop down box
   //Scroll the suggestions into the view of the users when using array keys
   const suggestionsRef = useRef<HTMLUListElement | null>(null);
   useEffect(() => {
+    setIsResultsVisible(false);
+  }, []);
+  useEffect(() => {
+    if (titlesData.eventId) {
+      setIsValidTitleSelected(true);
+    }
     const activeItem = suggestionsRef.current?.querySelector(
       `[data-index='${selectedIndex}']`
     ) as HTMLElement;
@@ -209,6 +219,7 @@ const SearchBarWhite: React.FC<SearchBarWhiteProps> = ({
 
   useEffect(() => {
     if (isValidTitleSelected) return;
+
     const timer = setTimeout(() => setDebouncedInput(inputValue), 300);
     return () => clearTimeout(timer);
   }, [inputValue]);
@@ -228,7 +239,7 @@ const SearchBarWhite: React.FC<SearchBarWhiteProps> = ({
         source: "All",
         type: titlesData.type,
       } as SearchTitleRequest),
-    enabled: debouncedInput.length > 1,
+    enabled: debouncedInput.length > 1 && isResultsVisible,
   });
 
   // Wll upload titles and get reference if user Selects an omdb result and wll set reference directly if he selects the db result
@@ -259,6 +270,7 @@ const SearchBarWhite: React.FC<SearchBarWhiteProps> = ({
     setInputValue(e.target.value);
     setIsValidTitleSelected(false);
     setSelectedIndex(-1);
+    setIsResultsVisible(true);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -279,6 +291,7 @@ const SearchBarWhite: React.FC<SearchBarWhiteProps> = ({
     } else if (e.key === "Escape") {
       setSelectedIndex(-1);
       setDebouncedInput("");
+      setIsResultsVisible(false);
     }
   };
 
@@ -292,7 +305,8 @@ const SearchBarWhite: React.FC<SearchBarWhiteProps> = ({
       setDebouncedInput("");
       setIsValidTitleSelected(true);
       setInputValue(`${selected.title}`);
-      setTitlesData((prev) => ({ ...prev, eventId: selected.eventId }));
+      setTitlesData(titlesDatas[index]);
+
       return;
     }
 
@@ -301,7 +315,7 @@ const SearchBarWhite: React.FC<SearchBarWhiteProps> = ({
 
   return (
     <div
-      className={`w-full z-[100] text-white bg-purple-200/6 rounded-md outline-2 
+      className={`search-bar-white w-full z-[100] text-white bg-purple-200/6 rounded-md outline-2 
          outline-offset-[-2px] backdrop-blur-3xl text-[clamp(16px,2vw,24px)] font-medium transition-all
          duration-200 focus:outline-none active:opacity-100 flex flex-col relative ${
            isValidTitleSelected ? "outline-green-400/50" : "outline-white/20"
@@ -320,7 +334,13 @@ const SearchBarWhite: React.FC<SearchBarWhiteProps> = ({
             />
           )}
         </AnimatePresence>
-        <div className="search-input-container flex flex-row gap-2 items-center my-3 mx-4">
+        <div
+          className="search-input-container flex flex-row gap-2 items-center my-3 mx-4"
+          onClick={() => {
+            setIsResultsVisible(true);
+            setDebouncedInput(inputValue);
+          }}
+        >
           <img
             src="/icons/search.svg"
             alt="search"
@@ -330,6 +350,10 @@ const SearchBarWhite: React.FC<SearchBarWhiteProps> = ({
 
           <input
             type="text"
+            onClick={() => {
+              setIsResultsVisible(true);
+              setDebouncedInput(inputValue);
+            }}
             value={inputValue}
             onChange={handleInputChange}
             placeholder="Search"
@@ -341,17 +365,21 @@ const SearchBarWhite: React.FC<SearchBarWhiteProps> = ({
         <Dropdown2
           options={[
             "All",
-            ...Array.from({ length: 75 }, (_, i) => `${currentYear - i}`),
+            ...Array.from(
+              { length: 75 },
+              (_, i) => `${parseInt(currentYear) - i}`
+            ),
           ]}
           selectedOption={year}
           setSelectedOption={setYear}
         />
       </div>
 
-      {isLoading && inputValue.length >= 1 && (
+      {isLoading && isResultsVisible && inputValue.length >= 1 && (
         <div className="p-3 text-white">Searching •••</div>
       )}
       {isFetched &&
+        isResultsVisible &&
         inputValue.length &&
         titlesDatas.length === 0 &&
         !isLoading && (
@@ -367,45 +395,47 @@ const SearchBarWhite: React.FC<SearchBarWhiteProps> = ({
           </div>
         )}
 
-      {Array.isArray(titlesDatas) && titlesDatas.length > 0 && (
-        <ul
-          ref={suggestionsRef}
-          className={`w-full absolute mt-16 z-[100] max-h-[300px] overflow-y-scroll rounded-md  bg-[#090e18] `}
-        >
-          {titlesDatas.map((item, index) => (
-            <li
-              key={index}
-              role="button"
-              data-index={index}
-              onClick={() => handleSelectSuggestion(index)}
-              className={`p-3 text-white cursor-pointer transition-all flex flex-row justify-between items-center  ${
-                selectedIndex === index
-                  ? "bg-[#7349AD]"
-                  : "hover:bg-[#7349ad8f]"
-              }`}
-            >
-              <div className="image-title-date-container flex flex-row justify-start items-center gap-4">
-                <img
-                  className="w-12 h-16 object-cover rounded-md"
-                  src={item.poster || "/images/popcorn.png"}
-                  alt="poster"
-                />
-                <div className="title-year flex flex-col gap-1 justify-start align-middle  text-[clamp(16px,1.5vw,20px)]  ">
-                  {item.title}
-                  <h3 className="text-[clamp(14px,1.5vw,18px)] text-overflow-ellipsis">
-                    {item.year}
-                  </h3>
+      {Array.isArray(titlesDatas) &&
+        isResultsVisible &&
+        titlesDatas.length > 0 && (
+          <ul
+            ref={suggestionsRef}
+            className={`w-full absolute mt-16 z-[100] max-h-[300px] overflow-y-scroll rounded-md  bg-[#090e18] `}
+          >
+            {titlesDatas.map((item, index) => (
+              <li
+                key={index}
+                role="button"
+                data-index={index}
+                onClick={() => handleSelectSuggestion(index)}
+                className={`p-3 text-white cursor-pointer transition-all flex flex-row justify-between items-center  ${
+                  selectedIndex === index
+                    ? "bg-[#7349AD]"
+                    : "hover:bg-[#7349ad8f]"
+                }`}
+              >
+                <div className="image-title-date-container flex flex-row justify-start items-center gap-4">
+                  <img
+                    className="w-12 h-16 object-cover rounded-md"
+                    src={item.poster || "/images/popcorn.png"}
+                    alt="poster"
+                  />
+                  <div className="title-year flex flex-col gap-1 justify-start align-middle  text-[clamp(16px,1.5vw,20px)]  ">
+                    {item.title}
+                    <h3 className="text-[clamp(14px,1.5vw,18px)] text-overflow-ellipsis">
+                      {item.year}
+                    </h3>
+                  </div>
                 </div>
-              </div>
-              {item.type && (
-                <span className="text-[clamp(14px,1.3vw,16px)] text-gray-400 leading-0 ml-2">
-                  ({item.type})
-                </span>
-              )}
-            </li>
-          ))}
-        </ul>
-      )}
+                {item.type && (
+                  <span className="text-[clamp(14px,1.3vw,16px)] text-gray-400 leading-0 ml-2">
+                    ({item.type})
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
     </div>
   );
 };

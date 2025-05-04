@@ -38,6 +38,7 @@ const SettingsDialogBox: React.FC<SettingsDialogBoxProps> = ({
 
   const { setUserData: setUserDataOnContext } = useProfile();
   useEffect(() => {
+    if (phoneNumber === "0000000000") SetPhoneNumber("");
     setUserData({
       ...usrData,
       name,

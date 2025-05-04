@@ -16,6 +16,7 @@ export const SearchBarDb: React.FC = () => {
 
   //Scroll the suggestions into the view of the users when using array keys
   const suggestionsRef = useRef<HTMLUListElement | null>(null);
+
   useEffect(() => {
     const activeItem = suggestionsRef.current?.querySelector(
       `[data-index='${selectedIndex}']`

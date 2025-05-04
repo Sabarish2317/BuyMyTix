@@ -61,7 +61,10 @@ const PageTwo: React.FC<PageTwoProps> = ({
   }, [showDateTime]);
 
   useEffect(() => {
-    setVenue(`${venueName}, ${venueCity}`);
+    if (venueName.length > 0 && venueCity.length > 0) {
+      setVenue(`${venueName}, ${venueCity}`);
+    }
+
     //imput sanitastion other things are handles by default html
     if (
       ticketPrice.toString().length > 4 ||
@@ -253,7 +256,7 @@ const PageTwo: React.FC<PageTwoProps> = ({
               updated.setHours(+hours, +minutes);
               setShowDateTime(updated);
             }}
-            className="p-3 rounded text-black bg-white"
+            className="p-3 rounded text-black bg-white cursor-pointer "
           />
         </div>
       </div>
