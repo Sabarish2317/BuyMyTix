@@ -55,6 +55,9 @@ const AddProfileDialogBox: React.FC<AddProfileDialogBoxProps> = ({
   });
   const { isPending } = signUpMutation;
   const { refetch } = useProfile();
+  const handleSubmit = (e: React.FormEvent) => {
+    hanldeContinue();
+  };
   const hanldeContinue = () => {
     if (!form.name || !form.phone) {
       setError(true);
@@ -88,9 +91,9 @@ const AddProfileDialogBox: React.FC<AddProfileDialogBoxProps> = ({
         if (url) {
           window.location.replace(`${TICKET_DETAILS_PAGE}/?eventRefId=${url}`);
           refetch();
-          setTimeout(() => navigate(HOME_PAGE, { replace: true }), 1000);
           return;
         } else {
+          refetch();
           setTimeout(() => navigate(HOME_PAGE, { replace: true }), 1000);
         }
       },
@@ -168,111 +171,113 @@ const AddProfileDialogBox: React.FC<AddProfileDialogBoxProps> = ({
       //didnnt use childrens direcly as exit animations didnt work i dont know why
       //top positipon is handled via motion variant props y distance
     >
-      <div className="w-[300px] md:w[400px] lg:w-[500px] p-4 bg-black rounded-xl backdrop-blur-sm flex flex-col items-center gap-3">
-        <div className="title-and-close-bnutton w-full flex justify-between flex-row items-center h-min ">
-          <div className="title-contnainer flex flex-col  gap-0">
-            <h2 className=" text-start text-white  text-[clamp(20px,2vw,24px)] font-black uppercase leading-loose [text-shadow:_0px_0px_56px_rgb(147_93_202_/_0.35)]">
-              Profile
-            </h2>
-            {isError ? (
-              <h2 className=" text-start text-[#DC3912] text-[clamp(14px,1.4vw,18px)] font-medium leading-4 md:leading-1 mb-3">
-                {error}
+      <form onSubmit={handleSubmit}>
+        <div className="w-[300px] md:w[400px] lg:w-[500px] p-4 bg-black rounded-xl backdrop-blur-sm flex flex-col items-center gap-3">
+          <div className="title-and-close-bnutton w-full flex justify-between flex-row items-center h-min ">
+            <div className="title-contnainer flex flex-col  gap-0">
+              <h2 className=" text-start text-white  text-[clamp(20px,2vw,24px)] font-black uppercase leading-loose [text-shadow:_0px_0px_56px_rgb(147_93_202_/_0.35)]">
+                Profile
               </h2>
-            ) : (
-              <h2 className=" text-start text-white text-[clamp(14px,1.4vw,18px)] font-medium leading-4 md:leading-1 mb-3">
-                Please add your details to continue to your account
-              </h2>
-            )}
+              {isError ? (
+                <h2 className=" text-start text-[#DC3912] text-[clamp(14px,1.4vw,18px)] font-medium leading-4 md:leading-1 mb-3">
+                  {error}
+                </h2>
+              ) : (
+                <h2 className=" text-start text-white text-[clamp(14px,1.4vw,18px)] font-medium leading-4 md:leading-1 mb-3">
+                  Please add your details to continue to your account
+                </h2>
+              )}
+            </div>
+            <img
+              className="scale-3d hover:scale-95  hover:opacity-80 active:scale-105 active:opacity-100 transition-all duration-200 cursor-pointer"
+              onClick={() => setToggleDialogueBox(false)}
+              src="/icons/close-icon.svg"
+              alt="close"
+            />
           </div>
-          <img
-            className="scale-3d hover:scale-95  hover:opacity-80 active:scale-105 active:opacity-100 transition-all duration-200 cursor-pointer"
-            onClick={() => setToggleDialogueBox(false)}
-            src="/icons/close-icon.svg"
-            alt="close"
-          />
-        </div>
-        <div className="relative profile-and-edit-container">
-          <img
-            className="w-16 l-16 md:w-20 md:h-20 lg:w-24 lg:h-24 relative rounded-[290.91px] object-cover outline-2 outline-[#dc3a1246]"
-            src={profile}
-            alt="profile"
-          />
-          <input
-            type="file"
-            ref={fileInputRef}
-            onChange={handleImageUpload}
-            accept="image/png, image/jpeg, image/jpg, image/webp"
-            className="hidden"
-          />
-          <button
-            onClick={triggerFileInput}
-            className="px-4 py-1.5 absolute bottom-[-16px] right-[-32px]  cursor-pointer bg-[#9F64DA] text-[clamp(14px,1.5vw,18px)] text-white font-medium rounded-md flex justify-center items-center gap-2.5 scale-3d 
+          <div className="relative profile-and-edit-container">
+            <img
+              className="w-16 l-16 md:w-20 md:h-20 lg:w-24 lg:h-24 relative rounded-[290.91px] object-cover outline-2 outline-[#dc3a1246]"
+              src={profile}
+              alt="profile"
+            />
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleImageUpload}
+              accept="image/png, image/jpeg, image/jpg, image/webp"
+              className="hidden"
+            />
+            <button
+              onClick={triggerFileInput}
+              className="px-4 py-1.5 absolute bottom-[-16px] right-[-32px]  cursor-pointer bg-[#9F64DA] text-[clamp(14px,1.5vw,18px)] text-white font-medium rounded-md flex justify-center items-center gap-2.5 scale-3d 
           hover:scale-105 active:opacity-100 transition-all duration-200"
+            >
+              Edit
+            </button>
+          </div>
+          <div className="name input-label-container flex flex-col gap-2 w-full">
+            <label className="self-start text-white/80 text-[clamp(14px,1.5vw,18px)] font-medium">
+              Name
+            </label>
+            <motion.div
+              initial={false}
+              animate={{
+                x: isError ? [-20, 0] : 0,
+                borderColor: isError ? "#dc3912" : "rgba(255,255,255,0.5)",
+              }}
+              transition={{
+                duration: 0.1,
+                ease: "backInOut",
+              }}
+              className="w-full px-3 py-[14px] rounded-md border-2 flex items-center justify-between"
+            >
+              <input
+                name="name"
+                type="text"
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                placeholder="Enter your name"
+                className="w-full bg-transparent text-white/80 text-[clamp(14px,1.3vw,16px)] font-normal outline-none"
+              />
+            </motion.div>
+          </div>
+          <div className="phonenumber input-label-container flex flex-col gap-2 w-full">
+            <label className="self-start text-white/80 text-[clamp(14px,1.5vw,18px)] font-medium">
+              Phone number
+            </label>
+            <motion.div
+              initial={false}
+              animate={{
+                x: isError ? [-20, 0] : 0,
+                borderColor: isError ? "#dc3912" : "rgba(255,255,255,0.5)",
+              }}
+              transition={{
+                duration: 0.1,
+                ease: "backInOut",
+              }}
+              className="w-full px-3 py-[14px] rounded-md border-2 flex items-center justify-between"
+            >
+              <input
+                name="number"
+                type=""
+                value={form.phone}
+                onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                placeholder="+91"
+                className="w-full bg-transparent text-white/80 text-[clamp(14px,1.3vw,16px)] font-normal outline-none"
+              />
+            </motion.div>
+          </div>
+          <button
+            type="submit"
+            className="w-full px-6 py-3.5 cursor-pointer bg-[#9F64DA] rounded-md flex justify-center items-center gap-2.5 scale-3d hover:scale-105 hover:opacity-90 active:opacity-100 transition-all duration-200"
           >
-            Edit
+            <span className="text-white text-xl font-medium leading-7">
+              {isPending ? "Signing up ..." : "Continue"}
+            </span>
           </button>
         </div>
-        <div className="name input-label-container flex flex-col gap-2 w-full">
-          <label className="self-start text-white/80 text-[clamp(14px,1.5vw,18px)] font-medium">
-            Name
-          </label>
-          <motion.div
-            initial={false}
-            animate={{
-              x: isError ? [-20, 0] : 0,
-              borderColor: isError ? "#dc3912" : "rgba(255,255,255,0.5)",
-            }}
-            transition={{
-              duration: 0.1,
-              ease: "backInOut",
-            }}
-            className="w-full px-3 py-[14px] rounded-md border-2 flex items-center justify-between"
-          >
-            <input
-              name="name"
-              type="text"
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-              placeholder="Enter your name"
-              className="w-full bg-transparent text-white/80 text-[clamp(14px,1.3vw,16px)] font-normal outline-none"
-            />
-          </motion.div>
-        </div>
-        <div className="phonenumber input-label-container flex flex-col gap-2 w-full">
-          <label className="self-start text-white/80 text-[clamp(14px,1.5vw,18px)] font-medium">
-            Phone number
-          </label>
-          <motion.div
-            initial={false}
-            animate={{
-              x: isError ? [-20, 0] : 0,
-              borderColor: isError ? "#dc3912" : "rgba(255,255,255,0.5)",
-            }}
-            transition={{
-              duration: 0.1,
-              ease: "backInOut",
-            }}
-            className="w-full px-3 py-[14px] rounded-md border-2 flex items-center justify-between"
-          >
-            <input
-              name="number"
-              type=""
-              value={form.phone}
-              onChange={(e) => setForm({ ...form, phone: e.target.value })}
-              placeholder="+91"
-              className="w-full bg-transparent text-white/80 text-[clamp(14px,1.3vw,16px)] font-normal outline-none"
-            />
-          </motion.div>
-        </div>
-        <button
-          onClick={hanldeContinue}
-          className="w-full px-6 py-3.5 cursor-pointer bg-[#9F64DA] rounded-md flex justify-center items-center gap-2.5 scale-3d hover:scale-105 hover:opacity-90 active:opacity-100 transition-all duration-200"
-        >
-          <span className="text-white text-xl font-medium leading-7">
-            {isPending ? "Signing up ..." : "Continue"}
-          </span>
-        </button>
-      </div>
+      </form>
     </motion.div>
   );
 

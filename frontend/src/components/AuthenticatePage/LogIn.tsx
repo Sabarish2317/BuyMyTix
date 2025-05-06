@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { replace, useNavigate } from "react-router-dom";
 import MyDivider from "../Global/Divider";
 import { AnimatePresence, motion } from "motion/react";
 import {
@@ -246,7 +246,9 @@ const LoginForm: React.FC<{ redirect: string | null }> = ({
           <span
             className="underline cursor-pointer hover:text-white transition-all duration-100 ease-in-out"
             onClick={() => {
-              navigate(`/Authenticate?mode=signup&redirectUrl=${url}`);
+              navigate(`/Authenticate?mode=signup&redirectUrl=${url}`, {
+                replace: true,
+              });
             }}
           >
             Sign Up
