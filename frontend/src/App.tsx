@@ -22,14 +22,14 @@ const AdminDashboard = lazy(() => import("./pages/AdminTitles"));
 const ReportsPage = lazy(() => import("./pages/ReportPage"));
 
 // Lazy-loaded pages
-const LandingPage = lazy(() => import("./pages/LandingPage"));
+// const LandingPage = lazy(() => import("./pages/LandingPage"));
 const AuthenticationPage = lazy(() => import("./pages/AuthenticationPage"));
 const HomePage = lazy(() => import("./pages/HomePage"));
 const ResultsPage = lazy(() => import("./pages/ResultsPage"));
 const TicketDetailsPage = lazy(() => import("./pages/TicketDetailsPage"));
 const HistoryPage = lazy(() => import("./pages/HistoryPage"));
 const ErrorPage = lazy(() => import("./components/Global/Error"));
-
+const Howitworks = lazy(() => import("../src/components/LandingPage/Howitworks"));
 const queryClient = new QueryClient();
 
 function App() {
@@ -55,7 +55,7 @@ function App() {
           >
             <Routes>
               <Route path="/*" element={<ErrorPage />} />
-              <Route path={LANDING_PAGE} element={<LandingPage />} />
+              <Route path={LANDING_PAGE} element={<Howitworks/>} />
               <Route path={HOME_PAGE} element={<HomePage />} />
               <Route path={RESULTS_PAGE} element={<ResultsPage />} />
               <Route path={HISTORY_PAGE} element={<HistoryPage />} />
@@ -70,6 +70,7 @@ function App() {
               <Route path={ADMIN_PAGE} element={<AdminDashboard />} />
               <Route path={REPORT_PAGE} element={<ReportsPage />} />
               <Route path={CATERGORY_PAGE} element={<CategoryPage />} />
+              
             </Routes>
           </Suspense>
         </Router>
