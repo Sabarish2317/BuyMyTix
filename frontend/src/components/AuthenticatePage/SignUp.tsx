@@ -276,7 +276,9 @@ const SignUpForm: React.FC<{ redirect: string | null }> = ({
           Already have an account?{" "}
           <span
             className="underline cursor-pointer hover:text-white transition-all duration-100 ease-in-out"
-            onClick={() => navigate(`${LOGIN_PAGE}`)}
+            onClick={() =>
+              navigate(`/Authenticate?mode=login&redirectUrl=${url}`)
+            }
           >
             Log In
           </span>
