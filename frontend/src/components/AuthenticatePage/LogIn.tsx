@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import MyDivider from "../Global/Divider";
 import { AnimatePresence, motion } from "motion/react";
 import {
+  HOME_PAGE,
   LANDING_PAGE,
   SIGNUP_PAGE,
   TICKET_DETAILS_PAGE,
@@ -12,6 +13,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { signInUser } from "../../queries/SignIn";
 import GoogleAuthButton from "./googleOauthButton";
 import ForgotPasswordDialogBox from "../DialogBoxes/ForgotPasswordDialogBox";
+import { useProfile } from "../../contexts/ProfileContext";
 
 const LoginForm: React.FC<{ redirect: string | null }> = ({
   redirect: url,
@@ -30,24 +32,25 @@ const LoginForm: React.FC<{ redirect: string | null }> = ({
     mutationFn: signInUser,
   });
   const { isError, error, isPending } = mutate;
-  const queryClient = useQueryClient();
+
+  const { refetch } = useProfile();
+
   //for login via email
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     mutate.mutate(form, {
       onSuccess: (responseData) => {
         setIsAnimating(true);
-        if (!responseData.token) {
-          return;
-        }
-        localStorage.setItem("token", responseData?.token);
-        queryClient.invalidateQueries({ queryKey: ["userProfile"] }); //invalide the user profile query used in profilecontext so re render
+        localStorage.setItem("token", responseData.token);
+        // queryClient.clear(); //invalide the user profile query used in profilecontext so re render
         if (url) {
+          // navigate(HOME_PAGE, { replace: true });
+
+          refetch();
           window.location.replace(`${TICKET_DETAILS_PAGE}/?eventRefId=${url}`);
-          console.log(`${TICKET_DETAILS_PAGE}/?eventRefId=${url}`);
-          return;
         } else {
-          setTimeout(() => navigate(LANDING_PAGE,{replace: true}), 1000);
+          refetch();
+          setTimeout(() => navigate(HOME_PAGE, { replace: true }), 1000);
         }
       },
     });

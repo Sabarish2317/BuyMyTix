@@ -8,6 +8,7 @@ interface ProfileContextType {
   isLoading: boolean;
   isError: boolean;
   setUserData: React.Dispatch<React.SetStateAction<ProfileResponse>>;
+  refetch: () => void;
 }
 
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
@@ -18,9 +19,24 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({
   const [userData, setUserData] = useState<ProfileResponse>(
     {} as ProfileResponse
   );
-  const { data, isLoading, isError } = useQuery<ProfileResponse>({
-    queryKey: ["userProfile", localStorage.getItem("token")],
+
+  const [token, setToken] = useState<string | null>(() =>
+    localStorage.getItem("token")
+  );
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setToken(localStorage.getItem("token"));
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
+
+  const { data, isLoading, isError, refetch } = useQuery<ProfileResponse>({
+    queryKey: ["userProfile", token], // use state here
     queryFn: getProfile,
+    enabled: !!token,
     retry: 0,
     staleTime: 1000 * 60 * 10,
   });
@@ -33,7 +49,13 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({
 
   return (
     <ProfileContext.Provider
-      value={{ userData: userData ?? null, isLoading, isError, setUserData }}
+      value={{
+        userData: userData ?? null,
+        isLoading,
+        isError,
+        setUserData,
+        refetch,
+      }}
     >
       {children}
     </ProfileContext.Provider>
