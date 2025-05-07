@@ -21,7 +21,7 @@ const {
 } = require("../controller/forgotPasswordController");
 const router = express.Router();
 
-router.post("/signup", banCheckMiddlewareWithoutAuth, registerUser);
+router.post("/signup", registerUser);
 router.post("/signin", banCheckMiddlewareWithoutAuth, loginUser);
 router.post("/googleOauth", OauthUser); //ban check middleware makes some error check it later
 router.get("/profile", checkToken, banCheckMiddleware, userProfile);

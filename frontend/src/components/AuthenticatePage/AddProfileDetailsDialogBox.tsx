@@ -7,7 +7,8 @@ import imageCompression from "browser-image-compression";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { signUpUser } from "../../queries/SignUp";
 import { useNavigate } from "react-router-dom";
-import { LANDING_PAGE, TICKET_DETAILS_PAGE } from "../../routes/appRoutes";
+import { HOME_PAGE, TICKET_DETAILS_PAGE } from "../../routes/appRoutes";
+import { useProfile } from "../../contexts/ProfileContext";
 
 const popUpVariants = {
   hidden: { opacity: 0, scale: 0.95 },
@@ -49,6 +50,7 @@ const AddProfileDialogBox: React.FC<AddProfileDialogBoxProps> = ({
     mutationFn: signUpUser,
   });
   const { isPending } = signUpMutation;
+  const { refetch } = useProfile();
 
   const hanldeContinue = () => {
     if (!form.name || !form.phone) {
@@ -80,12 +82,12 @@ const AddProfileDialogBox: React.FC<AddProfileDialogBoxProps> = ({
 
         localStorage.setItem("token", responseData?.token);
         queryClient.invalidateQueries({ queryKey: ["userProfile"] });
-        if (url) {
+        if (url !== "null" && url !== undefined && url !== null) {
+          refetch();
           window.location.replace(`${TICKET_DETAILS_PAGE}/?eventRefId=${url}`);
-          console.log(`${TICKET_DETAILS_PAGE}/?eventRefId=${url}`);
-          return;
         } else {
-          setTimeout(() => navigate(LANDING_PAGE, { replace: true }), 1000);
+          refetch();
+          setTimeout(() => navigate(HOME_PAGE, { replace: true }), 1000);
         }
       },
       onError: (err) => {

@@ -7,6 +7,7 @@ import { ProfileResponse } from "../../types/Profile";
 import ProfileImage from "../Global/profileImage";
 import { ADMIN_PAGE, HISTORY_PAGE, REPORT_PAGE } from "../../routes/appRoutes";
 import { useQueryClient } from "@tanstack/react-query";
+import { useProfile } from "../../contexts/ProfileContext";
 
 interface ProfileDialogueBoxProps {
   userData: ProfileResponse;
@@ -28,6 +29,7 @@ const ProfileDialogueBox: React.FC<ProfileDialogueBoxProps> = ({
     setIsQuickLinksExpanded((prev) => !prev);
   };
   const queryClient = useQueryClient();
+  const { refetch, setUserData } = useProfile();
 
   return (
     <motion.div
@@ -127,6 +129,8 @@ const ProfileDialogueBox: React.FC<ProfileDialogueBoxProps> = ({
             queryClient.clear();
             localStorage.clear();
             localStorage.removeItem("token");
+            refetch();
+            setUserData({} as ProfileResponse);
             navigate("/authenticate?type-login", { replace: true });
           }}
           className="logout-button cursor-pointer w-full flex flex-row items-center justify-start gap-6 pl-5 pr-5 pb-3 pt-3 scale-3d hover:bg-zinc-800 hover:scale-105 active:bg-zinc-700 active:scale-110 transition-all duration-200"
