@@ -17,6 +17,7 @@ import {
 } from "./routes/appRoutes";
 import CategoryPage from "./pages/DetailedPopularAndTrendingPage";
 import Reviews from "./components/LandingPage/Reviews";
+import Footer from "./components/LandingPage/Footer";
 const Layout = lazy(() => import("./components/Global/Layout"));
 const TickLoader = lazy(() => import("./components/Global/LoadingIcon"));
 const AdminDashboard = lazy(() => import("./pages/AdminTitles"));
@@ -56,7 +57,7 @@ function App() {
           >
             <Routes>
               <Route path="/*" element={<ErrorPage />} />
-              <Route path={LANDING_PAGE} element={<Reviews/>} />
+              <Route path={LANDING_PAGE} element={<Footer/>} />
               <Route path={HOME_PAGE} element={<HomePage />} />
               <Route path={RESULTS_PAGE} element={<ResultsPage />} />
               <Route path={HISTORY_PAGE} element={<HistoryPage />} />
