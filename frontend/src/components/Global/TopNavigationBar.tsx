@@ -2,7 +2,12 @@ import { AnimatePresence, motion } from "motion/react";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ANIMATION_DURATION, MOVEMENT_DISTANCE } from "../../utils/constants";
-import { LANDING_PAGE, LOGIN_PAGE, SIGNUP_PAGE } from "../../routes/appRoutes";
+import {
+  HOME_PAGE,
+  LANDING_PAGE,
+  LOGIN_PAGE,
+  SIGNUP_PAGE,
+} from "../../routes/appRoutes";
 import ProfileDialogueBox from "../DialogBoxes/ProfileDialogueBox";
 import LocationDialogBox from "../DialogBoxes/locationDialogBox";
 import SellTicketDialogBox from "../DialogBoxes/SellTicketsDialogBox";
@@ -72,7 +77,7 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({
       <div
         onClick={() => {
           if (window.location.pathname != "/home") {
-            navigate("/home");
+            navigate(HOME_PAGE);
           } else {
             window.location.reload();
           }
@@ -89,9 +94,17 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({
       {/* Navigation Links - Hidden on mobile, visible on medium screens and larger */}
       <div className="navigation-links gap-8 flex-row hidden md:flex">
         <button
-          onClick={() => navigate(LANDING_PAGE)}
-          className="home w-max text-[clamp(20px,2vw,24px)] text-white font-medium primary
-         hover:scale-95 transition-all duration-200 active:scale-105 cursor-pointer select-none"
+          onClick={() => {
+            if (window.location.pathname != "/home") {
+              navigate(HOME_PAGE);
+            } else {
+              window.location.reload();
+            }
+          }}
+          className={`home w-max text-[clamp(20px,2vw,24px)]  font-medium 
+         hover:scale-95 transition-all duration-200 active:scale-105 cursor-pointer select-none ${
+           window.location.pathname === "/home" ? "primary" : "text-white"
+         }`}
         >
           Home
         </button>

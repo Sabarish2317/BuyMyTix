@@ -343,6 +343,7 @@ const SearchBarWhite: React.FC<SearchBarWhiteProps> = ({
           {isCreateNewTitleDialogBoxVisible && (
             <CreateNewTitleDialogBox
               input={debouncedInput}
+              setDebouncedInput={setDebouncedInput}
               ticketData={ticketData}
               titlesData={titlesData}
               setTitlesData={setTitlesData}

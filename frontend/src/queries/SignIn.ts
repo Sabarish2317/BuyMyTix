@@ -25,6 +25,8 @@ export const signInUser = async (
       throw new Error("Invalid email or password");
     } else if (status === 401) {
       throw new Error("Invalid email or password");
+    } else if (status === 404) {
+      throw new Error("Account does not exist, try signing up.");
     } else {
       throw new Error("Something went wrong");
     }

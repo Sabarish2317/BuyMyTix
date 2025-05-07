@@ -1,15 +1,10 @@
 import React, { useState } from "react";
-import { replace, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import MyDivider from "../Global/Divider";
 import { AnimatePresence, motion } from "motion/react";
-import {
-  HOME_PAGE,
-  LANDING_PAGE,
-  SIGNUP_PAGE,
-  TICKET_DETAILS_PAGE,
-} from "../../routes/appRoutes";
+import { HOME_PAGE, TICKET_DETAILS_PAGE } from "../../routes/appRoutes";
 import { SignInRequest } from "../../types/SignIn";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { signInUser } from "../../queries/SignIn";
 import GoogleAuthButton from "./googleOauthButton";
 import ForgotPasswordDialogBox from "../DialogBoxes/ForgotPasswordDialogBox";
@@ -43,9 +38,7 @@ const LoginForm: React.FC<{ redirect: string | null }> = ({
         setIsAnimating(true);
         localStorage.setItem("token", responseData.token);
         // queryClient.clear(); //invalide the user profile query used in profilecontext so re render
-        if (url) {
-          // navigate(HOME_PAGE, { replace: true });
-
+        if (url !== "null" && url !== undefined && url !== null) {
           refetch();
           window.location.replace(`${TICKET_DETAILS_PAGE}/?eventRefId=${url}`);
         } else {
