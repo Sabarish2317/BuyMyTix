@@ -16,7 +16,6 @@ import {
   CATERGORY_PAGE,
 } from "./routes/appRoutes";
 import CategoryPage from "./pages/DetailedPopularAndTrendingPage";
-import LandingPage from "./pages/LandingPage";
 
 const Layout = lazy(() => import("./components/Global/Layout"));
 const TickLoader = lazy(() => import("./components/Global/LoadingIcon"));
@@ -57,7 +56,7 @@ function App() {
           >
             <Routes>
               <Route path="/*" element={<ErrorPage />} />
-              <Route path={LANDING_PAGE} element={<LandingPage />} />
+              <Route path={LANDING_PAGE} element={<LANDING_PAGE />} />
               <Route path={HOME_PAGE} element={<HomePage />} />
               <Route path={RESULTS_PAGE} element={<ResultsPage />} />
               <Route path={HISTORY_PAGE} element={<HistoryPage />} />
