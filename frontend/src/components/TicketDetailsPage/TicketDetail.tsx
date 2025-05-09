@@ -268,7 +268,7 @@ const TicketDetail: React.FC<TicketDetailProps> = ({
               onClick={() => window.open(`https://wa.me/${sellerData.phone}`)}
               className="w-12 h-12 bg-white/75 rounded-lg flex justify-center items-center cursor-pointer scale-3d hover:scale-105 active:opacity-80 transition-all duration-200 ease-in-out"
             >
-              <img src="/icons/wp.svg" alt="whatsapp" />
+              <img src="/icons/wp2.svg" alt="whatsapp" />
             </button>
           </div>
         </div>

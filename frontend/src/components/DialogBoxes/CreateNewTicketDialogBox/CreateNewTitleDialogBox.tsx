@@ -88,7 +88,9 @@ const CreateNewTitleDialogBox: React.FC<CreateNewTitleDialogBoxProps> = ({
 
     if (!url || !url.startsWith("http")) {
       if (url === "") return;
-      toast.error("Please enter a valid image URL.");
+      toast.error("Please enter a valid image URL.", {
+        toastId: "image-url-error",
+      });
       return;
     }
 
@@ -96,6 +98,10 @@ const CreateNewTitleDialogBox: React.FC<CreateNewTitleDialogBoxProps> = ({
 
     try {
       const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error("Image could not be fetched.");
+      }
+
       const blob = await response.blob();
       const file = new File([blob], "poster.jpg", { type: blob.type });
 
@@ -109,10 +115,13 @@ const CreateNewTitleDialogBox: React.FC<CreateNewTitleDialogBoxProps> = ({
       reader.onload = () => {
         selectedImage(reader.result as string);
       };
+      reader.onerror = () => {
+        toast.error("Failed to read image after compression.");
+      };
       reader.readAsDataURL(compressedFile);
     } catch (err) {
       console.error("Error loading image from URL:", err);
-      toast.error("Failed to load image from URL");
+      toast.error("Failed to load or compress image from URL.");
     } finally {
       setIsCompressing(false);
     }
@@ -266,8 +275,8 @@ const CreateNewTitleDialogBox: React.FC<CreateNewTitleDialogBoxProps> = ({
               intputValue={rating}
               setInputValue={setRating}
               title={`${titlesData.type} Rating`}
-              placeholder="eg.: 7.5"
-              maxLength={4}
+              placeholder="eg.: 7"
+              maxLength={1}
               type="num"
             />
             <Dropdown

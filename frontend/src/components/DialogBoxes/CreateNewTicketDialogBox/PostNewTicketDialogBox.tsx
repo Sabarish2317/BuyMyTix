@@ -276,7 +276,7 @@ const PostNewTickDialogBox: React.FC<PostNewTickDialogBoxProps> = ({
         duration: ANIMATION_DURATION * 2,
         ease: "easeOut",
       }}
-      className="blurred-background fixed inset-0 backdrop-blur-sm z-[100] flex items-center justify-center "
+      className="blurred-background fixed inset-0 backdrop-blur-sm flex items-center justify-center z-[999999] "
     >
       <div className="create-new-ticket-dialogue-box  w-[300px] md:w[400px] lg:w-[500px] p-4 bg-black rounded-xl backdrop-blur-sm flex flex-col items-center gap-3 scale-90 ">
         {currentPageIndex >= 1 && currentPageIndex < 4 && (

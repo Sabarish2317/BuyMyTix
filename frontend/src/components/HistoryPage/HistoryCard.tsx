@@ -32,6 +32,9 @@ const HistoryCard: React.FC<HistoryCardProps> = ({
   const [isActionOpen, setIsActionOpen] = useState(false);
   const [isConfirmVisible, setIsConfirmVisible] = useState(false);
   const [isEditDialogBoxVisible, setEditDialogBoxVisible] = useState(false);
+  const fallbackImage = getImageForType({
+    type: userTicketHistory.eventRef.type,
+  } as AddTitlesRequest);
 
   const getTicketHistoryQuery = useQueryClient();
   //stage managment of data to be sent to backend for deletion
@@ -55,15 +58,19 @@ const HistoryCard: React.FC<HistoryCardProps> = ({
     >
       <div className="relative w-[80px] md:w-[100px] lg:w-[120px] flex-shrink-0">
         <img
+          src={userTicketHistory.eventRef.poster}
+          alt={`${userTicketHistory.eventRef.title} Poster`}
+          onError={(e) => {
+            const target = e.currentTarget;
+            if (target.src !== fallbackImage) {
+              target.src = fallbackImage;
+            }
+          }}
           className={`w-full min-h-full aspect-3/4  object-cover rounded-md ${
             !isMoreThanOneDay ? "brightness-50" : ""
           }`}
-          src={
-            userTicketHistory.eventRef.poster ||
-            getImageForType(userTicketHistory.eventRef as AddTitlesRequest)
-          }
-          alt="Poster"
         />
+
         {!isMoreThanOneDay && (
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white bg-purple-500/10 backdrop-blur-sm text-center rounded-md w-full py-1 text-sm">
             Expired

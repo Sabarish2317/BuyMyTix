@@ -45,9 +45,15 @@ const DetailCard: React.FC<DetailCardProps> = ({
     >
       <div className="w-full image-container  aspect-[2/3] ">
         <img
-          src={imgSrc || fallbackImg}
+          src={imgSrc}
           alt={`${title} Poster`}
-          className="w-full h-full object-cover  aspect-[2/3]  rounded-lg"
+          onError={(e) => {
+            const target = e.currentTarget;
+            if (target.src !== fallbackImg) {
+              target.src = fallbackImg;
+            }
+          }}
+          className="w-full h-full object-cover aspect-[2/3] rounded-lg"
         />
       </div>
       <h3 className="mt-2  w-full text-center text-white/80 text-[clamp(14px,1.2vw,18px)]  font-medium leading-snug px-0.5 overflow-ellipsis line-clamp-2">

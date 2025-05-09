@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { AddTitlesRequest } from "../../../types/Titles";
 import Dropdown from "../../Global/DropDown";
-import Input from "../../Global/Input";
 
 interface PageZeroProps {
   setTitlesData: React.Dispatch<React.SetStateAction<AddTitlesRequest>>;
@@ -13,7 +12,7 @@ const PageZero: React.FC<PageZeroProps> = ({
   toggleDialogBox,
 }) => {
   const [ticketType, setSelectedType] = React.useState("Movie");
-  const [bmsUrl, setBmsUrl] = React.useState("");
+  // const [bmsUrl, setBmsUrl] = React.useState("");
 
   //Changes the data selected on the drop down into the upper state of SetTitlesData
   useEffect(() => {
@@ -42,19 +41,19 @@ const PageZero: React.FC<PageZeroProps> = ({
         />
       </div>
       <Dropdown
-        heading="Ticket Type"
+        heading="Select your ticket type"
         options={["Movie", "Sport", "Event"]}
         selectedOption={ticketType}
         setSelectedOption={setSelectedType}
       />
       {/* //tmeporatily not used */}
-      <Input
+      {/* <Input
         intputValue={bmsUrl}
         setInputValue={setBmsUrl}
         title="BMS M-Ticket url (optional)"
         placeholder="Url"
-      />
-      <div className="w-full h-max justify-center py-2">
+      /> */}
+      {/* <div className="w-full h-max justify-center py-2">
         <span className="text-white text-[clamp(16px,1.4vw,20px)] font-medium">
           Paste the{" "}
         </span>
@@ -71,7 +70,7 @@ const PageZero: React.FC<PageZeroProps> = ({
           the details. The parsing is local to your computer. We don't store any
           sensitive information.
         </span>
-      </div>
+      </div> */}
     </>
   );
 };

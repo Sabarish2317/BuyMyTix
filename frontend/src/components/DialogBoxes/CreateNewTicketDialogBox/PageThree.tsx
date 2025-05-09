@@ -48,7 +48,7 @@ const PageThree: React.FC<PageThreeProps> = ({
               err ? "text-red-600" : "text-white"
             } text-[clamp(12px,1vw,16px)]`}
           >
-            {err ? err : "Add your Ticket details"}
+            {err ? err : "Check your contact details"}
           </h3>
         </div>
         <img
