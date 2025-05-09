@@ -1,3 +1,4 @@
+
 # 🎟️ BuyMyTix
 
 **BuyMyTix** is a full-stack ticket marketplace where users can buy and sell event tickets — with confidence. Fast, secure, and optimized for last-minute finds or safe reselling.
@@ -34,3 +35,74 @@
 ```bash
 git clone https://github.com/your-username/buymytix.git
 cd buymytix
+```
+
+### 2. Setup Environment Variables
+
+Create two `.env` files:
+
+- `frontend/.env`
+- `backend/.env`
+
+Example contents:
+
+```env
+# frontend/.env
+VITE_BACKEND_URL=http://localhost:5000
+
+# backend/.env
+PORT=5000
+MONGODB_URI=mongodb://localhost:27017/buymytix
+JWT_SECRET=your_jwt_secret
+REDIS_URL=redis://localhost:6379
+```
+
+---
+
+## 🖥️ Running Locally
+
+### Option 1: Manual (no Docker)
+
+In **two terminals**:
+
+```bash
+# Terminal 1: Frontend
+cd frontend
+npm install
+npm run dev
+```
+
+```bash
+# Terminal 2: Backend
+cd backend
+npm install
+npm run dev
+```
+
+
+
+## 📂 Project Structure
+
+```
+frontend/       # React + Tailwind UI
+backend/        # Express API
+
+```
+
+---
+
+## 🤝 Contributing
+
+Pull requests are welcome. For major changes, please open an issue first.
+
+---
+
+## 📄 License
+
+[MIT](LICENSE)
+
+---
+
+## ✨ Credits
+
+Made by Sabarish and contributors.
