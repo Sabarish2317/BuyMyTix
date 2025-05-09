@@ -2,7 +2,12 @@ import { AnimatePresence, motion } from "motion/react";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ANIMATION_DURATION, MOVEMENT_DISTANCE } from "../../utils/constants";
-import { LANDING_PAGE, LOGIN_PAGE, SIGNUP_PAGE } from "../../routes/appRoutes";
+import {
+  HOME_PAGE,
+  LANDING_PAGE,
+  LOGIN_PAGE,
+  SIGNUP_PAGE,
+} from "../../routes/appRoutes";
 import ProfileDialogueBox from "../DialogBoxes/ProfileDialogueBox";
 import LocationDialogBox from "../DialogBoxes/locationDialogBox";
 import SellTicketDialogBox from "../DialogBoxes/SellTicketsDialogBox";
@@ -74,7 +79,7 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({
       <div
         onClick={() => {
           if (window.location.pathname != "/home") {
-            navigate("/home");
+            navigate(HOME_PAGE);
           } else {
             window.location.reload();
           }
@@ -91,9 +96,17 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({
       {/* Navigation Links - Hidden on mobile, visible on medium screens and larger */}
       <div className="navigation-links gap-8 flex-row hidden md:flex">
         <button
-          onClick={() => navigate(LANDING_PAGE)}
-          className="home w-max text-[clamp(20px,2vw,24px)] text-white font-medium primary
-         hover:scale-95 transition-all duration-200 active:scale-105 cursor-pointer select-none"
+          onClick={() => {
+            if (window.location.pathname != "/home") {
+              navigate(HOME_PAGE);
+            } else {
+              window.location.reload();
+            }
+          }}
+          className={`home w-max text-[clamp(20px,2vw,24px)]  font-medium 
+         hover:scale-95 transition-all duration-200 active:scale-105 cursor-pointer select-none ${
+           window.location.pathname === "/home" ? "primary" : "text-white"
+         }`}
         >
           Home
         </button>
@@ -136,22 +149,20 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({
         /* Action Buttons - Hidden on mobile and the user havent logeed inn*/
         <div className="action-buttons-container flex flex-row gap-6 items-center justify-end w-full">
           {/* Login Button (Only visible on large screens) */}
-          {/* <button
+          <button
             className="login-button w-max text-[clamp(20px,2vw,24px)] text-white underline hidden lg:flex
          hover:scale-95 transition-all duration-200 active:scale-105 cursor-pointer"
             onClick={() => navigate(LOGIN_PAGE)}
           >
             Log in
-          </button> */}
+          </button>
           {/* Get Started Button (Hidden on small screens, visible on medium+) */}
           <button
+            onClick={() => navigate(SIGNUP_PAGE)}
             className="get-started-button w-max bg-white px-3 py-2 md:px-4 md:py-3 rounded-md backdrop-blur-sm justify-center items-center gap-2.5 flex 
         hover:bg-white/80 hover:scale-95 transition-all duration-200 active:scale-105 active:bg-white cursor-pointer"
           >
-            <h2
-              className="text-[clamp(20px,2vw,24px)] text-black font-medium select-none"
-              onClick={() => navigate(SIGNUP_PAGE)}
-            >
+            <h2 className="text-[clamp(20px,2vw,24px)] text-black font-medium select-none">
               Get started
             </h2>
           </button>

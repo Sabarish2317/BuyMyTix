@@ -145,9 +145,10 @@ const TicketDetail: React.FC<TicketDetailProps> = ({
             <span className="text-[#DC3912] w-max text-[clamp(16px,1.8vw,24px)] font-bold">
               {sellerData.name}
             </span>
-            <span
-              onClick={() => setIsReportDialogBoxVisible(true)}
-              className={`text-gray-400 w-max text-[clamp(14px,1.2vw,18px)] font-medium self-center self-middle cursor-pointer
+            {userDetail?.email && (
+              <span
+                onClick={() => setIsReportDialogBoxVisible(true)}
+                className={`text-gray-400 w-max text-[clamp(14px,1.2vw,18px)] font-medium self-center self-middle cursor-pointer
                  hover:scale-105 hover:text-white   active:opacity-80 transition-all duration-200 ease-in-out  ${
                    (userDetail?.email.toString() || "") ===
                    sellerData.email.toString()
@@ -155,9 +156,11 @@ const TicketDetail: React.FC<TicketDetailProps> = ({
                      : ""
                  }
               ${(userDetail?.email.toString() || "") === null ? "hidden" : ""}`}
-            >
-              Report user
-            </span>
+              >
+                Report user
+              </span>
+            )}
+
             <span
               onClick={() => setIsBlockDialogBoxVisible(true)}
               className={`text-gray-400 w-max text-[clamp(14px,1.2vw,18px)] font-medium self-center self-middle cursor-pointer
@@ -240,7 +243,7 @@ const TicketDetail: React.FC<TicketDetailProps> = ({
                 ? sellerData.phone
                 : sellerData.phone.slice(0, 4) + "*****"}
             </span>
-            {!sellerData?.email && (
+            {!userDetail?.email && (
               <button
                 onClick={() => {
                   navigate(
@@ -257,20 +260,24 @@ const TicketDetail: React.FC<TicketDetailProps> = ({
             {ticketData.userDescription}
           </div>
           {/* Social Icons Placeholder */}
-          <div className="flex gap-5">
-            <button
-              onClick={() => window.open(`tel:${sellerData.phone}`)}
-              className="w-12 h-12 bg-white/75 rounded-lg flex justify-center items-center cursor-pointer  scale-3d hover:scale-105 active:opacity-80 transition-all duration-200 ease-in-out"
-            >
-              <img src="/icons/phone.svg" alt="phone" />
-            </button>
-            <button
-              onClick={() => window.open(`https://wa.me/${sellerData.phone}`)}
-              className="w-12 h-12 bg-white/75 rounded-lg flex justify-center items-center cursor-pointer scale-3d hover:scale-105 active:opacity-80 transition-all duration-200 ease-in-out"
-            >
-              <img src="/icons/wp2.svg" alt="whatsapp" />
-            </button>
-          </div>
+
+          {userDetail?.email && (
+            <div className="flex gap-5">
+              <button
+                onClick={() => window.open(`tel:${sellerData.phone}`)}
+                className="w-12 h-12 bg-white/75 rounded-lg flex justify-center items-center cursor-pointer  scale-3d hover:scale-105 active:opacity-80 transition-all duration-200 ease-in-out"
+              >
+                <img src="/icons/phone.svg" alt="phone" />
+              </button>
+              <button
+                onClick={() => window.open(`https://wa.me/${sellerData.phone}`)}
+                className="w-12 h-12 bg-white/75 rounded-lg flex justify-center items-center cursor-pointer scale-3d hover:scale-105 active:opacity-80 transition-all duration-200 ease-in-out"
+              >
+                <img src="/icons/wp.svg" alt="whatsapp" />
+              </button>
+            </div>
+          )}
+
         </div>
       </section>
     </div>

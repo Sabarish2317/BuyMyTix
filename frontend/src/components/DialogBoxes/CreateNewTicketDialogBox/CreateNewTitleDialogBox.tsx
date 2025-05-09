@@ -23,6 +23,7 @@ interface CreateNewTitleDialogBoxProps {
   input: string;
   titlesData: AddTitlesRequest;
   ticketData: Ticket;
+  setDebouncedInput: React.Dispatch<React.SetStateAction<string>>;
   setToggleDialogueBox: React.Dispatch<React.SetStateAction<boolean>>;
   setTitlesData: React.Dispatch<React.SetStateAction<AddTitlesRequest>>;
   setTicketData: React.Dispatch<React.SetStateAction<Ticket>>;
@@ -30,6 +31,7 @@ interface CreateNewTitleDialogBoxProps {
 
 const CreateNewTitleDialogBox: React.FC<CreateNewTitleDialogBoxProps> = ({
   input,
+  setDebouncedInput,
   setToggleDialogueBox,
   titlesData,
   setTitlesData,
@@ -169,7 +171,11 @@ const CreateNewTitleDialogBox: React.FC<CreateNewTitleDialogBoxProps> = ({
         queryKey: ["all titles", debouncedInput, year],
       });
       setTimeout(() => {
+        let oldInput = "";
+        oldInput = debouncedInput;
         setToggleDialogueBox(false);
+        setDebouncedInput("");
+        setDebouncedInput(oldInput.trim().toLowerCase().slice(0, -1));
       }, 500);
     },
     onError: (error) => {

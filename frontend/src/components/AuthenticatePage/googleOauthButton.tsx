@@ -4,6 +4,8 @@ import { oAuthApi } from "../../routes/apiRoutes";
 import axios from "../../utils/axios";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
+import { useProfile } from "../../contexts/ProfileContext";
+import { HOME_PAGE } from "../../routes/appRoutes";
 
 interface OauthProps {
   name: string;
@@ -11,6 +13,7 @@ interface OauthProps {
 const GoogleAuthButton: React.FC<OauthProps> = ({ name }) => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const { refetch } = useProfile();
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
@@ -32,13 +35,15 @@ const GoogleAuthButton: React.FC<OauthProps> = ({ name }) => {
           name,
           profileImage: {
             data: picture,
-            contentType: "image/jpeg", 
+            contentType: "image/jpeg",
           },
         });
         if (backendResponse.status === 401)
           alert("Account with this email already exits");
         localStorage.setItem("token", backendResponse.data.token);
         queryClient.invalidateQueries({ queryKey: ["userProfile"] });
+        refetch();
+        setTimeout(() => navigate(HOME_PAGE, { replace: true }), 1000);
         navigate("/home");
       } catch (err) {
         console.error("OAuth failed", err);

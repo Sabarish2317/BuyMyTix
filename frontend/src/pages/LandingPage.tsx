@@ -40,7 +40,7 @@ const LandingPage: React.FC = () => {
   };
 
   //profile cntxt api
-  const { userData, isLoading } = useProfile();
+  const { userData, isLoading  } = useProfile();
 
   if (isLoading)
     return (
