@@ -23,7 +23,7 @@ const AdminDashboard = lazy(() => import("./pages/AdminTitles"));
 const ReportsPage = lazy(() => import("./pages/ReportPage"));
 
 // Lazy-loaded pages
-// const LandingPage = lazy(() => import("./pages/LandingPage"));
+const LandingPage = lazy(() => import("./pages/LandingPage"));
 const AuthenticationPage = lazy(() => import("./pages/AuthenticationPage"));
 const HomePage = lazy(() => import("./pages/HomePage"));
 const ResultsPage = lazy(() => import("./pages/ResultsPage"));
@@ -56,7 +56,7 @@ function App() {
           >
             <Routes>
               <Route path="/*" element={<ErrorPage />} />
-              <Route path={LANDING_PAGE} element={<LANDING_PAGE />} />
+              <Route path={LANDING_PAGE} element={<LandingPage />} />
               <Route path={HOME_PAGE} element={<HomePage />} />
               <Route path={RESULTS_PAGE} element={<ResultsPage />} />
               <Route path={HISTORY_PAGE} element={<HistoryPage />} />
