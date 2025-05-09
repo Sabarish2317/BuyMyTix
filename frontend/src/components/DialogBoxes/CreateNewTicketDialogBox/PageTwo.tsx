@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import Input from "../../Global/Input";
 import { Ticket } from "../../../types/Ticket";
 import { AddTitlesRequest } from "../../../types/Titles";
+import { toast } from "react-toastify";
 
 interface PageTwoProps {
   titlesData: AddTitlesRequest;
@@ -138,7 +139,7 @@ const PageTwo: React.FC<PageTwoProps> = ({
           title="Ticket Quantity"
           placeholder="Enter no. of tickets"
           type="num"
-          maxLength={3}
+          maxLength={2}
         />
         <Input
           name="Ticket Price"
@@ -240,6 +241,15 @@ const PageTwo: React.FC<PageTwoProps> = ({
               const [year, month, day] = e.target.value.split("-");
               const updated = new Date(showDateTime);
               updated.setFullYear(+year, +month - 1, +day);
+
+              // Check for today's date
+              const today = new Date();
+              const isToday = updated.toDateString() === today.toDateString();
+
+              if (isToday) {
+                toast.error("Show date cannot be today. Choose a future date.");
+              }
+
               setShowDateTime(updated);
             }}
             className="p-3 rounded text-black bg-white"
@@ -256,7 +266,7 @@ const PageTwo: React.FC<PageTwoProps> = ({
               updated.setHours(+hours, +minutes);
               setShowDateTime(updated);
             }}
-            className="p-3 rounded text-black bg-white cursor-pointer "
+            className="p-3 rounded text-black bg-white cursor-pointer"
           />
         </div>
       </div>

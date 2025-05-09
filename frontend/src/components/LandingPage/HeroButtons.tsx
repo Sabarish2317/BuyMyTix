@@ -20,9 +20,9 @@ const HeroButtons: React.FC<props> = ({ showSellDialogBoxInstruction }) => {
         delay: ANIMATION_DURATION * 6,
         ease: "easeOut",
       }}
-      className="buttons-container self-center w-max justify-center items-center gap-3 md:gap-4 flex flex-col "
+      className="buttons-container self-center my-4 w-max justify-center items-center gap-3 md:gap-4 flex flex-col "
     >
-      <div className="buttons-container buttons-container justify-center items-center gap-3 md:gap-4 flex flex-row">
+      <div className="buttons-container buttons-container z-[9999] justify-center items-center gap-3 md:gap-4 flex flex-row">
         {/* Sell Tickets Button */}
         <button
           onClick={() => showSellDialogBoxInstruction(true)}
@@ -42,7 +42,7 @@ const HeroButtons: React.FC<props> = ({ showSellDialogBoxInstruction }) => {
         </button>
       </div>
       {/* search button*/}
-      <div className="relative w-full h-max items-center justify-center">
+      <div className="relative w-full h-max items-center justify-center ">
         <motion.div
           initial={{ opacity: 1, y: MOVEMENT_DISTANCE }}
           animate={{
@@ -61,10 +61,10 @@ const HeroButtons: React.FC<props> = ({ showSellDialogBoxInstruction }) => {
             repeatType: "mirror",
             ease: "easeInOut",
           }}
-          className="w-[3528.60px] h-[941.24px] bg-black rounded-[50%]
+          className="w-[3528.60px] h-[941.24px] bg-black  rounded-t-[50%]
              absolute left-1/2 -translate-x-1/2
              top-6 md:top-4 lg:2
-             pointer-events-none"
+             pointer-events-none "
         />
 
         <SearchBarDb />

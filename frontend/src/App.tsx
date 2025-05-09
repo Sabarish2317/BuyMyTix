@@ -16,6 +16,7 @@ import {
   CATERGORY_PAGE,
 } from "./routes/appRoutes";
 import CategoryPage from "./pages/DetailedPopularAndTrendingPage";
+
 const Layout = lazy(() => import("./components/Global/Layout"));
 const TickLoader = lazy(() => import("./components/Global/LoadingIcon"));
 const AdminDashboard = lazy(() => import("./pages/AdminTitles"));

@@ -21,12 +21,14 @@ import { toast } from "react-toastify";
 interface TopNavigationBarProps {
   userData: ProfileResponse; // response from parent from context
   delay?: number;
+  className?: string;
 }
 
 // Top Navigation Bar Component
 const TopNavigationBar: React.FC<TopNavigationBarProps> = ({
   userData,
   delay = 6,
+  className = "",
 }) => {
   const navigate = useNavigate();
 
@@ -71,7 +73,7 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({
         delay: ANIMATION_DURATION * delay,
         ease: "easeOut",
       }}
-      className="top-navigation-bar w-full flex flex-row justify-between items-center py-5 cursor-default overflow-visible "
+      className={`top-navigation-bar w-full flex flex-row justify-between items-center py-5 cursor-default overflow-visible ${className}`}
     >
       {/* Logo Section */}
       <div

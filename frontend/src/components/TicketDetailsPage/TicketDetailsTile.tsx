@@ -75,6 +75,9 @@ const TicketDetailsTile: React.FC<TicketDetailsTileProps> = ({
       __v: 1,
     },
   };
+  const fallbackImage = getImageForType({
+    type: titlesData.type,
+  } as AddTitlesRequest);
 
   //if admin decideds to delete the ticket
   const [isActionOpen, setIsActionOpen] = useState(false);
@@ -117,11 +120,13 @@ const TicketDetailsTile: React.FC<TicketDetailsTileProps> = ({
           alt={`${titlesData.title} Poster`}
           onError={(e) => {
             const target = e.currentTarget;
+
             if (target.src !== fallbackImg) {
               target.src = fallbackImg;
             }
           }}
           className="w-full h-full object-cover user-drag-none aspect-[2/3] rounded-lg"
+
         />
       </div>
       <div className="details-container w-full">

@@ -260,6 +260,7 @@ const TicketDetail: React.FC<TicketDetailProps> = ({
             {ticketData.userDescription}
           </div>
           {/* Social Icons Placeholder */}
+
           {userDetail?.email && (
             <div className="flex gap-5">
               <button
@@ -276,6 +277,7 @@ const TicketDetail: React.FC<TicketDetailProps> = ({
               </button>
             </div>
           )}
+
         </div>
       </section>
     </div>

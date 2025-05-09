@@ -235,3 +235,98 @@ export const SearchBarDb: React.FC = () => {
     </div>
   );
 };
+
+const DummySearchBarDb: React.FC = () => {
+  const dummyResults = [
+    {
+      title: "Avengers: Endgame",
+      year: "2019",
+      type: "Movie",
+      poster: "/images/avengers-end-game.jpg",
+    },
+    {
+      title: "Avengers: Infinity War",
+      year: "2018",
+      type: "Movie",
+      poster: "/images/avengers-infinity-war.webp",
+    },
+    {
+      title: "Avengers: Age of Ultron",
+      year: "2015",
+      type: "Movie",
+      poster: "/images/avengers-age-of-ultron.jpg",
+    },
+  ];
+
+  return (
+    <div
+      className={` scale-90 scale`}
+      style={{
+        transformStyle: "preserve-3d", // this is the real key here
+        transformOrigin: "center",
+        perspective: "inherit", // optional if you want to inherit from parent
+      }}
+    >
+      <div
+        style={{
+          transform: "perspective(1000px) translateZ(0)",
+          transformStyle: "preserve-3d",
+        }}
+        className="w-full self-center z-[90] text-white bg-purple-200/6 rounded-md select-none pointer-events-none outline-2 
+           outline-offset-[-2px] backdrop-blur-3xl text-[clamp(16px,2vw,24px)] font-medium transition-all
+           duration-200 focus:outline-none active:opacity-100 flex flex-col   outline-white/20"
+      >
+        <div className="w-full search-input-container flex flex-row gap-2 items-center my-3 mx-4 select-none pointer-events-none">
+          <img
+            src="/icons/search.svg"
+            alt="search"
+            className="w-6 h-6 origin-left scale-80 md:scale-100 hover:scale-105 transition-all duration-200 active:scale-110 cursor-pointer"
+          />
+
+          <div className="input-and-flipping-container relative w-full h-max">
+            <input
+              type="text"
+              value="Avengers"
+              readOnly
+              className="w-full bg-transparent border-none outline-none select-none text-[clamp(16px,2vw,24px)] font-medium"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Dummy Results */}
+      <ul className="w-full mt-2 z-[100] max-h-[300px] overflow-y-scroll rounded-md bg-[#090e18] ">
+        {dummyResults.map((item, index) => (
+          <li
+            key={index}
+            role="button"
+            data-index={index}
+            className={`p-3 text-white cursor-pointer transition-all flex flex-row justify-between items-center ${
+              index === 0 ? "bg-[#7349AD]" : "hover:bg-[#7349ad8f]"
+            }`}
+          >
+            <div className="image-title-date-container flex flex-row justify-start items-center gap-4 cursor-pointer">
+              <img
+                className="w-12 h-16 object-cover rounded-md"
+                src={item.poster || "/images/popcorn.png"}
+                alt="poster"
+              />
+              <div className="title-year flex flex-col gap-1 justify-start align-middle text-[clamp(16px,1.5vw,20px)]">
+                {item.title}
+                <h3 className="text-[clamp(14px,1.5vw,18px)] text-overflow-ellipsis">
+                  {item.year}
+                </h3>
+              </div>
+            </div>
+            {item.type && (
+              <span className="text-[clamp(14px,1.3vw,16px)] text-gray-400 leading-0 ml-2">
+                ({item.type})
+              </span>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+export { DummySearchBarDb };

@@ -10,6 +10,9 @@ import { ProfileResponse } from "../types/Profile";
 import TickLoader from "../components/Global/LoadingIcon";
 import { useProfile } from "../contexts/ProfileContext";
 import PostNewTickDialogBox from "../components/DialogBoxes/CreateNewTicketDialogBox/PostNewTicketDialogBox";
+import Howitworks from "../components/LandingPage/Howitworks";
+import Reviews from "../components/LandingPage/Reviews";
+import Footer from "../components/LandingPage/Footer";
 
 const LandingPage: React.FC = () => {
   // Testing component
@@ -50,9 +53,12 @@ const LandingPage: React.FC = () => {
     );
 
   return (
-    <Layout>
-      <TopNavigationBar userData={userData || ({} as ProfileResponse)} />
-      <div className="home-page-layout flex flex-col gap-4 select-none">
+    <Layout wrapperClassName="!w-full !flex !flex-col !max-w-[4000px] !px-0 !md:px-0 items-center !lg:px-[0px] !z-50">
+      <TopNavigationBar
+        className="max-w-[1490px] px-4 md:px-6 items-center lg:px-[42px]"
+        userData={userData || ({} as ProfileResponse)}
+      />
+      <div className="home-page-layout flex flex-col  select-none w-full">
         <HeroSection />
         <HeroButtons
           showSellDialogBoxInstruction={setSellTicketDialogBoxVisible}
@@ -75,8 +81,12 @@ const LandingPage: React.FC = () => {
             />
           )}
         </AnimatePresence>
-
         <AnimatedBento />
+        <Howitworks
+          showSellDialogBoxInstruction={setSellTicketDialogBoxVisible}
+        />
+        <Reviews />
+        <Footer showSellDialogBoxInstruction={setSellTicketDialogBoxVisible} />
       </div>
     </Layout>
   );

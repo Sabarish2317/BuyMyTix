@@ -53,6 +53,7 @@ const DetailCard: React.FC<DetailCardProps> = ({
               target.src = fallbackImg;
             }
           }}
+
           className="w-full h-full object-cover origin-center    user-drag-none aspect-[2/3] rounded-lg"
         />
       </div>

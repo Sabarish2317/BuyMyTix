@@ -6,7 +6,9 @@ import TickLoader from "../components/Global/LoadingIcon";
 import { toast } from "react-toastify";
 import axios from "../utils/axios";
 import imageCompression from "browser-image-compression";
-import { ProfileResponse } from "@/types/Profile";
+import { ProfileResponse } from "../types/Profile";
+import { getImageForType } from "../utils/getImageForType";
+import { AddTitlesRequest } from "../types/Titles";
 
 interface Title {
   _id: string;
@@ -214,8 +216,21 @@ const AdminTitles: React.FC = () => {
                 >
                   <img
                     src={title.poster}
-                    alt={title.title}
-                    className="w-full h-48 object-cover"
+                    alt={`${title} Poster`}
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      if (
+                        target.src !==
+                        getImageForType({
+                          type: title.type,
+                        } as AddTitlesRequest)
+                      ) {
+                        target.src = getImageForType({
+                          type: title.type,
+                        } as AddTitlesRequest);
+                      }
+                    }}
+                    className="w-full h-42 object-cover"
                   />
 
                   {/* Overlay on Hover */}

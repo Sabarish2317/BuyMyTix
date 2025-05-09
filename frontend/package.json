@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-     "analyze": "vite build && source-map-explorer dist/assets/*.js",
+    "analyze": "vite build && source-map-explorer dist/assets/*.js",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -16,18 +16,25 @@
     "@tanstack/react-query": "^5.72.2",
     "axios": "^1.8.4",
     "browser-image-compression": "^2.0.2",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "color-thief-browser": "^2.0.2",
     "fast-average-color": "^9.5.0",
+    "framer-motion": "^12.10.5",
     "jwt-decode": "^4.0.0",
+    "lucide-react": "^0.509.0",
     "motion": "^12.4.7",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-intersection-observer": "^9.16.0",
     "react-router-dom": "^7.2.0",
     "react-toastify": "^11.0.5",
+    "tailwind-merge": "^3.2.0",
     "tailwindcss": "^4.0.9"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
+    "@types/node": "^22.15.17",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react": "^4.3.4",
@@ -36,6 +43,7 @@
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^15.15.0",
     "source-map-explorer": "^2.5.3",
+    "tw-animate-css": "^1.2.9",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.24.1",
     "vite": "^6.2.0"
