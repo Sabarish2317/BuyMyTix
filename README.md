@@ -1,3 +1,4 @@
+
 # 🎟️ BuyMyTix
 
 **BuyMyTix** is a full-stack ticket marketplace where users can buy and sell event tickets — with confidence. Fast, secure, and optimized for last-minute finds or safe reselling.
@@ -31,7 +32,6 @@
 ## 🚀 Getting Started
 
 ### 1. Clone the repository
-
 ```bash
 git clone https://github.com/your-username/buymytix.git
 cd buymytix
@@ -78,6 +78,7 @@ cd backend
 npm install
 npm run dev
 ```
+
 
 ## 📂 Project Structure
 
