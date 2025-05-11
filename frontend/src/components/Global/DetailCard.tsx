@@ -53,7 +53,8 @@ const DetailCard: React.FC<DetailCardProps> = ({
               target.src = fallbackImg;
             }
           }}
-          className="w-full h-full object-cover aspect-[2/3] rounded-lg"
+
+          className="w-full h-full object-cover origin-center    user-drag-none aspect-[2/3] rounded-lg"
         />
       </div>
       <h3 className="mt-2  w-full text-center text-white/80 text-[clamp(14px,1.2vw,18px)]  font-medium leading-snug px-0.5 overflow-ellipsis line-clamp-2">

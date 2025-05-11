@@ -96,6 +96,9 @@ const TicketDetailsTile: React.FC<TicketDetailsTileProps> = ({
       toast.error(err.message);
     },
   });
+  const fallbackImg = getImageForType({
+    type: titlesData.type,
+  } as AddTitlesRequest);
   return (
     <div
       className={`ticket-tile-container flex flex-row gap-3 min-h-min min-w-[300px] max-w-[450px] 
@@ -117,11 +120,13 @@ const TicketDetailsTile: React.FC<TicketDetailsTileProps> = ({
           alt={`${titlesData.title} Poster`}
           onError={(e) => {
             const target = e.currentTarget;
-            if (target.src !== fallbackImage) {
-              target.src = fallbackImage;
+
+            if (target.src !== fallbackImg) {
+              target.src = fallbackImg;
             }
           }}
-          className="w-full min-h-full  object-cover rounded-md"
+          className="w-full h-full object-cover user-drag-none aspect-[2/3] rounded-lg"
+
         />
       </div>
       <div className="details-container w-full">

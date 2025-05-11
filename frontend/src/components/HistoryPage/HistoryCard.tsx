@@ -50,7 +50,9 @@ const HistoryCard: React.FC<HistoryCardProps> = ({
       toast.error(err.message);
     },
   });
-
+  const fallbackImg = getImageForType({
+    type: userTicketHistory.eventRef.type,
+  } as AddTitlesRequest);
   return (
     <div
       className="ticket-tile-container flex flex-row gap-3 min-w-[300px] max-w-[450px] 
@@ -69,6 +71,16 @@ const HistoryCard: React.FC<HistoryCardProps> = ({
           className={`w-full min-h-full aspect-3/4  object-cover rounded-md ${
             !isMoreThanOneDay ? "brightness-50" : ""
           }`}
+
+          src={userTicketHistory.eventRef.poster}
+          onError={(e) => {
+            const target = e.currentTarget;
+            if (target.src !== fallbackImg) {
+              target.src = fallbackImg;
+            }
+          }}
+          alt="Poster"
+
         />
 
         {!isMoreThanOneDay && (

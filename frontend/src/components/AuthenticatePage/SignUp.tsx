@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MyDivider from "../Global/Divider";
 import { AnimatePresence, motion } from "framer-motion";
-import { LOGIN_PAGE } from "../../routes/appRoutes";
 import { useMutation } from "@tanstack/react-query";
 import { checkIsEmailAvailable } from "../../queries/SignUp";
 import { SignUpRequest } from "../../types/SignUp";
@@ -44,6 +43,7 @@ const SignUpForm: React.FC<{ redirect: string | null }> = ({
     onSuccess: () => {
       toggleProfileDialogueBox();
     },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError: (err: any) => {
       toast.error(err.message);
     },
@@ -276,7 +276,9 @@ const SignUpForm: React.FC<{ redirect: string | null }> = ({
           Already have an account?{" "}
           <span
             className="underline cursor-pointer hover:text-white transition-all duration-100 ease-in-out"
-            onClick={() => navigate(`${LOGIN_PAGE}`)}
+            onClick={() =>
+              navigate(`/Authenticate?mode=login&redirectUrl=${url}`)
+            }
           >
             Log In
           </span>
