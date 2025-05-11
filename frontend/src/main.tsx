@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
+import { Analytics } from "@vercel/analytics/next";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 if (import.meta.env.VITE_MODE === "development") {
   const script = document.createElement("script");
@@ -13,6 +14,7 @@ if (import.meta.env.VITE_MODE === "development") {
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <GoogleOAuthProvider clientId={import.meta.env.VITE_OAUTH_GOOGLE_CLIENT_ID}>
+      <Analytics />
       <App />
     </GoogleOAuthProvider>
   </React.StrictMode>

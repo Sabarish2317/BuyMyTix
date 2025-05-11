@@ -145,13 +145,11 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({
           </button> */}
           {/* Get Started Button (Hidden on small screens, visible on medium+) */}
           <button
+            onClick={() => navigate(SIGNUP_PAGE)}
             className="get-started-button w-max bg-white px-3 py-2 md:px-4 md:py-3 rounded-md backdrop-blur-sm justify-center items-center gap-2.5 flex 
         hover:bg-white/80 hover:scale-95 transition-all duration-200 active:scale-105 active:bg-white cursor-pointer"
           >
-            <h2
-              className="text-[clamp(20px,2vw,24px)] text-black font-medium select-none"
-              onClick={() => navigate(SIGNUP_PAGE)}
-            >
+            <h2 className="text-[clamp(20px,2vw,24px)] text-black font-medium select-none">
               Get started
             </h2>
           </button>
