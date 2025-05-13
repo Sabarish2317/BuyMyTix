@@ -31,13 +31,13 @@ const Howitworks: React.FC<HowitworksProps> = ({
   return (
     <motion.div
       ref={containerRef}
-      className="flex min-w-full z-[999] items-center justify-center gap-8 px-8 py-12 flex-col bg-gradient-to-b"
+      className="flex min-w-full  z-[999] justify-center gap-8  py-12 flex-col bg-gradient-to-b max-w-[1490px] px-4 md:px-6 items-center lg:px-[42px]"
       style={{
         backgroundImage: "linear-gradient(180deg, #4E2E7B 0%, #26004C 100%)",
       }}
     >
       {/* Title */}
-      <div className="flex justify-center">
+      <div className="flex justify-center ">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}

@@ -41,12 +41,12 @@ const Input = <T extends string | number>({
 
   return (
     <div className="relative self-stretch w-full min-w-[180px]">
-      <h3 className="w-full justify-start text-white text-[clamp(12px,1vw,16px)] font-bold leading-loose">
+      <h3 className="w-full justify-start text-[clamp(12px,1vw,16px)] mb-0.5 text-gray-200 font-bold leading-loose">
         {title}
       </h3>
       <div className="input-container flex flex-row gap-0 items-center justify-center bg-white rounded-sm outline-2 outline-white">
         {prefixText && (
-          <h3 className="w-min text-black inline-flex justify-start items-center pl-4 text-[clamp(12px,1vw,16px)] font-medium leading-loose">
+          <h3 className="w-min text-black inline-flex justify-start items-center  pl-4  font-medium leading-loose">
             {prefixText}
           </h3>
         )}

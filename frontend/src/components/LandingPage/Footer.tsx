@@ -57,7 +57,6 @@ const Footer: React.FC<{
           </div>
           <div className="flex flex-col gap-2 text-sm text-[#CCC]  ">
             <h4>© 2024–2025 BuyMyTix. All rights reserved.</h4>
-            <h4>Designed and developed with passion.</h4>
           </div>
         </div>
 
@@ -105,9 +104,6 @@ const Footer: React.FC<{
           with confidence.
         </h2>
       </div>
-
-      {/* Footer Note */}
-      <p className="text-white  text-start">© 2023 — Copyright</p>
     </div>
   );
 };

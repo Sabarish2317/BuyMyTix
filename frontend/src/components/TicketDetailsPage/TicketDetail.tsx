@@ -18,6 +18,7 @@ interface TicketDetailProps {
   sellerData: ProfileResponse;
   eventId: string;
   userDetail: ProfileResponse;
+  setToggleDialogueBox: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const TicketDetail: React.FC<TicketDetailProps> = ({
@@ -26,6 +27,7 @@ const TicketDetail: React.FC<TicketDetailProps> = ({
   sellerData,
   eventId,
   userDetail,
+  setToggleDialogueBox,
 }) => {
   const handleRedirect = () => {
     const query = `${ticketData.venue}`; // e.g., "Murugan Cinemas Coimbatore"
@@ -51,12 +53,23 @@ const TicketDetail: React.FC<TicketDetailProps> = ({
     userDetail.type = "";
   }
   return (
-    <div className=" w-full px-5 py-8 bg-white/5 rounded-xl items-start backdrop-blur-lg flex flex-col gap-6 mb-6 select-text">
+    <div className=" w-full px-5 py-8 bg-black/90 rounded-xl items-start backdrop-blur-lg flex flex-col gap-6 mb-6 select-text md:bg-white/5">
       {/* Ticket Details Section */}
       <section className="ticket-details-sction flex w-full flex-col gap-3 items-start">
-        <h2 className="text-white  text-[clamp(16px,2vw,28px)] font-bold text-center ">
-          Ticket Details
-        </h2>
+        <div className="top w-full flex justify-between">
+          <h2 className="text-white  text-[clamp(16px,2vw,28px)] font-bold text-center  ">
+            Ticket Details
+          </h2>
+          <img
+            className="scale-3d hover:scale-95  hover:opacity-80 active:scale-105 active:opacity-100 transition-all duration-200 cursor-pointer md:hidden"
+            onClick={(e) => {
+              e.stopPropagation();
+              setToggleDialogueBox(false);
+            }}
+            src="/icons/close-icon.svg"
+            alt="close"
+          />
+        </div>
 
         <div className="flex flex-col gap-2 w-full">
           {/* Movie Info */}
@@ -273,11 +286,10 @@ const TicketDetail: React.FC<TicketDetailProps> = ({
                 onClick={() => window.open(`https://wa.me/${sellerData.phone}`)}
                 className="w-12 h-12 bg-white/75 rounded-lg flex justify-center items-center cursor-pointer scale-3d hover:scale-105 active:opacity-80 transition-all duration-200 ease-in-out"
               >
-                <img src="/icons/wp.svg" alt="whatsapp" />
+                <img src="/icons/wp2.svg" alt="whatsapp" />
               </button>
             </div>
           )}
-
         </div>
       </section>
     </div>

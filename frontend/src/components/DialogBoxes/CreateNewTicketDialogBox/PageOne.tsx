@@ -21,15 +21,12 @@ const PageOne: React.FC<PageOneProps> = ({
   return (
     <>
       <div className="title-and-close-button-container w-full flex justify-between h-min items-start">
-        <div className="text-center justify-start items-center flex flex-col self-start ">
-          <span className="text-white text-[clamp(20px,2vw,24px)] uppercase font-black self-start w-full text-start ">
-            Create A{" "}
-            <span className="text-red-600 text-[clamp(20px,2vw,24px)] uppercase font-black">
-              post
-            </span>
-          </span>
-          <h3 className="w-full text-white text-start text-[clamp(16px,1.5vw,20px)]">
-            Select {titlesData.type}
+        <div className="text-center justify-start items-start flex flex-col">
+          <h2 className="text-white text-[clamp(20px,2vw,24px)] uppercase font-black">
+            Create A Post
+          </h2>
+          <h3 className="text-white  text-[clamp(16px,1.5vw,20px)]">
+            Choose {titlesData.type}
           </h3>
         </div>
         <img

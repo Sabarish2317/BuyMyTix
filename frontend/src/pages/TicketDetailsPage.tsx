@@ -18,7 +18,7 @@ import DetailCard from "../components/Global/DetailCard";
 const TicketDetailsPage: React.FC = () => {
   const navigate = useNavigate();
   const { userData, isLoading: isProfileLoading } = useProfile();
-
+  const [setIsDummySetState] = useState(false);
   const [searchParams] = useSearchParams();
   const [eventRefId, setEventRefId] = useState<string>("");
   const location = useLocation();
@@ -117,18 +117,18 @@ const TicketDetailsPage: React.FC = () => {
           initial={{ opacity: 0, y: MOVEMENT_DISTANCE }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: easeInOut }}
-          className="main-container flex flex-col md:flex-row w-full items-start select-none"
+          className="main-container flex flex-col md:flex-row w-full items-start select-none h-max"
         >
           {/* Left Side - Tickets */}
           <div className="tickets-left-side flex-2 w-full flex flex-col gap-6 h-max">
             {/* Poster Section */}
-            <div className="poster-and-details-container w-full flex h-[300px] rounded-[12px] overflow-clip relative">
+            <div className="poster-and-details-container w-full flex  h-[200px] md:h-[300px] rounded-[12px] overflow-clip relative">
               <img
                 className="w-full h-full object-cover object-top blur-[2px] brightness-50"
                 src={title.poster}
                 alt="poster"
               />
-              <div className="description-container absolute bottom-8 left-8">
+              <div className="description-container absolute bottom-4 left-4 md:bottom-8 md:left-8">
                 <h2 className="text-white text-[clamp(20px,2.5vw,32px)] font-bold">
                   {title.title} ({title.year})
                 </h2>
@@ -146,7 +146,7 @@ const TicketDetailsPage: React.FC = () => {
             <h2 className="text-white text-[clamp(20px,2vw,28px)] font-semibold">
               Tickets
             </h2>
-            <div className="ticket-details-tile-container grid grid-cols-[repeat(auto-fit,minmax(400px,1fr))] gap-4">
+            <div className="ticket-details-tile-container grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] md:grid-cols-[repeat(auto-fit,minmax(360px,1fr))] lg:grid-cols-[repeat(auto-fit,minmax(400px,1fr))] gap-4">
               {Object.entries(listings).map(([id, listing], index) => (
                 <TicketDetailsTile
                   ticketId={id}
@@ -164,33 +164,38 @@ const TicketDetailsPage: React.FC = () => {
           </div>
 
           {/* Right Side - Selected Ticket Detail */}
-          <div className="other-results-right-side w-max flex-1 flex-col gap-3 scale-90 origin-top-right">
-            {listings && Object.values(listings)[selectedIndex] ? (
-              <TicketDetail
-                userDetail={userData}
-                eventId={eventRefId}
-                ticketData={
-                  Object.values(listings)[selectedIndex].ticketDetails
-                }
-                titlesData={title}
-                sellerData={
-                  Object.values(listings)[selectedIndex].sellerDetails
-                }
-              />
-            ) : (
-              <div className="text-white text-lg mt-4">No ticket selected</div>
-            )}
+          <div className="other-results-right-side w-full  flex-1 flex-col gap-3 md:scale-90 origin-left md:origin-top-right h-max mt-4 md:mt-0">
+            <div className={`hidden md:flex lg:flex xl:flex`}>
+              {listings && Object.values(listings)[selectedIndex] ? (
+                <TicketDetail
+                  setToggleDialogueBox={setIsDummySetState}
+                  userDetail={userData}
+                  eventId={eventRefId}
+                  ticketData={
+                    Object.values(listings)[selectedIndex].ticketDetails
+                  }
+                  titlesData={title}
+                  sellerData={
+                    Object.values(listings)[selectedIndex].sellerDetails
+                  }
+                />
+              ) : (
+                <div className="text-white text-lg mt-4">
+                  No ticket selected
+                </div>
+              )}
+            </div>
 
             {/* Other results from search */}
             {searchQuery && titlesDataFromSearch && (
               <>
-                <h2 className="text-white text-[clamp(16px,1.5vw,24px)] font-semibold mb-4">
+                <h2 className="text-white text-[clamp(20px,2vw,28px)] font-semibold mb-4">
                   {searchQuery.startsWith("Popular") ||
                   searchQuery.startsWith("Trending")
                     ? searchQuery
                     : `Other results for ${searchQuery}`}
                 </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                <div className="w-full grid grid-cols-4 justify-center md:grid-cols-3 gap-4">
                   {Object.entries(titlesDataFromSearch).map(([id, listing]) => (
                     <DetailCard
                       forwardingData={{} as DbSearchTitleResponse[]}

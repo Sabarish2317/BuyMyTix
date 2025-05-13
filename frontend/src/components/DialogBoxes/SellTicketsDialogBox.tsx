@@ -51,7 +51,7 @@ const SellTicketDialogBox: React.FC<SellTicketDialogBoxProps> = ({
           duration: ANIMATION_DURATION * 2,
           ease: "easeOut",
         }}
-        className="w-[300px] md:w-[400px] lg:w-[500px] p-4 bg-black rounded-xl flex flex-col items-center gap-3"
+        className="w-[350px] md:w-[400px] lg:w-[500px] p-2 md:p-4 bg-black rounded-xl flex flex-col items-center gap-3"
       >
         <div className="title-and-close-button-container w-full flex justify-between h-min items-center">
           <h2 className="text-center text-white text-[clamp(20px,2vw,24px)] font-black uppercase leading-loose [text-shadow:_0px_0px_56px_rgb(147_93_202_/_0.35)]">
@@ -82,9 +82,9 @@ const SellTicketDialogBox: React.FC<SellTicketDialogBoxProps> = ({
               navigate(LOGIN_PAGE);
             }
           }}
-          className="w-full cursor-pointer px-6 py-3.5 bg-white text-black rounded-md flex justify-center items-center gap-2.5 scale-3d hover:scale-105 hover:opacity-90 hover:bg-[#DC3912] hover:text-white active:opacity-100 transition-all duration-200"
+          className="w-full cursor-pointer px-6 py-3 md:py-3.5 bg-white text-black rounded-md flex justify-center items-center gap-2.5 scale-3d hover:scale-102 hover:opacity-90 hover:bg-[#DC3912] hover:text-white active:opacity-100 transition-all duration-200"
         >
-          <span className="text-[clamp(16px,1.5vw,20px)] font-medium leading-7">
+          <span className="text-[clamp(16px,2vw,24px)] font-medium ">
             Start Selling
           </span>
         </button>

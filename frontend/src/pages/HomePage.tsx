@@ -187,19 +187,25 @@ export const RecommendationRow: React.FC<{
         ))}
       </div>
       {data.length > 6 && (
-        <div
-          onClick={() => {
-            const [type, category] = title.split(" ") as [string, string];
-            const filteredType = type.toLowerCase();
-            const filteredCategory = toSingular(category);
-            navigate(
-              `${CATERGORY_PAGE}?type=${filteredType}&category=${filteredCategory}&page=1`
-            );
-          }}
-          className=" text-[clamp(12px,1vw,18px)] text-white flex flex-row items-center justify-end font-regular gap-2 cursor-pointer hover:underline"
-        >
-          More
-          <img className="w-6" src="/icons/arrow-right.svg" alt="arrow-right" />
+        <div className=" text-[clamp(12px,1vw,18px)] text-white flex flex-row items-center justify-end ">
+          <div
+            onClick={() => {
+              const [type, category] = title.split(" ") as [string, string];
+              const filteredType = type.toLowerCase();
+              const filteredCategory = toSingular(category);
+              navigate(
+                `${CATERGORY_PAGE}?type=${filteredType}&category=${filteredCategory}&page=1`
+              );
+            }}
+            className="flex flex-row gap-2 w-max  cursor-pointer hover:underline"
+          >
+            More
+            <img
+              className="w-6"
+              src="/icons/arrow-right.svg"
+              alt="arrow-right"
+            />
+          </div>
         </div>
       )}
     </div>

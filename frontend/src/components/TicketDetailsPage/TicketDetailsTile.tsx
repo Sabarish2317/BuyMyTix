@@ -11,6 +11,7 @@ import { AnimatePresence } from "motion/react";
 import { ConfirmDialogBox } from "../HistoryPage/ConfirmDialogBox";
 import { HistoryTicketActions } from "../HistoryPage/HistoryTicketActionDropDown";
 import { EditDialogBox } from "../HistoryPage/EditDialogBox";
+import TicketDetailDialogBox from "../DialogBoxes/TicketDetailDialogBox";
 
 interface TicketDetailsTileProps {
   ticketId: string;
@@ -75,14 +76,15 @@ const TicketDetailsTile: React.FC<TicketDetailsTileProps> = ({
       __v: 1,
     },
   };
-  const fallbackImage = getImageForType({
-    type: titlesData.type,
-  } as AddTitlesRequest);
+
+  //for mobile devices
 
   //if admin decideds to delete the ticket
   const [isActionOpen, setIsActionOpen] = useState(false);
   const [isConfirmVisible, setIsConfirmVisible] = useState(false);
   const [isEditDialogBoxVisible, setEditDialogBoxVisible] = useState(false);
+  const [isDetailsDialogBoxVisible, setDetailsDialogBoxVisible] =
+    useState(false);
   const getTicketsQuery = useQueryClient();
   const deleteTicketMutate = useMutation({
     mutationFn: deleteTicket,
@@ -101,7 +103,7 @@ const TicketDetailsTile: React.FC<TicketDetailsTileProps> = ({
   } as AddTitlesRequest);
   return (
     <div
-      className={`ticket-tile-container flex flex-row gap-3 min-h-min min-w-[300px] max-w-[450px] 
+      className={`ticket-tile-container flex flex-row gap-3 min-h-min min-w-[280px] max-w-[450px] 
       rounded-xl p-[10px] items-center select-none
       ${
         selectedIndex !== index
@@ -110,11 +112,12 @@ const TicketDetailsTile: React.FC<TicketDetailsTileProps> = ({
       }  transition-all duration-100 ease-in-out cursor-pointer
       ${selectedIndex === index ? "bg-[#c83615d4]" : "bg-white/5"}`}
       onClick={() => {
+        setDetailsDialogBoxVisible(true);
         if (selectedIndex === index) return;
         setSelectedIndex(index);
       }}
     >
-      <div className="image-container w-[80px] md:w-[100px] lg:w-[120px] h-full flex-shrink-0">
+      <div className="image-container w-[100px] md:w-[120px] lg:w-[140px] h-full flex-shrink-0">
         <img
           src={titlesData.poster}
           alt={`${titlesData.title} Poster`}
@@ -126,7 +129,6 @@ const TicketDetailsTile: React.FC<TicketDetailsTileProps> = ({
             }
           }}
           className="w-full h-full object-cover user-drag-none aspect-[2/3] rounded-lg"
-
         />
       </div>
       <div className="details-container w-full">
@@ -138,7 +140,10 @@ const TicketDetailsTile: React.FC<TicketDetailsTileProps> = ({
             <h2 className="text-white relative flex flex-row gap-2 text-[clamp(16px,1.2vw,20px)] w-max self-center font-regular pr-2 bg-white/10 py-2 px-3 rounded-md items-center justify-center ">
               {ticketData.language.trim()}
               <button
-                onClick={() => setIsActionOpen(!isActionOpen)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsActionOpen(!isActionOpen);
+                }}
                 className={`bg-white/10 hover:bg-white/20 p-2 rounded-md cursor-pointer ${
                   userData.type === "admin" ? "" : "hidden"
                 }`}
@@ -146,7 +151,21 @@ const TicketDetailsTile: React.FC<TicketDetailsTileProps> = ({
                 <img src="/icons/menu-icon.svg" alt="menu" />
               </button>
             </h2>
-
+            <AnimatePresence mode="wait">
+              {isDetailsDialogBoxVisible && (
+                <TicketDetailDialogBox
+                  ticketId={ticketId}
+                  userData={userData}
+                  index={index}
+                  selectedIndex={selectedIndex}
+                  setSelectedIndex={setSelectedIndex}
+                  ticketData={ticketData}
+                  titlesData={titlesData}
+                  sellerData={sellerData}
+                  setToggleDialogueBox={setDetailsDialogBoxVisible}
+                />
+              )}
+            </AnimatePresence>
             <AnimatePresence mode="wait">
               {isActionOpen && (
                 <HistoryTicketActions

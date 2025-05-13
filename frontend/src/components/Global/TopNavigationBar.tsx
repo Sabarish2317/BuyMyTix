@@ -2,12 +2,7 @@ import { AnimatePresence, motion } from "motion/react";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ANIMATION_DURATION, MOVEMENT_DISTANCE } from "../../utils/constants";
-import {
-  HOME_PAGE,
-  LANDING_PAGE,
-  LOGIN_PAGE,
-  SIGNUP_PAGE,
-} from "../../routes/appRoutes";
+import { HOME_PAGE, LANDING_PAGE, LOGIN_PAGE } from "../../routes/appRoutes";
 import ProfileDialogueBox from "../DialogBoxes/ProfileDialogueBox";
 import LocationDialogBox from "../DialogBoxes/locationDialogBox";
 import SellTicketDialogBox from "../DialogBoxes/SellTicketsDialogBox";
@@ -87,7 +82,7 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({
         className="logo-padding w-full flex justify-start flex-row scale-3d hover:scale-95 hover:opacity-80 active:scale-105 active:opacity-100 transition-all duration-200"
       >
         <img
-          className="scale-75 md:scale-90 lg:scale-100 origin-left cursor-pointer user-drag-none "
+          className="scale-90 lg:scale-100 origin-left cursor-pointer user-drag-none "
           src="/icons/logo.svg"
           alt="logo"
         />
@@ -103,7 +98,7 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({
               window.location.reload();
             }
           }}
-          className={`home w-max text-[clamp(20px,2vw,24px)]  font-medium 
+          className={`home w-max text-[clamp(16px,2vw,24px)]  font-medium 
          hover:scale-95 transition-all duration-200 active:scale-105 cursor-pointer select-none ${
            window.location.pathname === "/home" ? "primary" : "text-white"
          }`}
@@ -122,7 +117,7 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({
               }, 100);
             }
           }}
-          className="about-us w-max text-[clamp(20px,2vw,24px)] text-white
+          className="about-us w-max text-[clamp(16px,2vw,24px)] text-white
           hover:scale-95 transition-all duration-200 active:scale-105 cursor-pointer select-none"
         >
           About us
@@ -138,7 +133,7 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({
               }
             } else navigate(LOGIN_PAGE);
           }}
-          className="help-and-support w-max text-[clamp(20px,2vw,24px)] text-white
+          className="help-and-support w-max text-[clamp(16px,2vw,24px)] text-white
           hover:scale-95 transition-all duration-200 active:scale-105 cursor-pointer select-none"
         >
           Sell tickets
@@ -150,7 +145,7 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({
         <div className="action-buttons-container flex flex-row gap-6 items-center justify-end w-full">
           {/* Login Button (Only visible on large screens) */}
           <button
-            className="login-button w-max text-[clamp(20px,2vw,24px)] text-white underline hidden lg:flex
+            className="login-button w-max text-[clamp(16px,2vw,24px)] text-white underline hidden lg:flex
          hover:scale-95 transition-all duration-200 active:scale-105 cursor-pointer"
             onClick={() => navigate(LOGIN_PAGE)}
           >
@@ -158,11 +153,15 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({
           </button>
           {/* Get Started Button (Hidden on small screens, visible on medium+) */}
           <button
-            onClick={() => navigate(SIGNUP_PAGE)}
-            className="get-started-button w-max bg-white px-3 py-2 md:px-4 md:py-3 rounded-md backdrop-blur-sm justify-center items-center gap-2.5 flex 
+            onClick={() =>
+              navigate("/authenticate?mode=signup&redirectUrl=null", {
+                replace: true,
+              })
+            }
+            className="get-started-button w-max bg-white px-3 py-3 md:px-4 md:py-3 rounded-md backdrop-blur-sm justify-center items-center gap-2.5 flex 
         hover:bg-white/80 hover:scale-95 transition-all duration-200 active:scale-105 active:bg-white cursor-pointer"
           >
-            <h2 className="text-[clamp(20px,2vw,24px)] text-black font-medium select-none">
+            <h2 className="text-[clamp(16px,2vw,24px)] text-black font-medium select-none">
               Get started
             </h2>
           </button>
@@ -181,7 +180,7 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({
               alt=""
             />
             <div
-              className="login-button w-max  text- text-[clamp(20px,2vw,24px)] text-white
+              className="login-button w-max  text- text-[clamp(16px,2vw,24px)] text-white
          hover:text-zinc-300 transition-all duration-200 active:text-zinc-400 cursor-pointer select-none"
             >
               {userData.city
@@ -249,6 +248,9 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({
             <AnimatePresence mode="wait">
               {isProfileVisible && (
                 <ProfileDialogueBox
+                  toggleSellTicketDialogBox={toggleSellTicketDialogBox}
+                  toggleProfileDialogBox={toggleProfileDialogueBox}
+                  toggleLocationDialogBox={toggleCityDialogueBox}
                   toggleSettingsDialogBox={toggleSettingsDialogBox}
                   userData={
                     userDataFromProfileContext || ({} as ProfileResponse)
