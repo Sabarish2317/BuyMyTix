@@ -12,6 +12,7 @@ import PageThree from "./PageThree";
 import { useMutation } from "@tanstack/react-query";
 import { addTicket } from "../../../queries/Tickets";
 import { toast } from "react-toastify";
+import ReactDOM from "react-dom";
 const popUpVariants = {
   hidden: { opacity: 0, scale: 0.95 },
   visible: { opacity: 1, scale: 1, y: 0 },
@@ -266,7 +267,7 @@ const PostNewTickDialogBox: React.FC<PostNewTickDialogBoxProps> = ({
     }
   };
 
-  return (
+  return ReactDOM.createPortal(
     <motion.div
       variants={popUpVariants}
       initial="hidden"
@@ -276,9 +277,9 @@ const PostNewTickDialogBox: React.FC<PostNewTickDialogBoxProps> = ({
         duration: ANIMATION_DURATION * 2,
         ease: "easeOut",
       }}
-      className="blurred-background fixed inset-0 backdrop-blur-sm flex items-center justify-center z-[999999] "
+      className="blurred-background fixed inset-0 backdrop-blur-sm flex items-center justify-center z-[999999] scale-110 md:scale-100"
     >
-      <div className="create-new-ticket-dialogue-box  w-[300px] md:w[400px] lg:w-[500px] p-4 bg-black rounded-xl backdrop-blur-sm flex flex-col items-center gap-3 scale-90 ">
+      <div className="create-new-ticket-dialogue-box  w-[360px] md:w[400px] lg:w-[500px] p-4 bg-black rounded-xl backdrop-blur-sm flex flex-col items-center gap-3 scale-90 ">
         {currentPageIndex >= 1 && currentPageIndex < 4 && (
           <ProgressIndicator currentStep={currentPageIndex} />
         )}
@@ -302,14 +303,14 @@ const PostNewTickDialogBox: React.FC<PostNewTickDialogBoxProps> = ({
             {currentPageIndex >= 1 && (
               <button
                 onClick={() => hanldePageIndexChange(false)}
-                className="w-full px-6 py-3 bg-[#9F64DA] text-white rounded-md text-[clamp(16px,1.4vw,20px)] font-semibold leading-tight flex justify-center items-center gap-3 scale-3d hover:scale-105 hover:opacity-90 cursor-pointer hover:text-white active:opacity-100 transition-all duration-200"
+                className="w-full px-6 py-3.5 md:py-3.5 bg-[#9F64DA] text-white rounded-md text-[clamp(16px,2vw,24px)] font-semibold leading-tight flex justify-center items-center gap-3 scale-3d hover:scale-105 hover:opacity-90 cursor-pointer hover:text-white active:opacity-100 transition-all duration-200"
               >
                 Previous
               </button>
             )}
             <button
               onClick={() => hanldePageIndexChange(true)}
-              className="w-full px-6 py-3.5 bg-[#9F64DA] text-white text-[clamp(16px,1.4vw,20px)] font-semibold leading-tight rounded-md flex justify-center items-center gap-3 scale-3d hover:scale-105 hover:opacity-90 cursor-pointer hover:text-white active:opacity-100 transition-all duration-200"
+              className="w-full px-6 py-3.5 md:py-3.5 bg-[#9F64DA] text-white text-[clamp(16px,2vw,24px)] font-semibold leading-tight rounded-md flex justify-center items-center gap-3 scale-3d hover:scale-105 hover:opacity-90 cursor-pointer hover:text-white active:opacity-100 transition-all duration-200"
             >
               {currentPageIndex == 0
                 ? "Continue"
@@ -322,7 +323,8 @@ const PostNewTickDialogBox: React.FC<PostNewTickDialogBoxProps> = ({
           </div>
         )}
       </div>
-    </motion.div>
+    </motion.div>,
+    document.body
   );
 };
 

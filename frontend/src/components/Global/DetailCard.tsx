@@ -41,7 +41,7 @@ const DetailCard: React.FC<DetailCardProps> = ({
 
         return;
       }}
-      className={`detail-card-container w-[clamp(40px,8vw,150px)] flex flex-col items-center cursor-pointer transition-transform duration-150 hover:scale-[1.03] active:scale-95 ${className}`}
+      className={`detail-card-container w-[clamp(80px,8vw,150px)] flex flex-col items-center cursor-pointer transition-transform duration-150 hover:scale-[1.03] active:scale-95 ${className}`}
     >
       <div className="w-full image-container  aspect-[2/3] ">
         <img
@@ -53,7 +53,6 @@ const DetailCard: React.FC<DetailCardProps> = ({
               target.src = fallbackImg;
             }
           }}
-
           className="w-full h-full object-cover origin-center    user-drag-none aspect-[2/3] rounded-lg"
         />
       </div>

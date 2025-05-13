@@ -1,13 +1,22 @@
 import { useQuery } from "@tanstack/react-query";
 import React, { useState, useEffect, useRef } from "react";
 import { fetchTitles } from "../../queries/Titles";
-import { DbSearchTitleResponse, SearchTitleRequest } from "../../types/Titles";
+import {
+  AddTitlesRequest,
+  DbSearchTitleResponse,
+  SearchTitleRequest,
+} from "../../types/Titles";
 import FlippingText from "./FlippingText";
 import { useNavigate } from "react-router-dom";
 import { RESULTS_PAGE, TICKET_DETAILS_PAGE } from "../../routes/appRoutes";
+import { getImageForType } from "../../utils/getImageForType";
+import useClickOutside from "../../utils/detectOutsideClickHook";
 
 export const SearchBarDb: React.FC = () => {
   const [inputValue, setInputValue] = useState("");
+
+  const [containerRef, isSuggestionsVisible, setIsSuggestionsVisible] =
+    useClickOutside(true);
 
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [debouncedInput, setDebouncedInput] = useState("");
@@ -53,6 +62,7 @@ export const SearchBarDb: React.FC = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
+    setIsSuggestionsVisible(true);
     setIsValidTitleSelected(false);
     setSelectedIndex(-1);
   };
@@ -119,6 +129,7 @@ export const SearchBarDb: React.FC = () => {
 
   return (
     <div
+      ref={containerRef}
       className={`absolute top-0 w-full self-center z-[90] text-white bg-purple-200/6 rounded-md outline-2 
            outline-offset-[-2px] backdrop-blur-3xl text-[clamp(16px,2vw,24px)] font-medium transition-all
            duration-200 focus:outline-none active:opacity-100 flex flex-col   ${
@@ -193,45 +204,58 @@ export const SearchBarDb: React.FC = () => {
           </ul>
         )}
 
-      {Array.isArray(titlesData) && titlesData.length > 0 && (
-        <ul
-          ref={suggestionsRef}
-          className={`w-full absolute mt-16 z-[100] max-h-[300px] overflow-y-scroll rounded-md  bg-[#090e18] `}
-        >
-          {titlesData.map((item, index) => (
-            <li
-              key={index}
-              role="button"
-              data-index={index}
-              onClick={() => handleSelectSuggestion(index)}
-              className={`p-3 text-white cursor-pointer transition-all flex flex-row justify-between items-center  ${
-                selectedIndex === index
-                  ? "bg-[#7349AD]"
-                  : "hover:bg-[#7349ad8f]"
-              }`}
-            >
-              <div className="image-title-date-container flex flex-row justify-start items-center gap-4">
-                <img
-                  className="w-12 h-16 object-cover rounded-md"
-                  src={item.poster || "/images/popcorn.png"}
-                  alt="poster"
-                />
-                <div className="title-year flex flex-col gap-1 justify-start align-middle  text-[clamp(16px,1.5vw,20px)]  ">
-                  {item.title}
-                  <h3 className="text-[clamp(14px,1.5vw,18px)] text-overflow-ellipsis">
-                    {item.year}
-                  </h3>
+      {Array.isArray(titlesData) &&
+        isSuggestionsVisible &&
+        titlesData.length > 0 && (
+          <ul
+            ref={suggestionsRef}
+            className={`w-full absolute mt-16 md:mt-20 z-[100] max-h-[300px] overflow-scroll rounded-md  bg-[#0c1320] `}
+          >
+            {titlesData.map((item, index) => (
+              <li
+                key={index}
+                role="button"
+                data-index={index}
+                onClick={() => handleSelectSuggestion(index)}
+                className={`p-3 text-white cursor-pointer transition-all flex flex-row justify-between items-center  ${
+                  selectedIndex === index
+                    ? "bg-[#7349AD]"
+                    : "hover:bg-[#7349ad8f]"
+                }`}
+              >
+                <div className="image-title-date-container flex flex-row justify-start items-center gap-4">
+                  <img
+                    className="w-12 h-16 object-cover rounded-md"
+                    src={item.poster}
+                    alt="poster"
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      if (
+                        target.src !==
+                        getImageForType({ type: item.type } as AddTitlesRequest)
+                      ) {
+                        target.src = getImageForType({
+                          type: item.type,
+                        } as AddTitlesRequest);
+                      }
+                    }}
+                  />
+                  <div className="title-year flex flex-col gap-1 justify-start align-middle  text-[clamp(16px,1.5vw,20px)]  ">
+                    {item.title}
+                    <h3 className="text-[clamp(14px,1.5vw,18px)] text-overflow-ellipsis">
+                      {item.year}
+                    </h3>
+                  </div>
                 </div>
-              </div>
-              {item.type && (
-                <span className="text-[clamp(14px,1.3vw,16px)] text-gray-400 leading-0 ml-2">
-                  ({item.type})
-                </span>
-              )}
-            </li>
-          ))}
-        </ul>
-      )}
+                {item.type && (
+                  <span className="text-[clamp(14px,1.3vw,16px)] text-gray-400 leading-0 ml-2">
+                    ({item.type})
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
     </div>
   );
 };
@@ -294,8 +318,8 @@ const DummySearchBarDb: React.FC = () => {
         </div>
       </div>
 
-      {/* Dummy Results */}
-      <ul className="w-full mt-2 z-[100] max-h-[300px] overflow-y-scroll rounded-md bg-[#090e18] ">
+      {/* Dummy Results this is used in the search bar on the landing page */}
+      <ul className="w-full mt-2 z-[100] max-h-[300px] overflow-scroll rounded-md bg-[#090e18] ">
         {dummyResults.map((item, index) => (
           <li
             key={index}

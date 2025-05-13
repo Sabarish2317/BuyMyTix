@@ -19,7 +19,7 @@ const Dropdown: React.FC<DropdownProps> = ({
     <div className="relative w-full z-90">
       {/* Dropdown Button */}
       <div className="title-and-drop-down">
-        <div className="self-stretch justify-start text-white text-[clamp(12px,1vw,16px)]  font-bold leading-loose ">
+        <div className="self-stretch justify-start text-white text-[clamp(16px,1.5vw,20px)]  font-bold leading-loose ">
           {heading}
         </div>
         <div
@@ -95,14 +95,14 @@ const Dropdown2: React.FC<Dropdown2Props> = ({
   return (
     <div
       ref={dropdownRef}
-      className="relative inline-block text-left  z-[110] min-w-[100px] min-h-full"
+      className="relative text-left  w-max  z-[110]    min-h-full"
     >
-      <h2 className="text-[clamp(12px,1.5vw,16px)] font-bold text-white">
+      <h2 className="text-[clamp(12px,1.5vw,16px)] font-bold  text-white">
         {heading}
       </h2>
       <div
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-between gap-2   h-full text-white px-4 py-2 rounded-md cursor-pointer transition-all"
+        className="flex items-center justify-between gap-2  w-full  h-full text-white px-4 py-2 rounded-md cursor-pointer transition-all"
       >
         <span className="text-[clamp(16px,1.5vw,20px)]">{selectedOption}</span>
         <img
@@ -119,7 +119,7 @@ const Dropdown2: React.FC<Dropdown2Props> = ({
           {options.map((option, index) => (
             <div
               key={index}
-              className={`px-4 py-2 text-[clamp(12px,1vw,16px)] cursor-pointer hover:bg-white/10 transition-colors ${
+              className={`px-4 py-2 text-[clamp(16px,1.5vw,18px)] cursor-pointer hover:bg-white/10 transition-colors ${
                 option === selectedOption
                   ? "text-[#DC3912] font-medium"
                   : "text-white"

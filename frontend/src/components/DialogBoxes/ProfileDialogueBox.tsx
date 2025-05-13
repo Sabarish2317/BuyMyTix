@@ -1,18 +1,29 @@
 import { AnimatePresence, motion } from "motion/react";
 
 import { ANIMATION_DURATION } from "../../utils/constants";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ProfileResponse } from "../../types/Profile";
 import ProfileImage from "../Global/profileImage";
-import { ADMIN_PAGE, HISTORY_PAGE, REPORT_PAGE } from "../../routes/appRoutes";
+import {
+  ADMIN_PAGE,
+  HISTORY_PAGE,
+  HOME_PAGE,
+  LANDING_PAGE,
+  REPORT_PAGE,
+} from "../../routes/appRoutes";
 import { useQueryClient } from "@tanstack/react-query";
 import { useProfile } from "../../contexts/ProfileContext";
+import useClickOutside from "@/utils/detectOutsideClickHook";
 
 interface ProfileDialogueBoxProps {
   userData: ProfileResponse;
   toggleSettingsDialogBox: React.Dispatch<React.SetStateAction<boolean>>;
+  toggleLocationDialogBox: () => void;
+  toggleSellTicketDialogBox: () => void;
+  toggleProfileDialogBox: () => void;
 }
+
 const profileVariants = {
   hidden: { opacity: 0, y: -10 },
   visible: { opacity: 1, y: 36 },
@@ -22,6 +33,9 @@ const profileVariants = {
 const ProfileDialogueBox: React.FC<ProfileDialogueBoxProps> = ({
   userData,
   toggleSettingsDialogBox,
+  toggleSellTicketDialogBox,
+  toggleLocationDialogBox,
+  toggleProfileDialogBox,
 }) => {
   const navigate = useNavigate();
   const [isQuickLinksExpanded, setIsQuickLinksExpanded] = useState(false); // Add state for quick links]useState
@@ -30,6 +44,15 @@ const ProfileDialogueBox: React.FC<ProfileDialogueBoxProps> = ({
   };
   const queryClient = useQueryClient();
   const { refetch, setUserData } = useProfile();
+
+  //handle tap outisde
+  const [containerRef, isVisible] = useClickOutside(true);
+
+  useEffect(() => {
+    if (!isVisible) {
+      toggleProfileDialogBox();
+    }
+  }, [isVisible]);
 
   return (
     <motion.div
@@ -46,13 +69,14 @@ const ProfileDialogueBox: React.FC<ProfileDialogueBoxProps> = ({
     >
       {/* profile container  */}
       <div
-        className="profile-dialogue-box-container fixed lg:absolute  right-0 min-w-80 pb-3 bg-black rounded-xl shadow-[0px_0px_55px_-11px_rgba(74,0,147,1.00)] outline-2 
+        ref={containerRef}
+        className="profile-dialogue-box-container  select-none fixed lg:absolute  right-0 min-w-80 pb-3 bg-black rounded-xl shadow-[0px_0px_55px_-11px_rgba(74,0,147,1.00)] outline-2 
         outline-offset-[-2px] outline-zinc-700  flex-col justify-center items-center overflow-hidden cursor-pointer z-100"
       >
-        <div className="profile-detail-container w-full profile-details-container self-stretch px-4 py-4 bg-zinc-900 rounded-md inline-flex justify-start items-center gap-3">
-          <div className="min-w-13 min-h-13 max-w-13 max-h-13 rounded-full flex items-center justify-center overflow-hidden origin-right scale-3d scale-75 md:scale-90 lg:scale-100 hover:scale-105 transition-all duration-200 ease-in-out active:scale-110 cursor-pointer">
+        <div className="profile-detail-container  w-full profile-details-container self-stretch px-4 py-4 bg-zinc-900  rounded-md inline-flex justify-start items-center  gap-1 md:gap-3">
+          <div className="min-w-12  min-h-12 max-w-12 max-h-12 rounded-full flex items-center justify-center overflow-hidden origin-left scale-3d scale-75 md:scale-90 lg:scale-100 hover:scale-105 transition-all duration-200 ease-in-out active:scale-110 cursor-pointer">
             <ProfileImage
-              className="min-w-13 min-h-13 max-w-13 max-h-13"
+              className="min-w-12 min-h-12 max-w-12 max-h-12"
               data={
                 !userData.profileImage?.data ||
                 userData.profileImage.data.trim().toLowerCase() !== "empty"
@@ -94,6 +118,30 @@ const ProfileDialogueBox: React.FC<ProfileDialogueBoxProps> = ({
           </div>
         </button>
         <button
+          onClick={() => toggleSellTicketDialogBox()}
+          className="settings-button cursor-pointer w-full flex flex-row items-center justify-start gap-6 pl-5 pr-5 pb-3 pt-3 scale-3d hover:bg-zinc-800 hover:scale-105 active:bg-zinc-700 active:scale-110 transition-all duration-200"
+        >
+          <img src="/icons/sell-icon.svg" alt="settings" />
+          <div className="justify-start text-white text-[clamp(20px,2vw,24px)] font-regular">
+            Sell your ticket
+          </div>
+        </button>
+        <button
+          className="location-container w-full flex flex-row items-center justify-start gap-6 pl-5 pr-5 pb-3 pt-3 scale-3d hover:bg-zinc-800 hover:scale-105 active:bg-zinc-700 active:scale-110 transition-all duration-200"
+          onClick={toggleLocationDialogBox}
+        >
+          <img
+            className="user-drag-none "
+            src="/icons/location-orange.svg"
+            alt="location"
+          />
+          <div className="login-button max-w-full line-clamp-1 text-start text-[clamp(20px,2vw,24px)] overflow-ellipsis text-white">
+            {userData.city
+              ? userData.city + ", " + userData.state
+              : "Select your city"}
+          </div>
+        </button>
+        <button
           onClick={() => {
             navigate(ADMIN_PAGE);
           }}
@@ -131,7 +179,9 @@ const ProfileDialogueBox: React.FC<ProfileDialogueBoxProps> = ({
             localStorage.removeItem("token");
             refetch();
             setUserData({} as ProfileResponse);
-            navigate("/authenticate?type-login", { replace: true });
+            navigate("/authenticate?type=login&redirect=null", {
+              replace: true,
+            });
           }}
           className="logout-button cursor-pointer w-full flex flex-row items-center justify-start gap-6 pl-5 pr-5 pb-3 pt-3 scale-3d hover:bg-zinc-800 hover:scale-105 active:bg-zinc-700 active:scale-110 transition-all duration-200"
         >
@@ -164,10 +214,19 @@ const ProfileDialogueBox: React.FC<ProfileDialogueBoxProps> = ({
           {isQuickLinksExpanded && (
             <AnimatePresence>
               <div
-                className="sub-links-container w-full justify-start text-white/80 text-[clamp(16px,2vw,20px)] font-regular  flex-col items-start gap-3
+                className="sub-links-container w-full justify-start text-white/80 text-[clamp(20px,2vw,24px)] font-regular  flex-col items-start flex gap-2
         "
               >
-                <button className="sub-link-1 pl-2 relative overflow-clip hover:scale-105 transition-all duration-200 ease-in-out active:scale-110 cursor-pointer flex flex-row gap-8">
+                <button
+                  onClick={() => {
+                    if (window.location.pathname != "/home") {
+                      navigate(HOME_PAGE);
+                    } else {
+                      window.location.reload();
+                    }
+                  }}
+                  className="sub-link-1 pl-2  overflow-clip hover:scale-105 transition-all duration-200 ease-in-out active:scale-110 cursor-pointer flex flex-row gap-8"
+                >
                   <img
                     src="/icons/down-arrow.svg"
                     alt="dummy-icon"
@@ -175,15 +234,28 @@ const ProfileDialogueBox: React.FC<ProfileDialogueBoxProps> = ({
                   />
                   Home
                 </button>
-                <button className="sub-link-2 relative pl-2 overflow-clip hover:scale-105 transition-all duration-200 ease-in-out active:scale-110 cursor-pointer flex flex-row gap-8">
+                <button
+                  onClick={() => {
+                    const currentPath = window.location.pathname;
+                    if (currentPath === LANDING_PAGE) {
+                      window.scrollTo({ top: 400, behavior: "smooth" });
+                    } else {
+                      navigate(LANDING_PAGE);
+                      setTimeout(() => {
+                        window.scrollTo({ top: 400, behavior: "smooth" });
+                      }, 100);
+                    }
+                  }}
+                  className="sub-link-2  pl-2 overflow-clip hover:scale-105 transition-all duration-200  ease-in-out active:scale-110 cursor-pointer flex flex-row gap-8"
+                >
                   <img
                     src="/icons/down-arrow.svg"
                     alt="dummy-icon"
-                    className="opacity-0"
+                    className="opacity-0 "
                   />
                   About us
                 </button>
-                <button className="sub-link-3 relative pl-2 overflow-clip hover:scale-105 transition-all duration-200 ease-in-out active:scale-110 cursor-pointer flex flex-row gap-8">
+                <button className="sub-link-3  pl-2 overflow-clip hover:scale-105 transition-all duration-200 ease-in-out active:scale-110 cursor-pointer flex flex-row gap-8">
                   <img
                     src="/icons/down-arrow.svg"
                     alt="dummy-icon"

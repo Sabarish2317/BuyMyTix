@@ -22,14 +22,11 @@ const PageZero: React.FC<PageZeroProps> = ({
   return (
     <>
       <div className="title-and-close-button-container w-full flex justify-between h-min items-start">
-        <div className="text-center justify-start items-center flex flex-col">
-          <span className="text-white text-[clamp(20px,2vw,24px)] uppercase font-black">
-            Create A{" "}
-            <span className="text-red-600 text-[clamp(20px,2vw,24px)] uppercase font-black">
-              post
-            </span>
-          </span>
-          <h3 className="text-white text-[clamp(16px,1.5vw,20px)]">
+        <div className="text-center justify-start items-start flex flex-col">
+          <h2 className="text-white text-[clamp(20px,2vw,24px)] uppercase font-black">
+            Create A Post
+          </h2>
+          <h3 className="text-white  text-[clamp(16px,1.5vw,20px)]">
             Select the ticket type
           </h3>
         </div>

@@ -4,15 +4,21 @@ import LogIn from "../components/AuthenticatePage/LogIn";
 import SignUp from "../components/AuthenticatePage/SignUp";
 import { motion, AnimatePresence } from "framer-motion";
 import { ANIMATION_DURATION } from "../utils/constants";
+import { useEffect } from "react";
 
 const AuthenticationPage: React.FC = () => {
   //mode?="login" etc parser
   const [searchParams] = useSearchParams();
   const mode = searchParams.get("mode") || "login"; //default mode is login ie without no params means it directs to login tab
-  const redirectUrl = searchParams.get("redirectUrl");
+  let redirectUrl = searchParams.get("redirectUrl");
+  useEffect(() => {
+    if (!redirectUrl) {
+      redirectUrl = "null";
+    }
+  }, []);
   console.log(redirectUrl);
   return (
-    <Layout className="justify-center relative ">
+    <Layout className="justify-center relative select-none">
       {/* max width section */}
       <div className="auth-page  items-center self-center flex flex-col justify-center w-full max-w-[760px] rounded-xl ">
         <img

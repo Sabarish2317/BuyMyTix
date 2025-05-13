@@ -1,11 +1,9 @@
 import React from "react";
 
-interface AdSpaceProps {}
-
-const AdSpace: React.FC<AdSpaceProps> = ({}) => {
+const AdSpace: React.FC = () => {
   return (
     <img
-      className="w-full h-[260px] object-cover  rounded-xl origin-top"
+      className="w-full h-[150px] md:h-[260px] object-cover  rounded-xl object-left-top "
       src="/images/ad-space.png"
       alt="google-ads "
     />

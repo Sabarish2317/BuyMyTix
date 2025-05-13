@@ -229,7 +229,7 @@ const CreateNewTitleDialogBox: React.FC<CreateNewTitleDialogBoxProps> = ({
             }
           }}
           className="create-new-ticket-dialogue-box 
-          w-[280px] sm:w-[360px] md:w-[400px] lg:w-[480px]
+          w-[340px] sm:w-[360px] md:w-[400px] lg:w-[480px]
           h-fit min-h-[300px] max-h-[80vh] overflow-y-auto
           p-[clamp(12px,3vw,20px)] relative
           bg-black rounded-xl backdrop-blur-sm

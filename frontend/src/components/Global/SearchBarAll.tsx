@@ -338,7 +338,7 @@ const SearchBarWhite: React.FC<SearchBarWhiteProps> = ({
            isValidTitleSelected ? "outline-green-400/50" : "outline-white/20"
          }`}
     >
-      <div className="search-bar-white flex flex-row h-max items-center gap-3 justify-between">
+      <div className="search-bar-white flex flex-row h-max items-center  justify-between mr-2">
         <AnimatePresence mode="wait">
           {isCreateNewTitleDialogBoxVisible && (
             <CreateNewTitleDialogBox
@@ -353,7 +353,7 @@ const SearchBarWhite: React.FC<SearchBarWhiteProps> = ({
           )}
         </AnimatePresence>
         <div
-          className="search-input-container flex flex-row gap-2 items-center my-3 mx-4"
+          className="search-input-container w-full flex  flex-row gap-2 items-center my-3 ml-3 md:ml-4"
           onClick={handleClickToShowResults}
         >
           <img

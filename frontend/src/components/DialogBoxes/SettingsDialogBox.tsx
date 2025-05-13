@@ -80,8 +80,8 @@ const SettingsDialogBox: React.FC<SettingsDialogBoxProps> = ({
       animate="visible"
       exit="exit"
       transition={{
-        duration: ANIMATION_DURATION * 2,
-        ease: "easeOut",
+        duration: ANIMATION_DURATION,
+        ease: "easeInOut",
       }}
       className="fixed inset-0 backdrop-blur-sm z-[100] flex items-center justify-center"
       //didnnt use childrens direcly as exit animations didnt work i dont know why
@@ -93,9 +93,6 @@ const SettingsDialogBox: React.FC<SettingsDialogBoxProps> = ({
             <h2 className=" text-center text-white text-[clamp(20px,2vw,24px)] font-black uppercase leading-loose [text-shadow:_0px_0px_56px_rgb(147_93_202_/_0.35)]">
               Settings
             </h2>
-            <h3 className=" text-xl font-medium leading-1 text-[#AFAFAF]">
-              Change how your profile looks
-            </h3>
           </div>
           <img
             className="scale-3d hover:scale-95 hover:opacity-80 active:scale-105 active:opacity-100 transition-all duration-200 cursor-pointer"
@@ -167,15 +164,15 @@ const SettingsDialogBox: React.FC<SettingsDialogBoxProps> = ({
               setToggleDialogueBox(false);
             }
           }}
-          className={`w-full px-6 py-3.5 cursor-pointer rounded-md flex justify-center items-center gap-2.5 scale-3d 
-            hover:scale-105 hover:opacity-90 active:opacity-100 transition-all duration-200 mt-2 ${
+          className={`w-full px-6 py-3 md:py-3.5 cursor-pointer rounded-md flex justify-center items-center gap-2.5 scale-3d 
+            hover:scale-105 hover:opacity-90 active:opacity-100 transition-all duration-200 mt-2 text-[clamp(16px,2vw,24px)] ${
               JSON.stringify(usrData) !== JSON.stringify(userData) &&
               usrData.profileImage.data === userData.profileImage.data
                 ? "bg-[#9F64DA]"
                 : "bg-white/50"
             }`}
         >
-          <span className="text-white text-xl font-medium leading-7">Save</span>
+          <span className="text-white font-medium leading-7">Save</span>
         </button>
       </div>
     </motion.div>

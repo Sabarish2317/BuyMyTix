@@ -107,7 +107,14 @@ const PageTwo: React.FC<PageTwoProps> = ({
     row,
   ]);
   return (
-    <div className="w-full flex flex-col gap-4">
+    <div
+      className="w-full flex flex-col gap-4 h-[500px] overflow-y-scroll"
+      style={{
+        scrollbarColor: "rgba(255,255,255,0.2) rgba(0,0,0,0.2)",
+
+        scrollbarWidth: "thin",
+      }}
+    >
       {/* Header */}
       <div className="flex justify-between items-start">
         <div className="text-left">
@@ -231,8 +238,8 @@ const PageTwo: React.FC<PageTwoProps> = ({
       )}
 
       {/* Show time and expiry time */}
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-5 ">
-        <div className="flex flex-col gap-1 ">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-5">
+        <div className="flex flex-col gap-1 w-full ">
           <label className="text-white font-bold">Show Date</label>
           <input
             type="date"
@@ -255,7 +262,7 @@ const PageTwo: React.FC<PageTwoProps> = ({
             className="p-3 rounded text-black bg-white"
           />
         </div>
-        <div className="flex flex-col gap-1 ">
+        <div className="flex flex-col gap-1 w-full">
           <label className="text-white font-bold">Show Time</label>
           <input
             type="time"

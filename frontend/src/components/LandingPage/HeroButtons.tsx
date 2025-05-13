@@ -26,7 +26,7 @@ const HeroButtons: React.FC<props> = ({ showSellDialogBoxInstruction }) => {
         {/* Sell Tickets Button */}
         <button
           onClick={() => showSellDialogBoxInstruction(true)}
-          className="px-4 py-2 md:px-6 md:py-3 text-white bg-[#ff3300] rounded-md   backdrop-blur-[145.40px] justify-center items-center gap-2.5 flex
+          className="px-4 py-3 md:px-6 md:py-3 text-white bg-[#ff3300] rounded-md   backdrop-blur-[145.40px] justify-center items-center gap-2.5 flex
            text-[clamp(16px,2vw,24px)] font-medium hover:scale-95 hover:opacity-80 transition-all duration-200 active:scale-105 active:opacity-100 cursor-pointer"
         >
           Sell your tickets
@@ -35,7 +35,7 @@ const HeroButtons: React.FC<props> = ({ showSellDialogBoxInstruction }) => {
         {/* Buy Now Button */}
         <button
           onClick={() => navigate(HOME_PAGE)}
-          className="px-4 py-2 md:px-6 md:py-3 text-black bg-white rounded-md justify-center items-center gap-2.5 flex
+          className="px-4 py-3 md:px-6 md:py-3 text-black bg-white rounded-md justify-center items-center gap-2.5 flex
       text-[clamp(16px,2vw,24px)] font-medium hover:scale-95 hover:opacity-80 transition-all duration-200 active:scale-105 active:opacity-100 cursor-pointer"
         >
           Buy now
@@ -46,13 +46,14 @@ const HeroButtons: React.FC<props> = ({ showSellDialogBoxInstruction }) => {
         <motion.div
           initial={{ opacity: 1, y: MOVEMENT_DISTANCE }}
           animate={{
+            willChange: "transform, filter",
             opacity: 1,
             y: 0,
-            boxShadow: [
-              "inset 0px -25px 94px 7px rgba(128,80,175,1.00), 0px -25px 94px 7px rgba(128,80,175,1.00)", // Start
-              "inset 0px -15px 80px 10px rgba(128,80,175,0.8), 0px -15px 80px 10px rgba(128,100,175,0.8)", // Wave Up
-              "inset 0px -30px 100px 5px rgba(128,80,175,1.1), 0px -50px 100px 5px rgba(128,100,175,1.1)", // Wave Down
-              "inset 0px -25px 94px 7px rgba(128,80,175,1.00), 0px -25px 94px 7px rgba(128,80,175,1.00)", // Back to Start
+            filter: [
+              "drop-shadow(0px -25px 94px rgba(128,80,175,1.0))",
+              "drop-shadow(0px -15px 80px rgba(128,100,175,0.8))",
+              "drop-shadow(0px -50px 100px rgba(128,100,175,1.1))",
+              "drop-shadow(0px -25px 94px rgba(128,80,175,1.0))",
             ],
           }}
           transition={{
@@ -61,7 +62,7 @@ const HeroButtons: React.FC<props> = ({ showSellDialogBoxInstruction }) => {
             repeatType: "mirror",
             ease: "easeInOut",
           }}
-          className="w-[3528.60px] h-[941.24px] bg-black  rounded-t-[50%]
+          className="w-[4500.60px] h-[941.24px] bg-black  rounded-t-[100%]
              absolute left-1/2 -translate-x-1/2
              top-6 md:top-4 lg:2
              pointer-events-none "

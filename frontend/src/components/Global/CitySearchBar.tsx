@@ -5,13 +5,15 @@ import { City } from "../../types/City";
 import { ProfileResponse } from "../../types/Profile";
 
 interface SearchBarProps {
+  userData: ProfileResponse;
   setUserData: React.Dispatch<React.SetStateAction<ProfileResponse>>;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ setUserData }) => {
-  const [inputValue, setInputValue] = useState("");
+const SearchBar: React.FC<SearchBarProps> = ({ setUserData, userData }) => {
+  const [inputValue, setInputValue] = useState(userData.city || "");
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [debouncedInput, setDebouncedInput] = useState("");
+  const [isSuggestionsVisible, setIsSuggestionsVisible] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedInput(inputValue), 300);
@@ -26,6 +28,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ setUserData }) => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
+    setIsSuggestionsVisible(true);
     setSelectedIndex(-1);
   };
 
@@ -50,6 +53,11 @@ const SearchBar: React.FC<SearchBarProps> = ({ setUserData }) => {
     if (selectedCity) {
       // returns { city, state }
       setInputValue(`${selectedCity.city}, ${selectedCity.state}`);
+      if (
+        userData.city === selectedCity.city ||
+        userData.state === selectedCity.state
+      )
+        return;
       setUserData((prev) => ({
         ...prev,
         city: selectedCity.city,
@@ -60,7 +68,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ setUserData }) => {
 
   return (
     <div className="w-full h-max absolute z-50 text-white bg-purple-200/6 rounded-md outline-2 outline-white/20 outline-offset-[-2px] backdrop-blur-3xl text-[clamp(16px,2vw,24px)] font-medium transition-all duration-200 focus:outline-none active:opacity-100 flex flex-col overflow-clip">
-      <div className="seach-input-container flex flex-row justify-start items-center gap-3 px-4 py-2 md:px-6 md:py-3">
+      <div className="seach-input-container flex flex-row justify-start items-center gap-3 px-4 py-4 md:px-6 md:py-3">
         <img
           src="/icons/search.svg"
           alt="search"
@@ -69,6 +77,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ setUserData }) => {
         <div className="relative w-full z-100">
           <input
             type="text"
+            onClick={() => setIsSuggestionsVisible(true)}
             value={inputValue}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
@@ -82,7 +91,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ setUserData }) => {
         </div>
       </div>
 
-      {cityData.length > 0 && (
+      {isSuggestionsVisible && cityData.length > 0 && (
         <ul className="w-full z-50 bg-gray-950 rounded-b-md">
           {cityData.map((item, index) => (
             <li

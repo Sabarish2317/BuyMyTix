@@ -153,7 +153,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   left: -2px;
   right: 0;
   border-radius: 12px;
-  padding: 2px;
+
+  padding: 1px;
   background: linear-gradient(to right, #8970a7, #000000);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
@@ -165,6 +166,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 /* Change the gradient border after `md` */
 @media (min-width: 768px) {
   .gradient-border-left::before {
+    padding: 2px;
     background: linear-gradient(to bottom, #8970a7, #000000);
   }
 }
