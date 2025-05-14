@@ -38,6 +38,8 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ProfileProvider key={localStorage.getItem("token") || ""}>
         <ToastContainer
+          toastClassName={"z-[9999999999]"}
+          className={"z-[9999999999]"}
           position="top-right"
           autoClose={3000}
           theme="dark"

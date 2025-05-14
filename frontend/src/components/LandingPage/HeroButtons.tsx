@@ -22,7 +22,7 @@ const HeroButtons: React.FC<props> = ({ showSellDialogBoxInstruction }) => {
       }}
       className="buttons-container self-center my-4 w-max justify-center items-center gap-3 md:gap-4 flex flex-col "
     >
-      <div className="buttons-container buttons-container z-[9999] justify-center items-center gap-3 md:gap-4 flex flex-row">
+      <div className="buttons-container buttons-container z-[99] justify-center items-center gap-3 md:gap-4 flex flex-row">
         {/* Sell Tickets Button */}
         <button
           onClick={() => showSellDialogBoxInstruction(true)}

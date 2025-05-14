@@ -50,15 +50,13 @@ const HistoryCard: React.FC<HistoryCardProps> = ({
       toast.error(err.message);
     },
   });
-  const fallbackImg = getImageForType({
-    type: userTicketHistory.eventRef.type,
-  } as AddTitlesRequest);
+
   return (
     <div
       className="ticket-tile-container flex flex-row gap-3 min-w-[300px] max-w-[450px] 
       rounded-xl p-[10px] items-center select-none transition-all text-gray bg-white/5"
     >
-      <div className="relative w-[80px] md:w-[100px] lg:w-[120px] flex-shrink-0">
+      <div className="relative min-h-full flex-shrink-0 items-center justify-center  flex">
         <img
           src={userTicketHistory.eventRef.poster}
           alt={`${userTicketHistory.eventRef.title} Poster`}
@@ -66,21 +64,13 @@ const HistoryCard: React.FC<HistoryCardProps> = ({
             const target = e.currentTarget;
             if (target.src !== fallbackImage) {
               target.src = fallbackImage;
+              target.className =
+                "min-h-full w-[clamp(100px,8vw,150px)] self-stretch  object-cover rounded-md  aspect-[3/4]";
             }
           }}
-          className={`w-full min-h-full aspect-3/4  object-cover rounded-md ${
+          className={`min-h-full w-[clamp(100px,8vw,150px)] self-stretch  object-cover rounded-md ${
             !isMoreThanOneDay ? "brightness-50" : ""
           }`}
-
-          src={userTicketHistory.eventRef.poster}
-          onError={(e) => {
-            const target = e.currentTarget;
-            if (target.src !== fallbackImg) {
-              target.src = fallbackImg;
-            }
-          }}
-          alt="Poster"
-
         />
 
         {!isMoreThanOneDay && (

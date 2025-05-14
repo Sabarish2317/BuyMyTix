@@ -13,7 +13,7 @@ const AnimatedBento: React.FC = () => {
         delay: ANIMATION_DURATION * 7,
         ease: "easeOut",
       }}
-      className="bento-container w-full flex flex-col z-0 md:flex-row gap-4 md:gap-6 lg:gap-8 p-3 md:p-4 lg:p-6 items-center justify-center mt-14 cursor-default select-none"
+      className="bento-container w-full flex flex-col z-0 mb-12  md:flex-row gap-4 md:gap-6 lg:gap-8 p-3 md:p-4 lg:p-6 items-center justify-center mt-14 cursor-default select-none"
     >
       {/* 1st column */}
       <div className="w-full md:w-auto flex flex-row md:flex-col gap-2 md:gap-4 lg:gap-6 ">
@@ -60,7 +60,7 @@ const AnimatedBento: React.FC = () => {
           offsetBoxClassName="min-h-full"
           className="min-h-full justify-between gradient-border-left py-8"
           title={
-            <h2 >
+            <h2>
               Direct Buyer-to-Seller
               <br />
               Chat

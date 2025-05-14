@@ -41,15 +41,11 @@ const TicketDetailDialogBox: React.FC<TicketDetailDialogBoxProps> = ({
   //handle tap outisde
   const [containerRef, isVisible] = useClickOutside(true);
 
-  useEffect(
-    () => {
-      if (!isVisible) {
-
-        setToggleDialogueBox(false);
-      }
-    },
-    [isVisible]
-  );
+  useEffect(() => {
+    if (!isVisible) {
+      setToggleDialogueBox(false);
+    }
+  }, [isVisible]);
 
   useEffect(() => {
     setDomReady(true);
@@ -67,6 +63,10 @@ const TicketDetailDialogBox: React.FC<TicketDetailDialogBoxProps> = ({
 
   const TicketDetailDialogBoxContent = (
     <motion.div
+      onClick={(e) => {
+        e.stopPropagation();
+        setToggleDialogueBox(false);
+      }}
       variants={popUpVariants}
       initial="hidden"
       animate="visible"
@@ -75,12 +75,14 @@ const TicketDetailDialogBox: React.FC<TicketDetailDialogBoxProps> = ({
         duration: ANIMATION_DURATION,
         ease: "easeInOut",
       }}
-      ref={containerRef}
       className="fixed inset-0 backdrop-blur-sm z-[100] flex items-center justify-center "
       //didnnt use childrens direcly as exit animations didnt work i dont know why
       //top positipon is handled via motion variant props y distance
     >
-      <div className="w-[350px] md:w[400px] lg:w-[500px]  rounded-xl backdrop-blur-sm flex flex-col items-center gap-3 ">
+      <div
+        ref={containerRef}
+        className="w-[350px] md:w[400px] lg:w-[500px]  rounded-xl backdrop-blur-sm flex flex-col items-center gap-3 "
+      >
         <TicketDetail
           setToggleDialogueBox={setToggleDialogueBox}
           userDetail={userData}
