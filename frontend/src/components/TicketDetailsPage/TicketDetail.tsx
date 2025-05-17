@@ -53,7 +53,13 @@ const TicketDetail: React.FC<TicketDetailProps> = ({
     userDetail.type = "";
   }
   return (
-    <div className=" w-full px-5 py-8 bg-black/90 rounded-xl items-start backdrop-blur-lg flex flex-col gap-6 mb-6 select-text md:bg-white/5">
+    <div
+      onClick={(e) => {
+        e.stopPropagation();
+        e.preventDefault();
+      }}
+      className=" w-full px-5 py-8 bg-black/90 rounded-xl items-start backdrop-blur-lg flex flex-col gap-6 mb-6 select-text md:bg-white/5"
+    >
       {/* Ticket Details Section */}
       <section className="ticket-details-sction flex w-full flex-col gap-3 items-start">
         <div className="top w-full flex justify-between">

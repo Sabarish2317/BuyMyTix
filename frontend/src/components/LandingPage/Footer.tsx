@@ -6,7 +6,7 @@ const Footer: React.FC<{
 }> = ({ showSellDialogBoxInstruction }) => {
   const navigate = useNavigate();
   return (
-    <div className="flex flex-col gap-12 -mt-4 p-6 md:p-10 bg-gradient-to-b from-[#4E2E7B] to-[#26004C]">
+    <div className="flex flex-col gap-12 w-full md:-mt-4 pt-8 p-6 md:p-10 bg-gradient-to-b from-[#4E2E7B] to-[#26004C]">
       {/* Main Box */}
       <div className="rounded-[16px] px-6 md:px-10 py-8 gap-10 flex flex-col bg-[rgba(255,_255,_255,_0.10)] backdrop-blur-[40px] text-[#CCC]  text-base font-normal leading-[140%]">
         {/* Top Section */}

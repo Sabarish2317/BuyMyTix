@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "motion/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ANIMATION_DURATION, MOVEMENT_DISTANCE } from "../../utils/constants";
 import { HOME_PAGE, LANDING_PAGE, LOGIN_PAGE } from "../../routes/appRoutes";
@@ -17,6 +17,7 @@ interface TopNavigationBarProps {
   userData: ProfileResponse; // response from parent from context
   delay?: number;
   className?: string;
+  sellTicketBox?: boolean;
 }
 
 // Top Navigation Bar Component
@@ -24,6 +25,7 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({
   userData,
   delay = 6,
   className = "",
+  sellTicketBox = false,
 }) => {
   const navigate = useNavigate();
 
@@ -58,6 +60,13 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({
   const togglePostNewTicketDialogBox = () => {
     setPostNewTicketDialogBoxVisible((prev) => !prev);
   };
+
+  useEffect(() => {
+    if (sellTicketBox) {
+      setSellTicketDialogBoxVisible(true);
+    }
+  }, [sellTicketBox]);
+
   return (
     // Main navigation container
     <motion.div

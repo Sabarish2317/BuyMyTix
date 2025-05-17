@@ -77,7 +77,13 @@ const SearchBar: React.FC<SearchBarProps> = ({ setUserData, userData }) => {
         <div className="relative w-full z-100">
           <input
             type="text"
-            onClick={() => setIsSuggestionsVisible(true)}
+            onClick={() => {
+              setTimeout(
+                () => document.getElementById("body")?.scrollTo(0, 400),
+                150
+              );
+              setIsSuggestionsVisible(true);
+            }}
             value={inputValue}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}

@@ -326,6 +326,7 @@ const SearchBarWhite: React.FC<SearchBarWhiteProps> = ({
   );
 
   const handleClickToShowResults = () => {
+    setTimeout(() => document.getElementById("body")?.scrollTo(0, 400), 150);
     setIsResultsVisible(true);
     setDebouncedInput(inputValue);
   };
@@ -338,7 +339,15 @@ const SearchBarWhite: React.FC<SearchBarWhiteProps> = ({
            isValidTitleSelected ? "outline-green-400/50" : "outline-white/20"
          }`}
     >
-      <div className="search-bar-white flex flex-row h-max items-center  justify-between mr-2">
+      <div
+        onClick={() => {
+          setTimeout(
+            () => document.getElementById("body")?.scrollTo(0, 400),
+            150
+          );
+        }}
+        className="search-bar-white flex flex-row h-max items-center  justify-between mr-2"
+      >
         <AnimatePresence mode="wait">
           {isCreateNewTitleDialogBoxVisible && (
             <CreateNewTitleDialogBox

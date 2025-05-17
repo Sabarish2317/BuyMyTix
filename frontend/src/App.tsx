@@ -34,14 +34,22 @@ const ErrorPage = lazy(() => import("./components/Global/Error"));
 const queryClient = new QueryClient();
 
 function App() {
+  const isMobile = window.matchMedia("(max-width: 768px)").matches;
   return (
     <QueryClientProvider client={queryClient}>
       <ProfileProvider key={localStorage.getItem("token") || ""}>
         <ToastContainer
-          position="top-right"
-          autoClose={3000}
+          className={
+            isMobile ? "toastify-container-mobile" : "toastify-container"
+          }
+          position={isMobile ? "bottom-center" : "top-right"}
+          hideProgressBar={isMobile ? true : false}
+          toastClassName={isMobile ? "toastify-mobile-view" : ""}
+          autoClose={1500}
           theme="dark"
           pauseOnHover={true}
+          closeButton={false}
+          limit={3}
         />
         <Router>
           <Suspense

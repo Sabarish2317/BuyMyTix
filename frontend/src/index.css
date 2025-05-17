@@ -163,8 +163,33 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   transition: all 0.3s ease-in-out;
 }
 
+.toastify-mobile-view {
+  margin: 24px !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+}
+
+.toastify-container {
+  z-index: 99999999 !important;
+}
+
+.toastify-container-mobile {
+  z-index: 99999999 !important;
+  width: 300px !important;
+  border-radius: 12px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  overflow: hidden !important;
+}
 /* Change the gradient border after `md` */
 @media (min-width: 768px) {
+  .toastify-mobile-view {
+    margin: 4px !important;
+  }
+
   .gradient-border-left::before {
     padding: 2px;
     background: linear-gradient(to bottom, #8970a7, #000000);

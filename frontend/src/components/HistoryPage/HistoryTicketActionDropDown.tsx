@@ -26,7 +26,8 @@ export const HistoryTicketActions: React.FC<HistoryTicketActionsProps> = ({
       className="absolute right-0 top-12 bg-[#171717] z-50 w-max rounded-xl shadow-lg overflow-clip"
     >
       <button
-        onClick={() => {
+        onClick={(e) => {
+          e.stopPropagation();
           onEdit();
           closeActions();
         }}
@@ -37,7 +38,8 @@ export const HistoryTicketActions: React.FC<HistoryTicketActionsProps> = ({
       </button>
       <div className="h-[1px] w-full bg-[#272727]" />
       <button
-        onClick={() => {
+        onClick={(e) => {
+          e.stopPropagation();
           onDelete();
           closeActions();
         }}
