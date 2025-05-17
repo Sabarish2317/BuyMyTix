@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Layout from "../components/Global/Layout";
 import TopNavigationBar from "../components/Global/TopNavigationBar";
 import DetailCard from "../components/Global/DetailCard";
@@ -16,6 +16,7 @@ import { SearchBarDb } from "../components/Global/SearchBarDb";
 import LoadingTitlesCard from "../components/LoadingSkeletons/LoadingTitlesCard";
 import { useNavigate } from "react-router-dom";
 import { CATERGORY_PAGE } from "../routes/appRoutes";
+import SellTicketDialogBox from "@/components/DialogBoxes/SellTicketsDialogBox";
 
 // interface HomePageProps {}
 
@@ -70,6 +71,11 @@ const HomePage: React.FC = () => {
     refetchOnWindowFocus: false,
   });
 
+  const [isSellTicketDialogBoxVisible, setSellTicketDialogBoxVisible] =
+    useState(false);
+  const toggleSellTicketBox = () => {
+    setSellTicketDialogBoxVisible((prev) => !prev);
+  };
   if (isLoading)
     return (
       <Layout
@@ -83,6 +89,7 @@ const HomePage: React.FC = () => {
   return (
     <Layout className="bg-[linear-gradient(to_right,#0D0B11_10%,#261349_80%)] ">
       <TopNavigationBar
+        sellTicketBox={isSellTicketDialogBoxVisible}
         userData={userData || ({} as ProfileResponse)}
         delay={0.2}
       />
@@ -95,6 +102,17 @@ const HomePage: React.FC = () => {
         <AdSpace />
         <div className="margin relative my-4 h-[56px]">
           <SearchBarDb />
+        </div>
+        <div className="SELL TICKET HINT  flex md:hidden justify-start my-3 rounded-md   font-regular text-white gap-3 items-center text-[clamp(12px,1vw,18px)] ">
+          <img className="scale-80" src="/icons/shining-star.svg" alt="star" />
+          Having extra tickets ?
+          <button
+            onClick={toggleSellTicketBox}
+            className="px-4    text-[clamp(12px,1vw,18px)]   py-2 md:px-6 md:py-3 text-white bg-[#ff3300] rounded-md justify-center items-center gap-2.5 flex
+       font-medium hover:scale-95 hover:opacity-80 transition-all duration-200 active:scale-105 active:opacity-100 cursor-pointer"
+          >
+            Sell your tickets
+          </button>
         </div>
 
         <RecommendationRow

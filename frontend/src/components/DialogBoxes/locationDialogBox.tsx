@@ -87,7 +87,7 @@ const LocationDialogBox: React.FC<LocationDialogBoxProps> = ({
     >
       <div
         ref={containerRef}
-        className="w-[350px] md:w[400px] lg:w-[500px] p-4 bg-black rounded-xl backdrop-blur-sm flex flex-col items-center gap-3 "
+        className="w-[350px] md:w[400px] lg:w-[500px] p-4 bg-black rounded-xl backdrop-blur-sm flex flex-col items-center gap-2 "
       >
         <div className="w-full flex justify-between h-min items-center">
           <h2 className=" text-center text-white text-[clamp(20px,2vw,24px)] font-black uppercase leading-loose [text-shadow:_0px_0px_56px_rgb(147_93_202_/_0.35)]">

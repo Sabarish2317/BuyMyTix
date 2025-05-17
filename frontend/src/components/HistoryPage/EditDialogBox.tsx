@@ -135,8 +135,12 @@ export const EditDialogBox: React.FC<EditDialogBoxProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-[999] bg-black/50 backdrop-blur-sm flex items-center justify-center">
-      <div className="bg-[#171717] border border-[#272727] text-white p-4 flex flex-col gap-2 rounded-xl w-[450px]">
+    <div className="fixed inset-0 z-[999] bg-black/50 backdrop-blur-sm flex items-center select-none justify-center">
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{ scrollbarColor: "rgba(255,255,255,0.2) rgba(0,0,0,0.2)" }}
+        className="bg-[#171717] border  w-[340px] sm:w-[380px] md:w-[400px]  lg:w-[480px] border-[#272727] h-[450px] overflow-y-scroll text-white p-4 flex flex-col gap-2 rounded-xl "
+      >
         {/* Header and Close */}
         <div className="flex justify-between items-start">
           <div className="text-left">
@@ -155,7 +159,10 @@ export const EditDialogBox: React.FC<EditDialogBoxProps> = ({
             src={"/icons/close-icon.svg"}
             alt="close"
             className="cursor-pointer hover:opacity-80 transition-all"
-            onClick={() => toggleDialogBox(false)}
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleDialogBox(false);
+            }}
           />
         </div>
 

@@ -50,6 +50,12 @@ const TicketDetailsPage: React.FC = () => {
     retry: 0,
   });
 
+  const [isSellTicketDialogBoxVisible, setSellTicketDialogBoxVisible] =
+    useState(false);
+  const toggleSellTicketBox = () => {
+    setSellTicketDialogBoxVisible((prev) => !prev);
+  };
+
   // === Loading states ===
   if (isProfileLoading || (userData && isTicketsLoading)) {
     return (
@@ -112,7 +118,11 @@ const TicketDetailsPage: React.FC = () => {
 
     return (
       <Layout className="bg-[linear-gradient(to_right,#0D0B11_10%,#261349_80%)]">
-        <TopNavigationBar userData={userData} delay={0.2} />
+        <TopNavigationBar
+          sellTicketBox={isSellTicketDialogBoxVisible}
+          userData={userData}
+          delay={0.2}
+        />
         <motion.div
           initial={{ opacity: 0, y: MOVEMENT_DISTANCE }}
           animate={{ opacity: 1, y: 0 }}
@@ -141,7 +151,23 @@ const TicketDetailsPage: React.FC = () => {
                 </h3>
               </div>
             </div>
-
+            <div className="SELL TICKET HINT  flex md:hidden  my-3 rounded-lg p-3 bg-white/6   font-regular text-white gap-3 items-center justify-between text-[clamp(12px,1vw,18px)] ">
+              <div className="div flex flex-row gap-3 items-center justify-start">
+                <img
+                  className="scale-80"
+                  src="/icons/shining-star.svg"
+                  alt="star"
+                />
+                Having extra tickets ?
+              </div>
+              <button
+                onClick={toggleSellTicketBox}
+                className="px-4    text-[clamp(12px,1vw,18px)]   py-2 md:px-6 md:py-3 text-white bg-[#ff3300] rounded-sm justify-center items-center gap-2.5 flex
+       font-medium hover:scale-95 hover:opacity-80 transition-all duration-200 active:scale-105 active:opacity-100 cursor-pointer"
+              >
+                Sell your tickets
+              </button>
+            </div>
             {/* Tickets */}
             <h2 className="text-white text-[clamp(20px,2vw,28px)] font-semibold">
               Tickets
