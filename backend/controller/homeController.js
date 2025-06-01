@@ -1,14 +1,11 @@
 const TicketListing = require("../model/ticketListingModel");
 const EventReference = require("../model/eventReferenceModel");
-const { Redis } = require("@upstash/redis");
-
-const redisClient = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN,
-});
+const { redisClient, connectRedis } = require("../utils/redisClient");
 
 const home = async (req, res) => {
   try {
+    await connectRedis();
+
     const { type, category, page = 1, pageSize = 10 } = req.query;
 
     if (!type) {
@@ -29,10 +26,9 @@ const home = async (req, res) => {
 
     // Try fetching from Redis
     const cachedData = await redisClient.get(cacheKey);
-
     if (cachedData) {
-      console.log("Cache hit");
-      return res.status(200).json(cachedData);
+      console.log("✅ Cache hit");
+      return res.status(200).json(JSON.parse(cachedData));
     }
 
     let data;
@@ -77,12 +73,12 @@ const home = async (req, res) => {
     }
 
     // Cache result for 5 minutes
-    console.log("Cache miss");
-    await redisClient.set(cacheKey, data, { ex: 300 }); // 300 seconds = 5 mins
+    console.log("⏳ Cache miss - writing to Redis");
+    await redisClient.setEx(cacheKey, 300, JSON.stringify(data));
 
     return res.status(200).json(data);
   } catch (err) {
-    console.error("Error in movie controller:", err);
+    console.error("❌ Error in movie controller:", err);
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
