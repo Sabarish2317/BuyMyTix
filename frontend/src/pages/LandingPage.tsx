@@ -45,7 +45,7 @@ const LandingPage: React.FC = () => {
   if (isLoading)
     return (
       <Layout
-        className=" w-screen h-screen flex justify-center self-center items-center bg-black "
+        className=" w-screen h-screen flex justify-center self-center items-center   "
         isHomePage={true}
       >
         <TickLoader />

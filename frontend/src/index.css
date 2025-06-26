@@ -60,21 +60,6 @@
     }
   }
 }
-input:focus,
-textarea:focus,
-select:focus {
-  outline: none;
-}
-
-body {
-  @apply antialiased [text-rendering:optimizeLegibility] [font-smoothing:antialiased];
-  font-family: var(--font-satoshi);
-  background-color: #000000;
-  border: none;
-  margin: 0px;
-  padding: 0px;
-  box-sizing: border-box;
-}
 
 input::-webkit-calendar-picker-indicator {
   cursor: pointer;

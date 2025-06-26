@@ -86,7 +86,7 @@ const Footer: React.FC<{
             Coimbatore, Tamil Nadu
           </p>
           <div className="flex items-center gap-4 text-right">
-            <div className="text-[28px] font-medium">124</div>
+            <div className="text-[28px] font-medium">730</div>
             <div className="text-[40px] font-light">/</div>
             <div>
               Web

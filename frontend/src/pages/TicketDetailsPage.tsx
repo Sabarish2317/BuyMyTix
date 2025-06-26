@@ -194,7 +194,7 @@ const TicketDetailsPage: React.FC = () => {
             <div className={`hidden md:flex lg:flex xl:flex`}>
               {listings && Object.values(listings)[selectedIndex] ? (
                 <TicketDetail
-                  setToggleDialogueBox={setIsDummySetState}
+                  setToggleDialogueBox={toggleSellTicketBox}
                   userDetail={userData}
                   eventId={eventRefId}
                   ticketData={

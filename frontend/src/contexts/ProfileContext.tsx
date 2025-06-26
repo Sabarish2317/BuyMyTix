@@ -33,7 +33,7 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({
     return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
-  const { data, isLoading, isError, refetch } = useQuery<ProfileResponse>({
+  const { data, isLoading, isError, refetch,  } = useQuery<ProfileResponse>({
     queryKey: ["userProfile", token], // use state here
     queryFn: getProfile,
     enabled: !!token,

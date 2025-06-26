@@ -20,7 +20,7 @@ const Layout: React.FC<LayoutProps> = ({
     <div
       ref={parentRef}
       className={`main-entry-point w-full min-h-screen h-max flex flex-col items-center relative overflow-hidden bg-gradient-to-b 
-                 from-black via-[#402283] via-50% to-[#9f64da] ${className}`}
+                 from-black via-[#402283] via-10% to-[#9f64da] ${className}`}
     >
       {/* Noise Overlay */}
       <motion.div
