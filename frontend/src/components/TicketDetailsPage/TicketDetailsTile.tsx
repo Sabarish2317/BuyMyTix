@@ -101,6 +101,8 @@ const TicketDetailsTile: React.FC<TicketDetailsTileProps> = ({
   const fallbackImg = getImageForType({
     type: titlesData.type,
   } as AddTitlesRequest);
+
+  const isMobile = window.matchMedia("(max-width: 768px)").matches;
   return (
     <div
       className={`ticket-tile-container flex flex-row gap-3 min-h-min min-w-[280px] max-w-[450px] 
@@ -112,7 +114,9 @@ const TicketDetailsTile: React.FC<TicketDetailsTileProps> = ({
       }  transition-all duration-100 ease-in-out cursor-pointer
       ${selectedIndex === index ? "bg-[#c83615d4]" : "bg-white/5"}`}
       onClick={() => {
-        setDetailsDialogBoxVisible(true);
+        if (isMobile) {
+          setDetailsDialogBoxVisible(true);
+        }
         if (selectedIndex === index) return;
         setSelectedIndex(index);
       }}
