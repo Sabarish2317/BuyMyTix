@@ -7,7 +7,7 @@
 
 ## 🧰 Tech Stack
 
-- **Frontend**: React (TypeScript), Tailwind CSS     s
+- **Frontend**: React (TypeScript), Tailwind CSS
 - **Backend**: Express.js (TypeScript)
 - **Database**: MongoDB
 - **Cache**: Redis
