@@ -13,7 +13,10 @@ const app = express();
 //     credentials: true,
 //   })
 // );
-app.use(cors());
+app.use(cors({
+  origin: true, // reflect request origin dynamically
+  credentials: true
+}));
 app.use(logger);
 app.use(express.json());
 
